@@ -1,4 +1,3 @@
-import { Link, NavLink } from "react-router-dom";
 
 describe('Submit', () => {
   it('should allow user to log a new exercise and view it in history', () => {
@@ -10,7 +9,7 @@ describe('Submit', () => {
     //Input test
     cy.get('input[name="exercise"]').type('Bench Press');
     cy.get('input[name="weight"]').type('80');
-    cy.get('input[name="reps"]').type('8');
+    cy.get('input[name="reps"]').type('10');
     cy.get('input[name="sets"]').type('3');
     cy.get('input[name="date"]').type('2025-05-15');
 
@@ -22,7 +21,7 @@ describe('Submit', () => {
     //Confirm the new log is now present
     cy.contains('Bench Press');
     cy.contains('80');
-    cy.contains('8');
+    cy.contains('10');
     cy.contains('3');
     cy.contains('2025-05-15');
 
