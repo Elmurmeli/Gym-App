@@ -12,7 +12,7 @@ export default function LogExercise() {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
+  /* Function for submitting the exercise to the form*/
   const handleSubmit = (e) => {
     e.preventDefault();
     const logs = JSON.parse(localStorage.getItem('exerciseLogs') || '[]');
