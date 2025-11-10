@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.13.7 on win32)" generated="2025-11-10T12:25:44.612948" rpa="false" schemaversion="5">
+<suite id="s1" name="Test Gym Tracker" source="E:\MyCodingProject\gym-tracker-client\tests\test_gym_tracker.robot">
+<test id="s1-t1" name="Open Browser Smoke Test" line="8">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:44.743443" level="INFO">Opening browser 'chrome' to base url 'https://example.com'.</msg>
+<arg>https://example.com</arg>
+<arg>chrome</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-11-10T12:25:44.743297" elapsed="1.927378"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-11-10T12:25:48.671677" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-11-10T12:25:46.671024" elapsed="2.000774"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2025-11-10T12:25:48.672067" elapsed="2.072334"/>
+</kw>
+<status status="PASS" start="2025-11-10T12:25:44.742723" elapsed="6.001932"/>
+</test>
+<test id="s1-t2" name="Log Exercise With Only Exercise Field" line="13">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:50.745408" level="INFO">Opening browser 'chrome' to base url 'http://localhost:5173/logs'.</msg>
+<arg>${URL}/logs</arg>
+<arg>chrome</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-11-10T12:25:50.745248" elapsed="1.067218"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>name:exercise</arg>
+<arg>5s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2025-11-10T12:25:51.812775" elapsed="0.013394"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:51.826548" level="INFO">Typing text 'Deadlift' into text field 'name:exercise'.</msg>
+<arg>name:exercise</arg>
+<arg>Deadlift</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-10T12:25:51.826393" elapsed="0.052661"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:51.879461" level="INFO">Clicking button 'Log Exercise'.</msg>
+<arg>Log Exercise</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-10T12:25:51.879301" elapsed="0.038163"/>
+</kw>
+<kw name="Page Should Contain Element" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:51.923967" level="INFO">Current page contains element 'name:weight'.</msg>
+<arg>name:weight</arg>
+<doc>Verifies that element ``locator`` is found on the current page.</doc>
+<status status="PASS" start="2025-11-10T12:25:51.917753" elapsed="0.006286"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2025-11-10T12:25:51.924354" elapsed="2.069665"/>
+</kw>
+<status status="PASS" start="2025-11-10T12:25:50.745006" elapsed="3.249197"/>
+</test>
+<test id="s1-t3" name="Log Complete Exercise" line="21">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:53.995191" level="INFO">Opening browser 'chrome' to base url 'http://localhost:5173/logs'.</msg>
+<arg>${URL}/logs</arg>
+<arg>chrome</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-11-10T12:25:53.995020" elapsed="1.084252"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:55.079851" level="INFO">Typing text 'Bench Press' into text field 'name:exercise'.</msg>
+<arg>name:exercise</arg>
+<arg>Bench Press</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-10T12:25:55.079608" elapsed="0.074926"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:55.154927" level="INFO">Typing text '80' into text field 'name:weight'.</msg>
+<arg>name:weight</arg>
+<arg>80</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-10T12:25:55.154757" elapsed="0.037932"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:55.193084" level="INFO">Typing text '8' into text field 'name:reps'.</msg>
+<arg>name:reps</arg>
+<arg>8</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-10T12:25:55.192922" elapsed="0.037236"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:55.230728" level="INFO">Typing text '3' into text field 'name:sets'.</msg>
+<arg>name:sets</arg>
+<arg>3</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-10T12:25:55.230479" elapsed="0.035130"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:55.266079" level="INFO">Typing text '10/11/2025' into text field 'name:date'.</msg>
+<arg>name:date</arg>
+<arg>10/11/2025</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-10T12:25:55.265894" elapsed="0.035567"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:55.302102" level="INFO">Clicking button 'Log Exercise'.</msg>
+<arg>Log Exercise</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-10T12:25:55.301929" elapsed="0.037496"/>
+</kw>
+<kw name="Handle Alert" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:55.339836" level="INFO">HANDLE::&lt;class 'NoneType'&gt;::None</msg>
+<arg>ACCEPT</arg>
+<doc>Handles the current alert and returns its message.</doc>
+<status status="PASS" start="2025-11-10T12:25:55.339696" elapsed="0.002188"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:55.342195" level="INFO">Opening url 'http://localhost:5173/history'</msg>
+<arg>${URL}/history</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2025-11-10T12:25:55.342070" elapsed="0.037599"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2025-11-10T12:25:55.389019" level="INFO">Current page contains text 'Bench Press'.</msg>
+<arg>Bench Press</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="PASS" start="2025-11-10T12:25:55.380063" elapsed="0.009023"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2025-11-10T12:25:55.389370" elapsed="2.057058"/>
+</kw>
+<status status="PASS" start="2025-11-10T12:25:53.994686" elapsed="3.451942"/>
+</test>
+<status status="PASS" start="2025-11-10T12:25:44.613925" elapsed="12.833258"/>
+</suite>
+<statistics>
+<total>
+<stat pass="3" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Test Gym Tracker" id="s1" pass="3" fail="0" skip="0">Test Gym Tracker</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
