@@ -23,6 +23,7 @@ export default function LogExercise() {
   };
 
   return (
+    <div class="max-w-4xl mx-auto p-6">
     <form onSubmit={handleSubmit} className="bg-white shadow rounded p-6 space-y-4">
       {['exercise', 'weight', 'reps', 'sets', 'date'].map((field) => (
         <div key={field}>
@@ -41,5 +42,6 @@ export default function LogExercise() {
         Log Exercise
       </button>
     </form>
+    </div>
   );
 }

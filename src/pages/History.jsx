@@ -9,11 +9,14 @@ export default function History() {
   }, []);
 
   return (
-    <div>
+    <div class="max-w-4xl mx-auto p-6">
+    
       <h2 className="text-xl font-semibold mb-4">Workout History</h2>
+      <div class="bg-white shadow-md rounded-lg p-4">
       {logs.length === 0 ? (
         <p>No logs found.</p>
       ) : (
+        
         <table className="w-full text-sm text-left bg-white border rounded shadow overflow-hidden">
           <thead>
             <tr className="bg-blue-100 text-blue-800">
@@ -37,6 +40,7 @@ export default function History() {
           </tbody>
         </table>
       )}
+    </div>
     </div>
   );
 }
