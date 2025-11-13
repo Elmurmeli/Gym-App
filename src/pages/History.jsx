@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion } from "framer-motion"
 
 export default function History() {
   const [logs, setLogs] = useState([]);
@@ -9,14 +10,27 @@ export default function History() {
   }, []);
 
   return (
-    <div class="max-w-4xl mx-auto p-6">
-    
-      <h2 className="text-xl font-semibold mb-4">Workout History</h2>
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100  justify-center px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="text-center"
+      >
+      <h2 className="text-2xl text-blue-500 font-semibold mb-4">Workout History</h2>
+    </motion.div>
+
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{delay: 0.2, duration: 0.8 }}
+      className="w-full"
+    >
       <div class="bg-white shadow-md rounded-lg p-4">
       {logs.length === 0 ? (
         <p>No logs found.</p>
       ) : (
-        
+        /* Table for displaying the exercises*/ 
         <table className="w-full text-sm text-left bg-white border rounded shadow overflow-hidden">
           <thead>
             <tr className="bg-blue-100 text-blue-800">
@@ -41,6 +55,7 @@ export default function History() {
         </table>
       )}
     </div>
+    </motion.div>
     </div>
   );
 }
