@@ -3,13 +3,13 @@ import { motion } from "framer-motion"
 
 export default function Home() {
     return (
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col items-center justify-center px-4">
         {/* Hero section */}
         <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-center "
+        className="text-center max-w-2xl"
       >
         <h1 className="text-5xl font-extrabold text-blue-500 mb-4 drop-shadow-sm">
           Welcome to Gym Tracker
