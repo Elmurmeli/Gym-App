@@ -7,7 +7,7 @@ export default function Home() {
         <h1 className="text-2xl font-bold flex justify-center">
           Welcome to Gym Tracker
         </h1>
-        <p className="text-gray-600 mb-8 text-center mt-4 text-lg">
+        <p className="text-gray-600 mb-8 text-center mt-4 text-xl">
           Track your workouts, monitor your progress, and stay motivated to reach your fitness goals!
         </p>
         <div className="flex justify-center gap-4 mb-12">
