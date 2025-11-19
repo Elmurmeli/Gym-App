@@ -44,14 +44,14 @@ export default function App() {
           <Link to="/" className="hover:text-blue-600 font-medium">Home</Link>
           <Link to="/logs" className="hover:text-blue-600 font-medium">Log Exercise</Link>
           <Link to="/history" className="hover:text-blue-600 font-medium">History</Link>
-
+          {/* Shows Register and Login links in the navbar if not logged in */}
           {!user && (
             <>
               <Link to="/register" className="hover:text-blue-600">Register</Link>
               <Link to="/login" className="hover:text-blue-600">Login</Link>
             </>
           )}
-
+          {/* Shows Logout button in the navbar if logged in */}
           {user && (
             <button onClick={handleLogout}
             className="bg-red-500 text-white px-2  rounded hover:bg-red-600 transition">
