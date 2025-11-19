@@ -10,7 +10,7 @@ export default function History() {
   }, []);
 
   return (
-    <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100  justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100  justify-center px-4">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -26,7 +26,7 @@ export default function History() {
       transition={{delay: 0.2, duration: 0.8 }}
       className="w-full"
     >
-      <div class="bg-white shadow-md rounded-lg p-4">
+      <div className="bg-white shadow-md rounded-lg p-4">
       {logs.length === 0 ? (
         <p>No logs found.</p>
       ) : (
