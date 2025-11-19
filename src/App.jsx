@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import LogExercise from './pages/LogExercise';
 import History from './pages/History';
+import Register from "./pages/Register";
 
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
           <Link to="/" className="hover:text-blue-600 font-medium">Home</Link>
           <Link to="/logs" className="hover:text-blue-600 font-medium">Log Exercise</Link>
           <Link to="/history" className="hover:text-blue-600 font-medium">History</Link>
+          <Link to="/register" className="hover:text-blue-600">Register</Link>
           </div>
         </nav>
 
@@ -25,6 +27,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/logs" element={<LogExercise />} />
           <Route path="/history" element={<History />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
 
