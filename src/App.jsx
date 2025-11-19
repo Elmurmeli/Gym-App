@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import LogExercise from './pages/LogExercise';
 import History from './pages/History';
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
           <Link to="/logs" className="hover:text-blue-600 font-medium">Log Exercise</Link>
           <Link to="/history" className="hover:text-blue-600 font-medium">History</Link>
           <Link to="/register" className="hover:text-blue-600">Register</Link>
+          <Link to="/login" className="hover:text-blue-600">Login</Link>
           </div>
         </nav>
 
@@ -28,6 +30,7 @@ export default function App() {
           <Route path="/logs" element={<LogExercise />} />
           <Route path="/history" element={<History />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
 
