@@ -1,2 +1,2 @@
 # GymApp
-Spare time project
+Spare time project using react, supabase, Robot Framework + Selenium
