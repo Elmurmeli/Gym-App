@@ -7,6 +7,7 @@ import LogExercise from './pages/LogExercise';
 import History from './pages/History';
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import ProtectedRoutes from './components/ProtectedRoutes';
 
 
 export default function App() {
@@ -64,8 +65,16 @@ export default function App() {
         {/* Main Routes */}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/logs" element={<LogExercise />} />
-          <Route path="/history" element={<History />} />
+          <Route path="/logs" element={
+            <ProtectedRoutes>
+              <LogExercise />
+            </ProtectedRoutes>
+            } />
+          <Route path="/history" element={
+            <ProtectedRoutes>
+              <History />
+            </ProtectedRoutes>
+            } />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>
