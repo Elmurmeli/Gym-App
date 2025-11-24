@@ -27,7 +27,7 @@ export default function Register() {
 
       <form onSubmit={handleRegister} className="flex flex-col gap-4">
         <input
-          data-testid="register-email"
+          data-testid="email-input"
           type="email"
           className="border p-2 rounded"
           placeholder="Email"
@@ -37,7 +37,7 @@ export default function Register() {
         />
 
         <input
-          data-testid="register-password"
+          data-testid="password-input"
           type="password"
           className="border p-2 rounded"
           placeholder="Password"
@@ -46,7 +46,7 @@ export default function Register() {
           required
         />
 
-        <button className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+        <button data-testid="register-btn" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
           Register
         </button>
       </form>
