@@ -39,6 +39,7 @@ export default function App() {
     <Router>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <div className="h-screen bg-gray-100 text-gray-800 p-4 w-screen mx-auto" src="...">
+
         {/* Navigation Bar */}
         <nav className=" bg-white shadow p-4 rounded flex justify-between items-center mb-6">
           <h1 className="text-blue-500 text-2xl font-bold">Gym Tracker</h1>
@@ -46,6 +47,7 @@ export default function App() {
           <Link to="/" className="hover:text-blue-600 font-medium">Home</Link>
           <Link to="/logs" className="hover:text-blue-600 font-medium">Log Exercise</Link>
           <Link to="/history" className="hover:text-blue-600 font-medium">History</Link>
+
           {/* Shows Register and Login links in the navbar if not logged in */}
           {!user && (
             <>
@@ -53,12 +55,16 @@ export default function App() {
               <Link to="/login" className="hover:text-blue-600">Login</Link>
             </>
           )}
-          {/* Shows Logout button in the navbar if logged in */}
+
+          {/* Shows email and logout button in the navbar if logged in */}
           {user && (
-            <button onClick={handleLogout}
-            className="bg-red-500 text-white px-2  rounded hover:bg-red-600 transition">
-              Logout
-            </button>
+            <div className="flex items-center gap-4">
+              <span className="text-gray-600">Logged in as: <strong>{user.email}</strong></span>
+              <button onClick={handleLogout}
+              className="bg-red-500 text-white px-2  rounded hover:bg-red-600 transition">
+                Logout
+              </button>
+            </div>
           )}
           </div>
         </nav>
