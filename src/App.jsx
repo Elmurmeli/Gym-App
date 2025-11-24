@@ -31,6 +31,7 @@ export default function App() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    window.location.href = "/"; // Redirect to home on logout
   };
 
   return (
