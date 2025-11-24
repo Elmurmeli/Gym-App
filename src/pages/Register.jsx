@@ -27,6 +27,7 @@ export default function Register() {
 
       <form onSubmit={handleRegister} className="flex flex-col gap-4">
         <input
+          data-testid="register-email"
           type="email"
           className="border p-2 rounded"
           placeholder="Email"
@@ -36,6 +37,7 @@ export default function Register() {
         />
 
         <input
+          data-testid="register-password"
           type="password"
           className="border p-2 rounded"
           placeholder="Password"

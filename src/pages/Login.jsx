@@ -41,7 +41,7 @@ export default function Login() {
           required
         />
 
-        <button className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+        <button data-testid="login-btn" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
           Login
         </button>
       </form>

@@ -60,7 +60,7 @@ export default function App() {
           {user && (
             <div className="flex items-center gap-4">
               <span className="text-gray-600">Logged in as: <strong>{user.email}</strong></span>
-              <button onClick={handleLogout}
+              <button data-testid="logout-btn" onClick={handleLogout}
               className="bg-red-500 text-white px-2  rounded hover:bg-red-600 transition">
                 Logout
               </button>
