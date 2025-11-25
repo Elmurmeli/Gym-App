@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from "framer-motion"
+import { supabase } from '../supabase';
 
 export default function LogExercise() {
   const [form, setForm] = useState({
@@ -9,18 +10,51 @@ export default function LogExercise() {
     sets: '',
     date: ''
   });
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
   /* Function for submitting the exercise to the form*/
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const logs = JSON.parse(localStorage.getItem('exerciseLogs') || '[]');
-    logs.push(form);
-    localStorage.setItem('exerciseLogs', JSON.stringify(logs));
-    alert('Exercise logged!');
-    setForm({ exercise: '', weight: '', reps: '', sets: '', date: '' });
+ 
+    setSubmitting(true); // start loading state
+
+  // Get current logged-in user
+  const {
+    data: { user },
+    error: userError
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    alert('You must be logged in to log an exercise.');
+    setSubmitting(false); // stop loading state
+    return;
+  }
+
+  // Insert exercise into supabase
+  const { error } = await supabase
+    .from('exercises')
+    .insert([
+      {
+        name: form.exercise,
+        weight: form.weight || null,
+        reps: form.reps || null,
+        sets: form.sets || null,
+        date: form.date || null,
+        user_id: user.id
+      }
+    ]);
+
+    if (error) {
+      alert('Failed to log exercise: ');
+    } else {
+      alert('Exercise logged successfully!');
+      setForm({ });
+    }
+    setSubmitting(false); // done loading state
+
   };
 
   return (
@@ -55,8 +89,8 @@ export default function LogExercise() {
           />
         </div>
       ))}
-      <button type="submit" className="bg-blue-600 text-white  font-semibold px-4 py-2 rounded-lg hover:bg-blue-700">
-        Log Exercise
+      <button type="submit" disabled={submitting} className="bg-blue-600 text-white  font-semibold px-4 py-2 rounded-lg hover:bg-blue-700">
+        {submitting ? 'Logging...' : 'Log Exercise'}
       </button>
     </form>
     </motion.div>
