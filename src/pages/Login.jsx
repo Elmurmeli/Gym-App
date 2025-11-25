@@ -24,6 +24,7 @@ export default function Login() {
 
       <form onSubmit={handleLogin} className="flex flex-col gap-4">
         <input
+          data-testid="email-input"
           type="email"
           className="border p-2 rounded"
           placeholder="Email"
@@ -33,6 +34,7 @@ export default function Login() {
         />
 
         <input
+          data-testid="password-input"
           type="password"
           className="border p-2 rounded"
           placeholder="Password"
