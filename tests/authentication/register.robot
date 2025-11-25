@@ -1,7 +1,7 @@
 *** Settings ***
 Library     SeleniumLibrary
 Library     String
-Resource    ../../resources/locators.robot
+Resource    ../resources/locators.robot
 
 *** Variables ***
 ${BASE_URL}     http://localhost:5173

@@ -132,3 +132,6 @@ dist
 # Cypress
 cypress/videos
 cypress/screenshots
+log.html
+output.xml
+report.html
