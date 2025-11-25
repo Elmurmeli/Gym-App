@@ -1,12 +1,45 @@
 import { useEffect, useState } from 'react';
 import { motion } from "framer-motion"
+import { supabase } from '../supabase';
 
 export default function History() {
   const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
-    const storedLogs = JSON.parse(localStorage.getItem('exerciseLogs') || '[]');
-    setLogs(storedLogs);
+    const fetchLogs = async () => {
+      // Get current logged-in user
+      const {
+        data: { user },
+        error: userError
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        alert('You must be logged in to view your workout history.');
+        console.error("User not logged in or error:",userError);
+        setLogs([]);
+        setLoading(false);
+        return;
+      }
+
+      const {data, error} = await supabase
+        .from('exercises')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('date', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching logs:', error);
+        setLogs([]);
+      } else {
+        setLogs(data);
+      }
+
+      setLoading(false);
+    };
+
+    fetchLogs();
   }, []);
 
   return (
@@ -44,7 +77,7 @@ export default function History() {
           <tbody>
             {logs.map((log, idx) => (
               <tr key={idx} className="even:bg-gray-50 hover:bg-gray-100">
-                <td className="p-2">{log.exercise}</td>
+                <td className="p-2">{log.name}</td>
                 <td className="p-2">{log.weight}</td>
                 <td className="p-2">{log.reps}</td>
                 <td className="p-2">{log.sets}</td>
