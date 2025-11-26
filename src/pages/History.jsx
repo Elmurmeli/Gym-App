@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from "framer-motion"
 import { supabase } from '../supabase';
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 export default function History() {
   const [logs, setLogs] = useState([]);
@@ -128,10 +129,12 @@ export default function History() {
               <th className="p-2">Reps</th>
               <th className="p-2">Sets</th>
               <th className="p-2">Date</th>
+              <th className="p-2 w-1 whitespace-nowrap">Actions</th>
             </tr>
           </thead>
           <tbody>
             {logs.map((log, idx) => (
+              
               <tr key={idx} className="even:bg-gray-50 hover:bg-gray-100">
                 {editingId === log.id ? (
                   <>
@@ -196,16 +199,16 @@ export default function History() {
                 <td className="p-2">{log.sets || '-'}</td>
                 <td className="p-2">{log.date || '-'}</td>
 
-                <td className="p-2 flex gap-2">
+                <td className="p-2 flex gap-2 2-1 whitespace-nowrap">
                   <button
                   className='bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500'
                   onClick={() => handleEdit(log)}>
-                    Edit
+                    <PencilSquareIcon className="h-5 w-5"/>
                   </button>
                   <button
                   className='bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600'
                   onClick={() => handleDelete(log.id)}>
-                    Delete
+                    <TrashIcon className="h-5 w-5"/>
                   </button>
                 </td>
                 </>
