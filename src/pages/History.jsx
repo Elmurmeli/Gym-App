@@ -15,6 +15,7 @@ export default function History() {
         error: userError
       } = await supabase.auth.getUser();
 
+      // If no user, redirect to login and show message
       if (userError || !user) {
         alert('You must be logged in to view your workout history.');
         console.error("User not logged in or error:",userError);
@@ -23,6 +24,7 @@ export default function History() {
         return;
       }
 
+      // Fetch exercise logs for the user
       const {data, error} = await supabase
         .from('exercises')
         .select('*')
@@ -41,6 +43,22 @@ export default function History() {
 
     fetchLogs();
   }, []);
+
+  const handleDelete = async (id) => {
+    // Confirm deletion
+    const confirmDelete = window.confirm(" Are you sure you want to delete this exercise?");
+    if(!confirmDelete) return;
+
+    const { error } = await supabase.from('exercises').delete().eq('id', id);
+
+    if (error) {
+      alert("Failed to delete exercise.");
+      console.error(error);
+    } else {
+    // Remove from local state so UI updates immediately
+      setLogs(logs.filter(log => log.id !== id));
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100  justify-center px-4">
@@ -78,10 +96,23 @@ export default function History() {
             {logs.map((log, idx) => (
               <tr key={idx} className="even:bg-gray-50 hover:bg-gray-100">
                 <td className="p-2">{log.name}</td>
-                <td className="p-2">{log.weight}</td>
-                <td className="p-2">{log.reps}</td>
-                <td className="p-2">{log.sets}</td>
-                <td className="p-2">{log.date}</td>
+                <td className="p-2">{log.weight || '-'}</td>
+                <td className="p-2">{log.reps || '-'}</td>
+                <td className="p-2">{log.sets || '-'}</td>
+                <td className="p-2">{log.date || '-'}</td>
+                <td className="p-2 flex gap-2">
+                  <button
+                  className='bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500'
+                  onClick={() => handleEdit(log)}>
+                    Edit
+                  </button>
+                  <button
+                  className='bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600'
+                  onClick={() => handleDelete(log.id)}>
+                    Delete
+                  </button>
+
+                </td>
               </tr>
             ))}
           </tbody>
