@@ -8,6 +8,7 @@ import History from './pages/History';
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ProtectedRoutes from './components/ProtectedRoutes';
+import NavBar from './components/NavBar';
 
 
 export default function App() {
@@ -40,35 +41,7 @@ export default function App() {
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <div className="h-screen bg-gray-100 text-gray-800 p-4 w-screen mx-auto" src="...">
 
-        {/* Navigation Bar */}
-        <nav className=" bg-white shadow p-4 rounded flex justify-between items-center mb-6">
-          <h1 className="text-blue-500 text-2xl font-bold">Gym Tracker</h1>
-          <div className="flex gap-8">
-          <Link to="/" className="hover:text-blue-600 font-medium">Home</Link>
-          <Link to="/logs" className="hover:text-blue-600 font-medium">Log Exercise</Link>
-          <Link to="/history" className="hover:text-blue-600 font-medium">History</Link>
-
-          {/* Shows Register and Login links in the navbar if not logged in */}
-          {!user && (
-            <>
-              <Link to="/register" className="hover:text-blue-600">Register</Link>
-              <Link to="/login" className="hover:text-blue-600">Login</Link>
-            </>
-          )}
-
-          {/* Shows email and logout button in the navbar if logged in */}
-          {user && (
-            <div className="flex items-center gap-4">
-              <span className="text-gray-600">Logged in as: <strong>{user.email}</strong></span>
-              <button data-testid="logout-btn" onClick={handleLogout}
-              className="bg-red-500 text-white px-2  rounded hover:bg-red-600 transition">
-                Logout
-              </button>
-            </div>
-          )}
-          </div>
-        </nav>
-
+        <NavBar />
         {/* Main Routes */}
         <Routes>
           <Route path="/" element={<Home />} />
