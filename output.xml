@@ -1,46 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.3.2 (Python 3.13.7 on win32)" generated="2025-11-25T12:45:47.074352" rpa="false" schemaversion="5">
-<suite id="s1" name="Login" source="E:\MyCodingProject\gym-tracker-client\tests\authentication\login.robot">
-<test id="s1-t1" name="Login Existing User" line="11">
+<robot generator="Robot 7.3.2 (Python 3.13.7 on win32)" generated="2025-11-26T15:48:52.831289" rpa="false" schemaversion="5">
+<suite id="s1" name="Register" source="E:\MyCodingProject\gym-tracker-client\tests\authentication\register.robot">
+<test id="s1-t1" name="Register New User" line="10">
+<kw name="Generate Random String" owner="String">
+<msg time="2025-11-26T15:48:52.955199" level="INFO">${random} = mqecfl</msg>
+<var>${random}</var>
+<arg>6</arg>
+<arg>[LOWER]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<status status="PASS" start="2025-11-26T15:48:52.955003" elapsed="0.000217"/>
+</kw>
 <kw name="Open Browser" owner="SeleniumLibrary">
-<msg time="2025-11-25T12:45:47.210858" level="INFO">Opening browser 'chrome' to base url 'http://localhost:5173/login'.</msg>
-<arg>${BASE_URL}/login</arg>
+<msg time="2025-11-26T15:48:52.955495" level="INFO">Opening browser 'chrome' to base url 'http://localhost:5173/register'.</msg>
+<arg>${BASE_URL}/register</arg>
 <arg>chrome</arg>
 <doc>Opens a new browser instance to the optional ``url``.</doc>
-<status status="PASS" start="2025-11-25T12:45:47.210676" elapsed="1.134365"/>
+<status status="PASS" start="2025-11-26T15:48:52.955375" elapsed="1.155614"/>
 </kw>
-<kw name="Input Text" owner="SeleniumLibrary">
-<msg time="2025-11-25T12:45:48.345798" level="INFO">Typing text 'elmurmeli123+123456@gmail.com' into text field 'xpath=//*[@data-testid="email-input"]'.</msg>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
 <arg>${EMAIL_INPUT}</arg>
-<arg>${EMAIL}</arg>
-<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<status status="PASS" start="2025-11-25T12:45:48.345383" elapsed="0.062467"/>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2025-11-26T15:48:54.111317" elapsed="0.008326"/>
 </kw>
 <kw name="Input Text" owner="SeleniumLibrary">
-<msg time="2025-11-25T12:45:48.408317" level="INFO">Typing text 'testi123' into text field 'xpath=//*[@data-testid="password-input"]'.</msg>
-<arg>${PASSWORD_INPUT}</arg>
-<arg>${PASSWORD}</arg>
+<msg time="2025-11-26T15:48:54.120105" level="INFO">Typing text 'elmurmeli123+mqecfl@gmail.com' into text field 'xpath=//*[@data-testid="email-input"]'.</msg>
+<arg>${EMAIL_INPUT}</arg>
+<arg>elmurmeli123+${random}@gmail.com</arg>
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<status status="PASS" start="2025-11-25T12:45:48.408107" elapsed="0.036936"/>
+<status status="PASS" start="2025-11-26T15:48:54.119892" elapsed="0.067597"/>
+</kw>
+<kw name="Input Password" owner="SeleniumLibrary">
+<msg time="2025-11-26T15:48:54.187997" level="INFO">Typing password into text field 'xpath=//*[@data-testid="password-input"]'.</msg>
+<msg time="2025-11-26T15:48:54.206567" level="INFO">Temporally setting log level to: NONE</msg>
+<arg>${PASSWORD_INPUT}</arg>
+<arg>MySecret123</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-26T15:48:54.187769" elapsed="0.047725"/>
 </kw>
 <kw name="Click Button" owner="SeleniumLibrary">
-<msg time="2025-11-25T12:45:48.445508" level="INFO">Clicking button 'xpath=//*[@data-testid="login-btn"]'.</msg>
-<arg>${LOGIN_BTN}</arg>
+<msg time="2025-11-26T15:48:54.235961" level="INFO">Clicking button 'xpath=//*[@data-testid="register-btn"]'.</msg>
+<arg>${REGISTER_BTN}</arg>
 <doc>Clicks the button identified by ``locator``.</doc>
-<status status="PASS" start="2025-11-25T12:45:48.445306" elapsed="0.033862"/>
+<status status="PASS" start="2025-11-26T15:48:54.235758" elapsed="0.045073"/>
 </kw>
 <kw name="Wait Until Page Contains" owner="SeleniumLibrary">
-<arg>Logged in as:</arg>
+<arg>Registration successful!</arg>
 <doc>Waits until ``text`` appears on the current page.</doc>
-<status status="PASS" start="2025-11-25T12:45:48.479434" elapsed="0.617890"/>
+<status status="PASS" start="2025-11-26T15:48:54.281114" elapsed="1.637614"/>
 </kw>
 <kw name="Close Browser" owner="SeleniumLibrary">
 <doc>Closes the current browser.</doc>
-<status status="PASS" start="2025-11-25T12:45:49.097556" elapsed="2.062687"/>
+<status status="PASS" start="2025-11-26T15:48:55.918978" elapsed="2.100615"/>
 </kw>
-<status status="PASS" start="2025-11-25T12:45:47.210127" elapsed="3.950409"/>
+<status status="PASS" start="2025-11-26T15:48:52.954352" elapsed="5.065476"/>
 </test>
-<status status="PASS" start="2025-11-25T12:45:47.075210" elapsed="4.085835"/>
+<status status="PASS" start="2025-11-26T15:48:52.832160" elapsed="5.188080"/>
 </suite>
 <statistics>
 <total>
@@ -49,7 +63,7 @@
 <tag>
 </tag>
 <suite>
-<stat name="Login" id="s1" pass="1" fail="0" skip="0">Login</stat>
+<stat name="Register" id="s1" pass="1" fail="0" skip="0">Register</stat>
 </suite>
 </statistics>
 <errors>

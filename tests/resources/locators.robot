@@ -4,4 +4,4 @@ ${PASSWORD_INPUT}   xpath=//*[@data-testid="password-input"]
 ${LOGIN_BTN}        xpath=//*[@data-testid="login-btn"]
 ${REGISTER_BTN}     xpath=//*[@data-testid="register-btn"]
 ${LOGOUT_BTN}       xpath=//*[@data-testid="logout-btn"]
-
+${MENU_BTN}         xpath=//*[@data-testid="menu-btn"]

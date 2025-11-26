@@ -21,7 +21,7 @@ Logged In User Can Access History
     Input Text      ${EMAIL_INPUT}      ${EMAIL}
     Input Text      ${PASSWORD_INPUT}   ${PASSWORD}
     Click Button    ${LOGIN_BTN}
-    Wait Until Page Contains    Logged in as:
+    Wait Until Page Contains    ${EMAIL}
 
     Go To       ${BASE_URL}/history
     Wait Until Page Contains    Workout History
@@ -36,8 +36,8 @@ Logged In User Can Access Log Exercise
     Input Text      ${PASSWORD_INPUT}   ${PASSWORD}
     Click Button    ${LOGIN_BTN}
     
-    Wait Until Page Contains    Logged in as:
-    Page Should Contain     Log Your Exercise
+    Wait Until Page Contains    ${EMAIL}
+    Wait Until Page Contains     Log Your Exercise
 
     Close Browser
 

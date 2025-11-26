@@ -49,6 +49,7 @@ export default function NavBar() {
             {/* Right Side - Login dropdown menu */}
             <div className="relative">
                 <button
+                    data-testid="menu-btn"
                     onClick={() => setMenuOpen(!menuOpen)}
                     className="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
                 >
@@ -81,6 +82,7 @@ export default function NavBar() {
                         {/* Logged-in menu */}
                         {user && (
                             <button
+                                data-testid="logout-btn"
                                 onClick={handleLogout}
                                 className="w-full text-left px-4 py-2 hover:bg-gray-100"
                             >

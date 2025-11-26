@@ -13,6 +13,6 @@ Login Existing User
     Input Text      ${EMAIL_INPUT}      ${EMAIL}
     Input Text      ${PASSWORD_INPUT}   ${PASSWORD}
     Click Button    ${LOGIN_BTN}
-    Wait Until Page Contains    Logged in as:
+    Wait Until Page Contains    ${EMAIL}
     Close Browser
 

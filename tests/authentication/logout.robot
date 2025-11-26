@@ -15,10 +15,12 @@ Logout User
     Input Text      ${EMAIL_INPUT}      ${EMAIL}
     Input Text      ${PASSWORD_INPUT}   ${PASSWORD}
     Click Button    ${LOGIN_BTN}
-    Wait Until Page Contains        Logged in as:
+    Wait Until Page Contains        ${EMAIL}
 
     # Logout
+    Click Button    ${MENU_BTN}
+    Wait Until Page Contains    Logout
     Click Button    ${LOGOUT_BTN}
-    Wait Until Page Does Not Contain       Logged in as:
-    Page Should Contain     Home
+    Wait Until Page Does Not Contain       ${EMAIL}
+    Page Should Contain     Login
     Close Browser
