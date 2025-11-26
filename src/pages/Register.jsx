@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { supabase } from '../supabase';
+import { motion } from "framer-motion"
 
 export default function Register() {
     const [email, setEmail] = useState("");
@@ -22,6 +23,13 @@ export default function Register() {
     };
 
     return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="text-center"
+      >
     <div className="max-w-md mx-auto mt-16 bg-white shadow p-6 rounded-xl">
       <h2 className="text-2xl font-bold mb-4 text-blue-600">Register</h2>
 
@@ -52,6 +60,8 @@ export default function Register() {
       </form>
 
       {message && <p className="mt-4 text-gray-700">{message}</p>}
+    </div>
+    </motion.div>
     </div>
     );
 }
