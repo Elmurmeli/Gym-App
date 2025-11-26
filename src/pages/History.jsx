@@ -5,7 +5,8 @@ import { supabase } from '../supabase';
 export default function History() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({ name: '', weight: '', reps: '', sets: '', date: '' });
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -44,6 +45,7 @@ export default function History() {
     fetchLogs();
   }, []);
 
+  // Delete function
   const handleDelete = async (id) => {
     // Confirm deletion
     const confirmDelete = window.confirm(" Are you sure you want to delete this exercise?");
@@ -59,6 +61,42 @@ export default function History() {
       setLogs(logs.filter(log => log.id !== id));
     }
   };
+
+  // Edit function
+  const handleEdit = (log) => {
+    setEditingId(log.id);
+    setEditForm({
+      name: log.name,
+      weight: log.weight|| '',
+      reps: log.reps || '',
+      sets: log.sets || '',
+      date: log.date || ''
+    });
+  };
+
+  // Save edited log
+  const handleUpdate = async (id) => {
+    const { error } = await supabase
+      .from('exercises')
+      .update({
+        name: editForm.name,
+        weight: editForm.weight,
+        reps: editForm.reps,
+        sets: editForm.sets,
+        date: editForm.date
+      })
+      .eq('id', id);
+
+    if (error) {
+      alert("Failed to update exercise.");
+      console.error(error);
+    } else {
+      // Update local state
+      setLogs(logs.map(log => log.id === id ? { ...log, ...editForm } : log));
+      setEditingId(null);
+    }
+  }
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100  justify-center px-4">
@@ -95,11 +133,69 @@ export default function History() {
           <tbody>
             {logs.map((log, idx) => (
               <tr key={idx} className="even:bg-gray-50 hover:bg-gray-100">
+                {editingId === log.id ? (
+                  <>
+                    <td className="p-2">
+                      <input
+                        type="text"
+                        value={editForm.name}
+                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                        className="border p-1 rounded"
+                        />
+                    </td>
+                    <td className="p-2">
+                      <input
+                        type="number"
+                        value={editForm.weight}
+                        onChange={(e) => setEditForm({ ...editForm, weight: e.target.value })}
+                        className="border p-1 rounded"
+                        /> 
+                    </td>
+                    <td className="p-2">
+                      <input
+                        type="number"
+                        value={editForm.reps}
+                        onChange={(e) => setEditForm({ ...editForm, reps: e.target.value })}
+                        className="border p-1 rounded"
+                        />
+                    </td>
+                    <td className="p-2">
+                      <input
+                        type="number"
+                        value={editForm.sets}
+                        onChange={(e) => setEditForm({ ...editForm, sets: e.target.value })}
+                        className="border p-1 rounded"
+                        />
+                    </td>
+                    <td className="p-2">
+                      <input
+                        type="date"
+                        value={editForm.date}
+                        onChange={(e) => setEditForm({ ...editForm, date: e.target.value })}
+                        className="border p-1 rounded"
+                        />
+                    </td>
+                    <td className="p-2 flex gap-2">
+                      <button
+                        className='bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600'
+                        onClick={() => handleUpdate(log.id)}>
+                        Save
+                      </button>
+                      <button
+                        className='bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500'
+                        onClick={() => setEditingId(null)}>
+                        Cancel
+                      </button>
+                    </td>
+                  </>
+                ) : (
+                <>
                 <td className="p-2">{log.name}</td>
                 <td className="p-2">{log.weight || '-'}</td>
                 <td className="p-2">{log.reps || '-'}</td>
                 <td className="p-2">{log.sets || '-'}</td>
                 <td className="p-2">{log.date || '-'}</td>
+
                 <td className="p-2 flex gap-2">
                   <button
                   className='bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500'
@@ -111,8 +207,9 @@ export default function History() {
                   onClick={() => handleDelete(log.id)}>
                     Delete
                   </button>
-
                 </td>
+                </>
+                )}
               </tr>
             ))}
           </tbody>
