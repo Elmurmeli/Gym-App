@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from "framer-motion"
 import { supabase } from '../supabase';
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { PencilSquareIcon, TrashIcon, CheckIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
 
 export default function History() {
   const [logs, setLogs] = useState([]);
@@ -182,12 +182,12 @@ export default function History() {
                       <button
                         className='bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600'
                         onClick={() => handleUpdate(log.id)}>
-                        Save
+                        <CheckIcon className="h-5 w-5"/>
                       </button>
                       <button
                         className='bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500'
                         onClick={() => setEditingId(null)}>
-                        Cancel
+                        <ArrowUturnLeftIcon className="h-5 w-5"/>
                       </button>
                     </td>
                   </>
