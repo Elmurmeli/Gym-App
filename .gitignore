@@ -135,3 +135,5 @@ cypress/screenshots
 log.html
 output.xml
 report.html
+
+dist/
