@@ -201,11 +201,13 @@ export default function History() {
 
                 <td className="p-2 flex gap-2 2-1 whitespace-nowrap">
                   <button
+                  data-testid="edit-btn"
                   className='bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500'
                   onClick={() => handleEdit(log)}>
                     <PencilSquareIcon className="h-5 w-5"/>
                   </button>
                   <button
+                  data-testid="delete-btn"
                   className='bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600'
                   onClick={() => handleDelete(log.id)}>
                     <TrashIcon className="h-5 w-5"/>
