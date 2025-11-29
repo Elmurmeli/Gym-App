@@ -12,6 +12,9 @@ ${EMAIL}  elmurmeli123+123456@gmail.com
 ${PASSWORD}   testi123
 
 *** Keywords ***
+Open Browser To Login Page
+    Open Browser    ${BASE_URL}/login   chrome
+    Maximize Browser Window
 
 Login As Test User
     Input Text  ${EMAIL_INPUT}  ${EMAIL}
