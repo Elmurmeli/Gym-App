@@ -137,3 +137,6 @@ output.xml
 report.html
 
 dist/
+report.html
+output.xml
+log.html

@@ -135,7 +135,7 @@ export default function History() {
           <tbody>
             {logs.map((log, idx) => (
               
-              <tr key={idx} className="even:bg-gray-50 hover:bg-gray-100">
+              <tr key={idx} data-testid="log-row" className="even:bg-gray-50 hover:bg-gray-100">
                 {editingId === log.id ? (
                   <>
                     <td className="p-2">
@@ -181,11 +181,13 @@ export default function History() {
                     <td className="p-2 flex gap-2">
                       <button
                         className='bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600'
+                        data-testid="save-btn"
                         onClick={() => handleUpdate(log.id)}>
                         <CheckIcon className="h-5 w-5"/>
                       </button>
                       <button
                         className='bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500'
+                        data-testid="cancel-btn"
                         onClick={() => setEditingId(null)}>
                         <ArrowUturnLeftIcon className="h-5 w-5"/>
                       </button>

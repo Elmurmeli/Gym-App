@@ -82,6 +82,7 @@ export default function LogExercise() {
           <input
             type={field === 'date' ? 'date' : 'text'}
             name={field}
+            data-testid={`${field}-input`}
             value={form[field]}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -89,7 +90,7 @@ export default function LogExercise() {
           />
         </div>
       ))}
-      <button type="submit" disabled={submitting} className="bg-blue-600 text-white  font-semibold px-4 py-2 rounded-lg hover:bg-blue-700">
+      <button data-testid="submit-btn" type="submit" disabled={submitting} className="bg-blue-600 text-white  font-semibold px-4 py-2 rounded-lg hover:bg-blue-700">
         {submitting ? 'Logging...' : 'Log Exercise'}
       </button>
     </form>
