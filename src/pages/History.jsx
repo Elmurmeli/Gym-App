@@ -142,6 +142,7 @@ export default function History() {
                       <input
                         type="text"
                         value={editForm.name}
+                        data-testid="exercise-input"
                         onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                         className="border p-1 rounded"
                         />
@@ -150,6 +151,7 @@ export default function History() {
                       <input
                         type="number"
                         value={editForm.weight}
+                        data-testid="weight-input"
                         onChange={(e) => setEditForm({ ...editForm, weight: e.target.value })}
                         className="border p-1 rounded"
                         /> 
@@ -158,6 +160,7 @@ export default function History() {
                       <input
                         type="number"
                         value={editForm.reps}
+                        data-testid="reps-input"
                         onChange={(e) => setEditForm({ ...editForm, reps: e.target.value })}
                         className="border p-1 rounded"
                         />
@@ -166,6 +169,7 @@ export default function History() {
                       <input
                         type="number"
                         value={editForm.sets}
+                        data-testid="sets-input"
                         onChange={(e) => setEditForm({ ...editForm, sets: e.target.value })}
                         className="border p-1 rounded"
                         />
@@ -174,6 +178,7 @@ export default function History() {
                       <input
                         type="date"
                         value={editForm.date}
+                        data-testid="date-input"
                         onChange={(e) => setEditForm({ ...editForm, date: e.target.value })}
                         className="border p-1 rounded"
                         />
