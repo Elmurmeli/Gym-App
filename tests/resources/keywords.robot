@@ -52,8 +52,7 @@ Fill Exercise Form
     Input Text      ${SETS_INPUT}        ${sets}
     Input Text      ${DATE_INPUT}        ${date}
     Click Button    ${SUBMIT_BTN}
-    Alert Should Be Present
-    Handle Alert    ACCEPT
+    Handle Alert    action=ACCEPT
 
 # ============================================
 # Edit Exercise
@@ -71,8 +70,7 @@ Save Edited Exercise
     Input Text    ${SETS_INPUT}        ${sets}
     Input Text    ${DATE_INPUT}        ${date}
     Click Button  ${SAVE_BTN}
-    Alert Should Be Present
-    Handle Alert    ACCEPT
+    Handle Alert    action=ACCEPT
 
 Cancel Edit
     Click Button    ${CANCEL_BTN}
@@ -87,8 +85,7 @@ Get First Exercise Name
 
 Delete First Exercise
     Click Button    ${FIRST_DELETE_BTN}
-    Alert Should Be Present
-    Handle Alert    ACCEPT
+    Handle Alert    action=ACCEPT
 
 # ============================================
 # Verification
