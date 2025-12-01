@@ -16,6 +16,13 @@ export default function Progress() {
     const [selectedExercise, setSelectedExercise] = useState("");
     const [filteredData, setFilteredData] = useState([]);
 
+    // Normalize exercise name: Capitalize first letter, lowercase the rest
+    const normalizeName = (name) => {
+        if (!name) return "";
+        const clean = name.trim().toLowerCase();
+        return clean.charAt(0).toUpperCase() + clean.slice(1);
+    }
+
     // Fetch logs on load
     useEffect(() => {
         const fetchLogs = async () => {
@@ -32,13 +39,19 @@ export default function Progress() {
                 .order("date", { ascending: true });
 
             if (!error && data) {
-                setLogs(data);
+                // Normalize exercise names 
+                const normalized = data.map((log) => ({
+                    ...log,
+                    name: normalizeName(log.name)
+                }));
 
-                // Get list of unique exercises
-                const unique = [...new Set(data.map((log) => log.name))];
+                setLogs(normalized);
+
+                // Build unique exercise list
+                const unique = [...new Set(normalized.map((log) => log.name))];
                 setExerciseList(unique);
 
-
+                // Set default selected exercise
                 if (unique.length > 0) {
                     setSelectedExercise(unique[0]);
                 }
