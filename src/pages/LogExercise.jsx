@@ -12,6 +12,12 @@ export default function LogExercise() {
   });
   const [submitting, setSubmitting] = useState(false);
 
+  //Normalize: Capitalize the first letter, lowercase the rest
+  const normalizeExerciseName = (name) => {
+    const clean = name.trim().toLowerCase();
+    return clean.charAt(0).toUpperCase() + clean.slice(1);
+  };
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -33,12 +39,14 @@ export default function LogExercise() {
     return;
   }
 
+  const normalizedExercise = normalizeExerciseName(form.exercise);
+
   // Insert exercise into supabase
   const { error } = await supabase
     .from('exercises')
     .insert([
       {
-        name: form.exercise,
+        name: normalizedExercise,
         weight: form.weight || null,
         reps: form.reps || null,
         sets: form.sets || null,
