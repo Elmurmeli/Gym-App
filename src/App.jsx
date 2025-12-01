@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ProtectedRoutes from './components/ProtectedRoutes';
 import NavBar from './components/NavBar';
+import Progress from './pages/Progress';
 
 
 export default function App() {
@@ -57,6 +58,7 @@ export default function App() {
             } />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/progress" element={<Progress />} />
         </Routes>
       </div>
 

@@ -42,6 +42,7 @@ export default function NavBar() {
                 <>
                     <Link to="/logs" className="hover:text-blue-600 font-medium mx-4">Log Exercise</Link>
                     <Link to="/history" className="hover:text-blue-600 font-medium mx-4">History</Link>
+                    <Link to="/progress" className="hover:text-blue-600 font-medium mx-4">Progress</Link>
                 </>
                 )}
             </div>
