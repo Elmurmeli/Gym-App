@@ -16,6 +16,21 @@ export default function Progress() {
     const [exerciseList, setExerciseList] = useState([]);
     const [selectedExercise, setSelectedExercise] = useState("");
     const [filteredData, setFilteredData] = useState([]);
+    const [prs, setPrs] = useState({ maxWeight: 0, maxVolume: 0});
+
+    // Calculate PRs
+    useEffect(() => {
+        // Calculate PRs whenever filteredData changes
+        if (filteredData.length === 0) {
+            setPrs({ maxWeight: 0, maxVolume: 0 });
+            return;
+        }
+
+        const maxWeight = Math.max(...filteredData.map((d) => d.weight));
+        const maxVolume = Math.max(...filteredData.map((d) => d.volume));
+
+        setPrs({ maxWeight, maxVolume });
+    }, [filteredData]);
 
     // Normalize exercise name: Capitalize first letter, lowercase the rest
     const normalizeName = (name) => {
@@ -107,6 +122,33 @@ export default function Progress() {
             ))}
             </select>
         
+        </motion.div>
+
+        {/* Personal Records */}
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+            <div className="max-w-xl mx-auto mb-6 p-5 bg-white rounded-xl shadow-md border border-gray-100">
+            <h3 className="text-xl font-semibold text-blue-600 mb-4 text-center">Personal Records</h3>
+
+            {filteredData.length === 0 ? (
+                <p className="text-center text-gray-500">No data for this exercise yet.</p>
+            ) : (
+                <div className="flex justify-around text center">
+                    <div>
+                        <p className="text-gray-600">Heaviest Lift</p>
+                        <p className="text-2xl font-bold text-blue-500">{prs.maxWeight} kg</p>
+                    </div>
+
+                    <div>
+                        <p className="text-gray-600">Highest Volume</p>
+                        <p className="text-2xl font-bold text-blue-500">{prs.maxVolume} kg</p>
+                    </div>
+                </div>
+            )}
+            </div>
         </motion.div>
 
         {/* Graph */}
