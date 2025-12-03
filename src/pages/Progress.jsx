@@ -9,6 +9,7 @@ import {
     CartesianGrid,
     ResponsiveContainer
 } from "recharts";
+import { motion } from "framer-motion";
 
 export default function Progress() {
     const [logs, setLogs] = useState([]);
@@ -88,9 +89,14 @@ export default function Progress() {
         </h2>
 
         {/* Exercise Selector */}
-        <div className="flex justify-center mb-6">
+        <motion.div
+            className="flex justify-center mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+        >
             <select
-            className="border p-2 rounded shadow"
+            className="border border-gray-300 p-2 rounded-lg shadow-sm focus:outline-none cursor-pointer focus:ring-1 focus:ring-blue-400 transition-all bg-white"
             value={selectedExercise}
             onChange={(e) => setSelectedExercise(e.target.value)}
             >
@@ -100,17 +106,23 @@ export default function Progress() {
                 </option>
             ))}
             </select>
-        </div>
+        
+        </motion.div>
 
         {/* Graph */}
-        <div className="bg-white shadow rounded p-4 mx-auto" style={{ width: "95%", height: 350 }}>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+        >
+        <div className="bg-white shadow-xl rounded-2xl p-6 mx-auto" style={{ width: "95%", height: 380 }}>
             {filteredData.length === 0 ? (
             <p className="text-center text-gray-500">No data available.</p>
             ) : (
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={filteredData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
+                <XAxis dataKey="date" tickFormatter={(d) => new Date(d).toLocaleDateString()} />
                 <YAxis dataKey="weight" />
                 <Tooltip />
                 <Line
@@ -124,6 +136,7 @@ export default function Progress() {
             </ResponsiveContainer>
             )}
         </div>
+        </motion.div>
         </div>
     );
 }
