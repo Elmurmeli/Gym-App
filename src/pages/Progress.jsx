@@ -131,7 +131,7 @@ export default function Progress() {
             transition={{ duration: 0.6, ease: "easeOut" }}
         >
             <div className="max-w-xl mx-auto mb-6 p-5 bg-white rounded-xl shadow-md border border-gray-100">
-            <h3 className="text-xl font-semibold text-blue-600 mb-4 text-center">Personal Records</h3>
+            <h3 className="text-xl font-semibold text-blue-600 mb-4 text-center">🏆Personal Records🏆</h3>
 
             {filteredData.length === 0 ? (
                 <p className="text-center text-gray-500">No data for this exercise yet.</p>

@@ -8,6 +8,13 @@ export default function History() {
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({ name: '', weight: '', reps: '', sets: '', date: '' });
+  const [personalRecords, setPersonalRecords] = useState({});
+
+  //Normalize exercise name: Capitalize the first letter, lowercase the rest
+  const normalizeExerciseName = (name) => {
+    const clean = name.trim().toLowerCase();
+    return clean.charAt(0).toUpperCase() + clean.slice(1);
+  };
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -38,6 +45,9 @@ export default function History() {
         setLogs([]);
       } else {
         setLogs(data);
+
+        //Calculate personal records for the user
+        setPersonalRecords(calculatePrs(data));
       }
 
       setLoading(false);
@@ -59,7 +69,10 @@ export default function History() {
       console.error(error);
     } else {
     // Remove from local state so UI updates immediately
-      setLogs(logs.filter(log => log.id !== id));
+      const updated = logs.filter(log => log.id !== id)
+      setLogs(updated);
+    // Recalculate personal records when deleting exercises
+      setPersonalRecords(calculatePrs(updated));
     }
   };
 
@@ -93,11 +106,33 @@ export default function History() {
       console.error(error);
     } else {
       // Update local state
-      setLogs(logs.map(log => log.id === id ? { ...log, ...editForm } : log));
+      const updated = logs.map(log => log.id === id ? { ...log, ...editForm } : log)
+      setLogs(updated);
+      // Recalculate personal when edited records
+      setPersonalRecords(calculatePrs(updated));
       setEditingId(null);
     }
   }
 
+  // Calculate personal records
+  const calculatePrs = (logs) => {
+    const prs = {};
+    logs.forEach(log => {
+      const name = normalizeExerciseName(log.name);
+      const weight = Number(log.weight);
+
+      if (!prs[name] || weight > prs[name]) {
+        prs[name] = weight;
+      }
+    });
+
+    return prs;
+  };
+
+  const isPR = (log) => {
+    const normalized = normalizeExerciseName(log.name);
+    return Number(log.weight) === personalRecords[normalized];
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100  justify-center px-4">
@@ -136,6 +171,7 @@ export default function History() {
             {logs.map((log, idx) => (
               
               <tr key={idx} data-testid="log-row" className="even:bg-gray-50 hover:bg-gray-100">
+                {/* Editing view */}
                 {editingId === log.id ? (
                   <>
                     <td className="p-2">
@@ -199,8 +235,20 @@ export default function History() {
                     </td>
                   </>
                 ) : (
+          
                 <>
-                <td className="p-2">{log.name}</td>
+                {/* Normal view */}
+                <td className="p-2">{log.name} {isPR(log) && (
+                  <motion.span
+                  initial={{ scale: 0.8, opacity:0}}
+                  animate={{ scale: 1, opacity: 1}}
+                  transition={{ duration:0.3 }}
+                  className="px-2 py-0.5 bg-yellow-300 text-yellow-900 rounded-full text-xs font-bold shadow"
+                  >
+                    🏆PR
+                  </motion.span>
+                )}
+                </td>
                 <td className="p-2">{log.weight || '-'}kg</td>
                 <td className="p-2">{log.reps || '-'}</td>
                 <td className="p-2">{log.sets || '-'}</td>
