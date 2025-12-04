@@ -201,7 +201,7 @@ export default function History() {
                 ) : (
                 <>
                 <td className="p-2">{log.name}</td>
-                <td className="p-2">{log.weight || '-'}</td>
+                <td className="p-2">{log.weight || '-'}kg</td>
                 <td className="p-2">{log.reps || '-'}</td>
                 <td className="p-2">{log.sets || '-'}</td>
                 <td className="p-2">{log.date || '-'}</td>
