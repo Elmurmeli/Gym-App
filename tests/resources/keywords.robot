@@ -1,5 +1,6 @@
 *** Settings ***
 Library     SeleniumLibrary
+Library     Collections
 Resource    locators.robot
 
 *** Variables ***
@@ -81,7 +82,7 @@ Cancel Edit
 
 Get First Exercise Name
     ${name}=    Get Text    ${FIRST_EXERCISE_NAME}
-    [Return]    ${name}
+    RETURN    ${name}
 
 Delete First Exercise
     Click Button    ${FIRST_DELETE_BTN}

@@ -243,13 +243,14 @@ export default function History() {
                   initial={{ scale: 0.8, opacity:0}}
                   animate={{ scale: 1, opacity: 1}}
                   transition={{ duration:0.3 }}
+                  data-testid="pr-badge"
                   className="px-2 py-0.5 bg-yellow-300 text-yellow-900 rounded-full text-xs font-bold shadow"
                   >
                     🏆PR
                   </motion.span>
                 )}
                 </td>
-                <td className="p-2">{log.weight || '-'}kg</td>
+                <td className="p-2" data-testid="weight-cell">{log.weight || '-'}</td>
                 <td className="p-2">{log.reps || '-'}</td>
                 <td className="p-2">{log.sets || '-'}</td>
                 <td className="p-2">{log.date || '-'}</td>
