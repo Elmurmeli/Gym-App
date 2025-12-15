@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { supabase } from "./supabase";
 
@@ -38,7 +38,7 @@ export default function App() {
 
   return (
 
-    <Router basename="/Gym-App">
+    <Router>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <div className="h-screen bg-gray-100 text-gray-800 p-4 w-screen mx-auto" src="...">
 

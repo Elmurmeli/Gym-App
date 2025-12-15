@@ -16,7 +16,7 @@ export default function Login() {
         });
 
         if (error) { setMessage(error.message); }
-        else window.location.href = "/Gym-App/logs"; // Redirect on successful login
+        else window.location.href = "/"; // Redirect on successful login
     };
 
     return (
