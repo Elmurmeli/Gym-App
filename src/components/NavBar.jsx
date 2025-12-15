@@ -26,7 +26,7 @@ export default function NavBar() {
     const handleLogout = async () => {
         await supabase.auth.signOut();
         setMenuOpen(false);
-        window.location.href = "/"; // Redirect to home on logout
+        window.location.hash = "#/"; // Redirect to home on logout
     };
 
     return (

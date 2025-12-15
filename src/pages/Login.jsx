@@ -16,7 +16,7 @@ export default function Login() {
         });
 
         if (error) { setMessage(error.message); }
-        else window.location.href = "/"; // Redirect on successful login
+        else window.location.hash = "#/"; // Redirect on successful login
     };
 
     return (
