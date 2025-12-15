@@ -33,7 +33,7 @@ export default function App() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate("/");
+    window.location.href = "/Gym-App/"; // Redirect to home on logout
   };
 
   return (
