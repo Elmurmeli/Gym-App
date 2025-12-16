@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { supabase } from "./supabase";
 
@@ -33,7 +33,7 @@ export default function App() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    window.location.href = "/"; // Redirect to home on logout
+    window.location.href = "/Gym-App/"; // Redirect to home on logout
   };
 
   return (

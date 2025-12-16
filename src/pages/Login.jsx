@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from '../supabase';
 import { motion } from "framer-motion"
+import { Link } from 'react-router-dom';
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ export default function Login() {
         });
 
         if (error) { setMessage(error.message); }
-        else window.location.href = "/logs"; // Redirect on successful login
+        else window.location.hash = "#/"; // Redirect on successful login
     };
 
     return (
@@ -56,6 +57,24 @@ export default function Login() {
           Login
         </button>
       </form>
+
+      {/*Divider*/}
+      <div className="flex items-center my-6">
+        <div className="flex-grow border-t border-gray-300" />
+        <span className="mx-4 text-sm text-gray-500">OR</span>
+        <div className="flex-grow border-t border-gray-300" />
+      </div>
+
+      <p className="text-center text-sm text-gray-600">
+        Don't have an account?{' '}
+        <Link
+            to="/register"
+            className="block px-2 py-2 rounded font-medium bg-green-100 hover:bg-green-200"
+            data-testid="register-link"
+        >
+            Create an account
+        </Link>
+      </p>
 
       {message && <p className="mt-4 text-red-600">{message}</p>}
       

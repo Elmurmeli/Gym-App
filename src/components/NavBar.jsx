@@ -26,23 +26,23 @@ export default function NavBar() {
     const handleLogout = async () => {
         await supabase.auth.signOut();
         setMenuOpen(false);
-        window.location.href = "/"; // Redirect to home on logout
+        window.location.hash = "#/"; // Redirect to home on logout
     };
 
     return (
         <nav className="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-40 rounded-xl">
             {/* Left Side - Application Name */}
             <div className= "flex gap-6 items-center">
-                <Link to="/" className="text-blue-500 text-2xl font-bold">
+                <Link to="/" className="text-blue-500 text-2xl font-bold text-shadow-lg">
                     Gym Tracker
                 </Link>
             
             {/* Logged-in only navigation links */}
             {user && (
                 <>
-                    <Link to="/logs" className="hover:text-blue-600 font-medium mx-4">Log Exercise</Link>
-                    <Link to="/history" className="hover:text-blue-600 font-medium mx-4">History</Link>
-                    <Link to="/progress" className="hover:text-blue-600 font-medium mx-4">Progress</Link>
+                    <Link to="/logs" className="hover:text-blue-600 font-medium mx-4 text-shadow-lg">Log Exercise</Link>
+                    <Link to="/history" className="hover:text-blue-600 font-medium mx-4 text-shadow-lg">History</Link>
+                    <Link to="/progress" className="hover:text-blue-600 font-medium mx-4 text-shadow-lg">Progress</Link>
                 </>
                 )}
             </div>
