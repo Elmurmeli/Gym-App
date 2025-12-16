@@ -13,6 +13,9 @@ export default function Register() {
         const { error } = await supabase.auth.signUp({
             email,
             password,
+            options: {
+              emailRedirectTo: "https://elmurmeli.github.io/Gym-App/"
+            }
         });
 
         if (error) {
