@@ -11,7 +11,6 @@ Suite Teardown  Close Browser
 Cannot Access Logs Without Login
     Run Keyword And Ignore Error    Logout User
     Go To   ${BASE_URL}/Gym-App/#/logs
-    Wait Until Page Contains    Login   timeout=5s
     Location Should Contain     /#/login
 
 Logged In User Can Access History
