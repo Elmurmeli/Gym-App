@@ -28,7 +28,7 @@ Login As Test User
 Logout User
     Click Button    ${MENU_BTN}
     Click Button    ${LOGOUT_BTN}
-    Wait Until Location Contains    login
+    Wait Until Page Contains    Login
 
 # ============================================
 # Navigation
@@ -41,6 +41,10 @@ Go To Log Exercise Page
 Go To History Page
     Go To    ${BASE_URL}/#/history
     Wait Until Page Contains Element    ${ROW}    timeout=10s
+
+Go To Login Page
+    Go To   ${BASE_URL}/#/login
+    Wait Until Page Contains    OR
 
 # ============================================
 # Add Exercise

@@ -2,14 +2,15 @@
 Library     SeleniumLibrary
 Library     String
 Resource    ../resources/locators.robot
+Resource    ../resources/keywords.robot
 
-*** Variables ***
-${BASE_URL}     http://localhost:5173
+Suite Setup     Open Browser To Login Page
+Suite Teardown  Close Browser
 
 *** Test Cases ***
 Register New User
     ${random}=      Generate Random String       6      [LOWER]
-    Open Browser    ${BASE_URL}/register    chrome
+    Open Browser    ${BASE_URL}/#/register    ${BROWSER}
     Wait Until Page Contains Element        ${EMAIL_INPUT}
     Input Text      ${EMAIL_INPUT}           elmurmeli123+${random}@gmail.com
     Input Password      ${PASSWORD_INPUT}   MySecret123

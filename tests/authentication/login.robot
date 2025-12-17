@@ -1,18 +1,12 @@
 *** Settings ***
+Documentation   Test that a user can successfully login
 Library     SeleniumLibrary
 Resource    ../resources/locators.robot
+Resource    ../resources/keywords.robot
 
-*** Variables ***
-${BASE_URL}     http://localhost:5173
-${EMAIL}  elmurmeli123+123456@gmail.com
-${PASSWORD}   testi123
+Suite Setup     Open Browser To Login Page
+Suite Teardown  Close Browser
 
 *** Test Cases ***
 Login Existing User
-    Open Browser    ${BASE_URL}/login   chrome
-    Input Text      ${EMAIL_INPUT}      ${EMAIL}
-    Input Text      ${PASSWORD_INPUT}   ${PASSWORD}
-    Click Button    ${LOGIN_BTN}
-    Wait Until Page Contains    ${EMAIL}
-    Close Browser
-
+    Login As Test User

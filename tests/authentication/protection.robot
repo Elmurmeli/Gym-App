@@ -1,45 +1,30 @@
 *** Settings ***
 Library     SeleniumLibrary
 Resource    ../resources/locators.robot
+Resource    ../resources/keywords.robot
 
-*** Variables ***
-${BASE_URL}     http://localhost:5173
-${EMAIL}  elmurmeli123+123456@gmail.com
-${PASSWORD}   testi123
+Suite Setup     Open Browser To Login Page
+Suite Teardown  Close Browser
 
 *** Test Cases ***
 Cannot Access Logs Without Login
-    Open Browser    ${BASE_URL}/logs    chrome
+    Go To   ${BASE_URL}/Gym-App/#/logs
     Wait Until Page Contains    Login   2s
-    Location Should Be      ${BASE_URL}/login
-    Close Browser
+    Location Should Be      ${BASE_URL}/Gym-App/#/login
 
 Logged In User Can Access History
-    Open Browser    ${BASE_URL}/login   chrome
-
-    #login
-    Input Text      ${EMAIL_INPUT}      ${EMAIL}
-    Input Text      ${PASSWORD_INPUT}   ${PASSWORD}
-    Click Button    ${LOGIN_BTN}
-    Wait Until Page Contains    ${EMAIL}
-
-    Go To       ${BASE_URL}/history
+    Login As Test User
+    Go To History Page
     Wait Until Page Contains    Workout History
-
-    Close Browser
+    Logout User
 
 Logged In User Can Access Log Exercise
-    Open Browser    ${BASE_URL}/login   chrome
-
-    #login
-    Input Text      ${EMAIL_INPUT}      ${EMAIL}
-    Input Text      ${PASSWORD_INPUT}   ${PASSWORD}
-    Click Button    ${LOGIN_BTN}
-    
-    Wait Until Page Contains    ${EMAIL}
+    Go To Login Page
+    Login As Test User
+    Go To Log Exercise Page
     Wait Until Page Contains     Log Your Exercise
+    Logout User
 
-    Close Browser
 
 
 
