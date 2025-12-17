@@ -11,9 +11,13 @@ Suite Teardown  Close Browser
 Delete Exercise Successfully
     Login As Test User
     Go To History Page
-    ${exercise}=    Get First Exercise Name
+
+    ${rows_before}=    Get Element Count    ${ROW}
+
     Delete First Exercise
-    Verify Exercise Removed     ${exercise}
+
+    Wait Until Keyword Succeeds    5s    1s
+    ...    Verify Row Count Decreased    ${rows_before}
 
 
 

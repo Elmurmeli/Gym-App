@@ -17,7 +17,6 @@ Logged In User Can Access History
     Login As Test User
     Go To History Page
     Wait Until Page Contains    Workout History
-    Logout User
 
 Logged In User Can Access Log Exercise
     Go To Login Page

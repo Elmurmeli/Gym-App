@@ -104,3 +104,8 @@ Verify Exercise Appears
 Verify Exercise Removed
     [Arguments]    ${exercise}
     Wait Until Page Does Not Contain    ${exercise}    timeout=10s
+
+Verify Row Count Decreased
+    [Arguments]    ${before}
+    ${after}=    Get Element Count    ${ROW}
+    Should Be Equal As Integers    ${after}    ${before - 1}
