@@ -1,17 +1,17 @@
 *** Settings ***
 Library    SeleniumLibrary
+Resource        ../resources/locators.robot
+Resource        ../resources/keywords.robot
 
-*** Variables ***
-${URL}    http://localhost:5173
 
 *** Test Cases ***
 Open Browser Smoke Test
-    Open Browser    https://example.com    chrome
+    Open Browser    ${BASE_URL}    {BROWSER}
     Sleep    2s
     Close Browser
 
 Log Exercise With Only Exercise Field
-    Open Browser    ${URL}/logs    chrome
+    Open Browser    ${BASE_URL}/#/logs    {BROWSER}
     Wait Until Element Is Visible    name:exercise    5s
     Input Text    name:exercise    Deadlift
     Click Button    Log Exercise
@@ -19,7 +19,7 @@ Log Exercise With Only Exercise Field
     [Teardown]    Close Browser
 
 Log Complete Exercise
-    Open Browser    ${URL}/logs    chrome
+    Open Browser    ${BASE_URL}/$/logs    chrome
     Input Text    name:exercise   Bench Press
     Input Text    name:weight    80
     Input Text    name:reps    8
@@ -27,6 +27,6 @@ Log Complete Exercise
     Input Text    name:date    10/11/2025
     Click Button    Log Exercise
      Handle Alert   ACCEPT
-    Go To    ${URL}/history
+    Go To    ${URL}/$/history
     Page Should Contain    Bench Press
     [Teardown]    Close Browser

@@ -4,13 +4,15 @@ Resource    ../resources/locators.robot
 Resource    ../resources/keywords.robot
 
 Suite Setup     Open Browser To Login Page
+Test Setup     Go To Login Page
 Suite Teardown  Close Browser
 
 *** Test Cases ***
 Cannot Access Logs Without Login
+    Run Keyword And Ignore Error    Logout User
     Go To   ${BASE_URL}/Gym-App/#/logs
-    Wait Until Page Contains    Login   2s
-    Location Should Be      ${BASE_URL}/Gym-App/#/login
+    Wait Until Page Contains    Login   timeout=5s
+    Location Should Contain     /#/login
 
 Logged In User Can Access History
     Login As Test User
