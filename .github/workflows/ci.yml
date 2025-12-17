@@ -11,9 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      #CheckOut
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      #Node setup and build
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -35,25 +37,29 @@ jobs:
         with:
           python-version: '3.11'
 
+      #Setup Robot Framework
       - name: Install Robot Framework dependencies
         run: |
           pip install robotframework
           pip install robotframework-seleniumlibrary
-          pip install webdriver-manager
 
       - name: Install Chrome
         uses: browser-actions/setup-chrome@v1
 
-      # Start Vite preview server
-      - name: Start app
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-        run: |
-          npm run preview -- --port 5173 &
-          sleep 5
-
       #Run tests
       - name: Run Robot Framework tests
+        env:
+          BASE_URL: https://elmurmeli.github.io/Gym-App
         run: |
-          robot --variable BROWSER:headlesschrome tests/
+          robot \
+            --variable BROWSER:headlesschrome \
+            --outputdir robot-results \
+            tests/
+
+      #Upload test reports
+      - name: Upload Robot reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-test-results
+          path: robot-results
