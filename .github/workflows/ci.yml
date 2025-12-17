@@ -29,3 +29,31 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm run build
 
+      #Setup python for robot tests
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Robot Framework dependencies
+        run: |
+          pip install robotframework
+          pip install robotframework-seleniumlibrary
+          pip install webdriver-manager
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      # Start Vite preview server
+      - name: Start app
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          npm run preview -- --port 5173 &
+          sleep 5
+
+      #Run tests
+      - name: Run Robot Framework tests
+        run: |
+          robot --variable BROWSER:headlesschrome tests/

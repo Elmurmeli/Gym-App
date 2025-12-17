@@ -1,31 +1,13 @@
 *** Settings ***
 Documentation   Test that a user can edit an existing exercise and see the changes.
 Resource        ../resources/locators.robot
+Resource        ../resources/keywords.robot
 Library         SeleniumLibrary
 
 Suite Setup     Open Browser To Login Page
 Suite Teardown  Close Browser
 
-*** Variables ***
-${BASE_URL}     http://localhost:5173
-${EMAIL}  elmurmeli123+123456@gmail.com
-${PASSWORD}   testi123
-
 *** Keywords ***
-Open Browser To Login Page
-    Open Browser    ${BASE_URL}/login   chrome
-    Maximize Browser Window
-
-Login As Test User
-    Input Text  ${EMAIL_INPUT}  ${EMAIL}
-    Input Text  ${PASSWORD_INPUT}   ${PASSWORD}
-    Click Button    ${LOGIN_BTN}
-    Wait Until Location Contains    /logs   timeout=5s
-
-Go To History Page
-    Go To   ${BASE_URL}/history
-    Wait Until Page Contains Element    ${ROW}
-
 Edit First Exercise
     [Arguments]     ${new_name}     ${new_weight}       ${new_reps}     ${new_sets}     ${new_date}
     Click Button    ${EDIT_BTN}

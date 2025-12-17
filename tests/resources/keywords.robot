@@ -4,9 +4,10 @@ Library     Collections
 Resource    locators.robot
 
 *** Variables ***
-${BASE_URL}     http://localhost:5173
+${BASE_URL}     %{BASE_URL}
 ${EMAIL}  elmurmeli123+123456@gmail.com
 ${PASSWORD}   testi123
+${BROWSER}    chrome
 
 *** Keywords ***
 
@@ -15,30 +16,30 @@ ${PASSWORD}   testi123
 # ============================================
 
 Open Browser To Login Page
-    Open Browser    ${BASE_URL}/login    chrome
+    Open Browser    ${BASE_URL}/#/login    ${BROWSER}
     Maximize Browser Window
 
 Login As Test User
     Input Text    ${EMAIL_INPUT}      ${EMAIL}
     Input Text    ${PASSWORD_INPUT}   ${PASSWORD}
     Click Button  ${LOGIN_BTN}
-    Wait Until Location Contains    /logs    timeout=7s
+    Wait Until Page Contains    Welcome to Gym Tracker    timeout=7s
 
 Logout User
     Click Button    ${MENU_BTN}
     Click Button    ${LOGOUT_BTN}
-    Wait Until Location Contains    /login
+    Wait Until Location Contains    login
 
 # ============================================
 # Navigation
 # ============================================
 
 Go To Log Exercise Page
-    Go To    ${BASE_URL}/logs
+    Go To    ${BASE_URL}/#/logs
     Wait Until Page Contains Element    ${EXERCISE_INPUT}
 
 Go To History Page
-    Go To    ${BASE_URL}/history
+    Go To    ${BASE_URL}/#/history
     Wait Until Page Contains Element    ${ROW}    timeout=10s
 
 # ============================================
