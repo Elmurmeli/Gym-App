@@ -23,7 +23,6 @@ Logged In User Can Access Log Exercise
     Login As Test User
     Go To Log Exercise Page
     Wait Until Page Contains     Log Your Exercise
-    Logout User
 
 
 
