@@ -15,5 +15,5 @@ Register New User
     Input Text      ${EMAIL_INPUT}           elmurmeli123+${random}@gmail.com
     Input Password      ${PASSWORD_INPUT}   MySecret123
     Click Button        ${REGISTER_BTN}
-    Wait Until Page Contains    Registration successful!
+    Wait Until Location Contains    /#/login    timeout=10s
     Close Browser

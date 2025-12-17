@@ -14,7 +14,7 @@ export default function Register() {
             email,
             password,
             options: {
-              emailRedirectTo: "https://elmurmeli.github.io/Gym-App/"
+              emailRedirectTo: "https://elmurmeli.github.io/Gym-App/#/login"
             }
         });
 
@@ -22,6 +22,10 @@ export default function Register() {
             setMessage(error.message);
         } else {
             setMessage("Registration successful! Check your email for confirmation.");
+            setTimeout(() => {
+              window.location.hash = "#/login"; // Redirect on successful register
+            }, 1500);
+            
         }
     };
 
