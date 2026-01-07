@@ -1,5 +1,6 @@
 *** Settings ***
 Documentation   Test that a user can add a new exercise and see it appear in history.
+Force Tags      regression
 Resource        ../resources/locators.robot
 Resource        ../resources/keywords.robot
 Library         SeleniumLibrary

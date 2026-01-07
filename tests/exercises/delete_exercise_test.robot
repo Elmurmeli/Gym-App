@@ -1,5 +1,6 @@
 *** Settings ***
 Documentation   Test that a user can delete an existing exercise and see the changes.
+Force Tags      regression
 Resource        ../resources/locators.robot
 Resource        ../resources/keywords.robot
 Library         SeleniumLibrary

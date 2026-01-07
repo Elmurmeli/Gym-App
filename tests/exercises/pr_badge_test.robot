@@ -1,5 +1,6 @@
 *** Settings ***
 Documentation   Test that the PR badge is shown
+Force Tags      regression
 Resource        ../resources/locators.robot
 Resource        ../resources/keywords.robot
 Library         SeleniumLibrary
