@@ -46,8 +46,21 @@ jobs:
       - name: Install Chrome
         uses: browser-actions/setup-chrome@v1
 
-      #Run tests
-      - name: Run Robot Framework tests
+      #Pull requests: run SMOKE only
+      - name: Run Robot Smoke tests (PR)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_URL: https://elmurmeli.github.io/Gym-App
+        run: |
+          robot \
+            --include smoke \
+            --variable BROWSER:headlesschrome \
+            --outputdir robot-results \
+            tests/
+
+      #Push to main: run FULL suite
+      - name: Run Robot Full Tests (main)
+        if: github.event_name == 'push'
         env:
           BASE_URL: https://elmurmeli.github.io/Gym-App
         run: |

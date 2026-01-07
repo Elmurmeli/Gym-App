@@ -1,4 +1,6 @@
 *** Settings ***
+Documentation   Test that a user can register a new account
+Force Tags      regression
 Library     SeleniumLibrary
 Library     String
 Resource    ../resources/locators.robot

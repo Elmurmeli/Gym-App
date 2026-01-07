@@ -1,4 +1,6 @@
 *** Settings ***
+Documentation   Test that a user can logout
+Force Tags      smoke
 Library     SeleniumLibrary
 Resource    ../resources/locators.robot
 Resource    ../resources/keywords.robot

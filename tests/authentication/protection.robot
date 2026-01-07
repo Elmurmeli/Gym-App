@@ -1,4 +1,6 @@
 *** Settings ***
+Documentation   Tests that the protected routes Work
+Force Tags      regression
 Library     SeleniumLibrary
 Resource    ../resources/locators.robot
 Resource    ../resources/keywords.robot
