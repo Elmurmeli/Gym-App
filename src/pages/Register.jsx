@@ -38,7 +38,7 @@ export default function Register() {
         className="text-center"
       >
     <div className="max-w-md mx-auto mt-16 bg-white shadow p-6 rounded-xl">
-      <h2 className="text-2xl font-bold mb-4 text-blue-600">Register</h2>
+      <h2 className="text-2xl font-bold mb-4 text-blue-600 text-shadow-sm">Register</h2>
 
       <form onSubmit={handleRegister} className="flex flex-col gap-4">
         <input

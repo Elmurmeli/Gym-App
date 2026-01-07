@@ -30,7 +30,7 @@ export default function Login() {
       >
     <div className="max-w-md mx-auto mt-16 bg-white shadow p-6 rounded-xl">
 
-      <h2 className="text-2xl font-bold mb-4 text-blue-600">Login</h2>
+      <h2 className="text-2xl font-bold mb-4 text-blue-600 text-shadow-sm">Login</h2>
 
       <form onSubmit={handleLogin} className="flex flex-col gap-4">
         <input
