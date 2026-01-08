@@ -76,7 +76,7 @@ export default function Login() {
         </Link>
       </p>
 
-      {message && <p className="mt-4 text-red-600">{message}</p>}
+      {message && <p data-testid="auth-error" className="mt-4 text-red-600">{message}</p>}
       
     </div>
     </motion.div>
