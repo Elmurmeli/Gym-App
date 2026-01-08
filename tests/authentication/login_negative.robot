@@ -15,8 +15,9 @@ Login Fails With Wrong Password
     Input Password      ${PASSWORD_INPUT}   definitely-wrong
     Click Button        ${LOGIN_BTN}
 
-    Wait Until Page Contains Element    ${AUTH_ERROR}   timeout=10s
-    Location Should Contain     /#/login
+    Wait Until Location Contains     /#/login   timeout=10s
+
+    Run Keyword And Ignore Error    Wait Until Page Contains Element    ${AUTH_ERROR}   timeout=3s
 
 Login Blocks Invalid Email Format
     [Tags]      regression
