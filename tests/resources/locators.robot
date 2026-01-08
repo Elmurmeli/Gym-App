@@ -19,5 +19,7 @@ ${SAVE_BTN}         xpath=//*[@data-testid="save-btn"]
 ${CANCEL_BTN}       xpath=//*[@data-testid="cancel-btn"]
 ${PR_BADGE}         xpath=//*[@data-testid="pr-badge"]
 
+${AUTH_ERROR}       xpath=//*[@data-testid="auth-error"]
+
 ${FIRST_EXERCISE_NAME}    xpath=(//*[@data-testid="log-row"]//td[1])[1]
 ${FIRST_DELETE_BTN}       xpath=(//*[@data-testid="log-row"]//button[@data-testid="delete-btn"])[1]
