@@ -69,6 +69,33 @@ export default function Programs() {
           )}
         </div>
 
+        {/* Prompt if not logged in */}
+        {!user && (
+          <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4 text-center">
+            <p className="text-blue-900 font-medium">
+              Login to get the full experience 💪
+            </p>
+            <p className="text-sm text-blue-700 mt-1">
+              Create your own programs, edit workouts, and track progress.
+            </p>
+
+            <div className="mt-3 flex justify-center gap-3">
+              <Link
+                to="/login"
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-100"
+              >
+                Create account
+              </Link>
+            </div>
+          </div>
+        )}
+
         <div className="flex gap-2 mb-6">
           <button
             onClick={() => setTab("public")}
