@@ -13,6 +13,7 @@ import Progress from './pages/Progress';
 import Programs from './pages/programs/Programs';
 import NewProgram from './pages/programs/NewProgram';
 import ProgramBuilder from './pages/programs/ProgramBuilder';
+import ProgramView from "./pages/programs/ProgramView";
 
 
 export default function App() {
@@ -79,6 +80,7 @@ export default function App() {
               </ProtectedRoutes>
             }
           />
+          <Route path="/programs/:id" element={<ProgramView />} />
         </Routes>
       </div>
 

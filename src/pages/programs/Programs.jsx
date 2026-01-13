@@ -101,13 +101,23 @@ export default function Programs() {
                 </div>
 
                 <div className="mt-4 flex justify-end gap-2">
-                  {/* For now, only allow editing from your own list; RLS will protect anyway */}
+                  {/* Always allow viewing */}
                   <Link
-                    to={`/programs/${p.id}/edit`}
+                    to={`/programs/${p.id}`}
                     className="px-3 py-2 rounded border hover:bg-gray-50"
                   >
-                    Open Builder
+                    View
                   </Link>
+
+                  {/* Only show builder link in "mine" tab */}
+                  {tab === "mine" && (
+                    <Link
+                      to={`/programs/${p.id}/edit`}
+                      className="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+                    >
+                      Open Builder
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}
