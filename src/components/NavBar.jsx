@@ -45,6 +45,7 @@ export default function NavBar() {
                     <Link to="/progress" className="hover:text-blue-600 font-medium mx-4 text-shadow-lg">Progress</Link>
                 </>
                 )}
+                <Link to="/programs" className="hover:text-blue-600 font-medium mx-4 text-shadow-lg">Programs</Link>
             </div>
 
             {/* Right Side - Login dropdown menu */}

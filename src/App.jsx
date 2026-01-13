@@ -10,6 +10,10 @@ import Login from "./pages/Login";
 import ProtectedRoutes from './components/ProtectedRoutes';
 import NavBar from './components/NavBar';
 import Progress from './pages/Progress';
+import Programs from './pages/programs/Programs';
+import NewProgram from './pages/programs/NewProgram';
+import ProgramBuilder from './pages/programs/ProgramBuilder';
+import ProgramView from "./pages/programs/ProgramView";
 
 
 export default function App() {
@@ -59,6 +63,24 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/progress" element={<Progress />} />
+          <Route path="/programs" element={<Programs />} />
+          <Route
+            path="/programs/new"
+            element={
+              <ProtectedRoutes>
+                <NewProgram />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/programs/:id/edit"
+            element={
+              <ProtectedRoutes>
+                <ProgramBuilder />
+              </ProtectedRoutes>
+            }
+          />
+          <Route path="/programs/:id" element={<ProgramView />} />
         </Routes>
       </div>
 
