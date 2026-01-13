@@ -38,6 +38,22 @@ export default function Programs() {
     fetchPrograms(tab);
   }, [tab]);
 
+  // Handle deleting a program
+  const handleDeleteProgram = async (programId) => {
+  const ok = window.confirm("Delete this program? This will also delete its workouts/exercises.");
+  if (!ok) return;
+
+  const { error } = await supabase.from("programs").delete().eq("id", programId);
+
+  if (error) {
+    alert(error.message || "Failed to delete program.");
+    return;
+  }
+
+  // remove from UI immediately
+  setPrograms((prev) => prev.filter((p) => p.id !== programId));
+};
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
       <div className="max-w-5xl mx-auto">
@@ -100,24 +116,36 @@ export default function Programs() {
                   </span>
                 </div>
 
-                <div className="mt-4 flex justify-end gap-2">
+                <div className="mt-4 flex items-center justify-between">
+                  {/* Left: View + Builder */}
                   {/* Always allow viewing */}
-                  <Link
-                    to={`/programs/${p.id}`}
-                    className="px-3 py-2 rounded border hover:bg-gray-50"
-                  >
-                    View
-                  </Link>
+                    <div className="flex gap-2">
+                      <Link
+                        to={`/programs/${p.id}`}
+                        className="px-3 py-2 rounded border hover:bg-gray-50"
+                      >
+                        View
+                      </Link>
+                      {/* Only show builder link in "mine" tab */}
+                      {tab === "mine" && (
+                        <Link
+                          to={`/programs/${p.id}/edit`}
+                          className="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+                        >
+                          Open Builder
+                        </Link>
+                      )}
+                    </div>
 
-                  {/* Only show builder link in "mine" tab */}
-                  {tab === "mine" && (
-                    <Link
-                      to={`/programs/${p.id}/edit`}
-                      className="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-                    >
-                      Open Builder
-                    </Link>
-                  )}
+                    {/* Right: Delete (only in "mine") */}
+                    {tab === "mine" && (
+                      <button
+                        onClick={() => handleDeleteProgram(p.id)}
+                        className="px-3 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+                      >
+                        Delete
+                      </button>
+                    )}
                 </div>
               </div>
             ))}
