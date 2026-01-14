@@ -255,7 +255,7 @@ export default function ProgramView() {
                               <div className="col-span-2">{ex.reps ?? "-"}</div>
                               <div className="col-span-1">{ex.rpe ?? "-"}</div>
                               <div className="col-span-2">{ex.rest_seconds ?? "-"}</div>
-                              <div className="col-span-2 text-sm text-gray-700 truncate">
+                              <div className="col-span-2 text-sm text-gray-700 whitespace-pre-wrap break-words">
                                 {ex.notes || "-"}
                               </div>
                             </div>
