@@ -13,6 +13,7 @@ export default function ProgramView() {
   const [workouts, setWorkouts] = useState([]);
   const [exercisesByWorkoutId, setExercisesByWorkoutId] = useState({});
   const [user, setUser] = useState(null);
+  const [openWorkoutId, setOpenWorkoutId] = useState(null);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -49,6 +50,9 @@ export default function ProgramView() {
         return;
       }
       setWorkouts(ws || []);
+
+      // Automatically open first workout if there exists any
+      if ((ws || []).length > 0) setOpenWorkoutId(ws[0].id);
 
       const workoutIds = (ws || []).map((w) => w.id);
       if (workoutIds.length === 0) {
@@ -110,17 +114,18 @@ export default function ProgramView() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
-      <div className="max-w-5xl mx-auto space-y-5">
+      <div className="max-w-6xl mx-auto space-y-5">
+        {/* Top header */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
           className="bg-white shadow rounded-xl p-6"
         >
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-3">
-                <h2 className="text-2xl font-bold text-blue-600">{program.title}</h2>
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-2xl md:text-3xl font-bold text-blue-500">{program.title}</h2>
                 <span
                   className={`text-xs font-bold px-2 py-1 rounded-full ${
                     program.visibility === "public"
@@ -130,22 +135,31 @@ export default function ProgramView() {
                 >
                   {program.visibility === "public" ? "🌍 Public" : "🔒 Private"}
                 </span>
+
+                <span className="text-xs font-semibold px-2 py-1 rounded-full bg-blue-50 text-blue-700">
+                  {workouts.length} day{workouts.length === 1 ? "" : "s"}
+                </span>
+
               </div>
 
-              {program.description && (
-                <p className="mt-2 text-gray-700 whitespace-pre-wrap">{program.description}</p>
+              {program.description ? (
+                <div className="mt-3 rounded-xl bg-gray-50 p-4 border border-gray-100">
+                  <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">{program.description}</p>
+                </div>
+              ) : (
+                <p className="mt-3 italic text-gray-400">No description.</p>
               )}
             </div>
 
             <div className="flex flex-col items-end gap-2">
-              <Link to="/programs" className="px-4 py-2 rounded border bg-white hover:bg-gray-50">
+              <Link to="/programs" className="px-4 py-2 rounded-lg border bg-white hover:bg-gray-50 font-medium">
                 ← Programs
               </Link>
 
               {isOwner && (
                 <Link
                   to={`/programs/${program.id}/edit`}
-                  className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+                  className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium"
                 >
                   Edit Program
                 </Link>
@@ -154,69 +168,125 @@ export default function ProgramView() {
           </div>
 
           {!isOwner && program.visibility !== "public" && (
-            <p className="mt-3 text-red-600">
+            <p className="mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-red-700">
               You don’t have access to this private program.
             </p>
           )}
         </motion.div>
 
-        {/* Read-only days */}
-        <div className="space-y-4">
+        {/* Days List */}
           {workouts.length === 0 ? (
-            <div className="bg-white shadow rounded-xl p-6 text-gray-600">
+            <div className="bg-white border border-gray-100 shadow-sm rounded-xl p-6 text-gray-600">
               No days added yet.
             </div>
           ) : (
-            workouts.map((w) => (
-              <div key={w.id} className="bg-white shadow rounded-xl p-5">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-gray-900">
-                    {w.day_label || `Day ${w.order_index || ""}`}
-                  </h3>
-                  <span className="text-xs text-gray-500">#{w.order_index}</span>
-                </div>
+          <div className="space-y-4">
+          {workouts.map((w) => {
+            const isOpen = openWorkoutId === w.id;
+            const exList = exercisesByWorkoutId[w.id] || [];
 
-                {w.notes && <p className="mt-2 text-sm text-gray-700">{w.notes}</p>}
+            return (
+              <div
+                key={w.id}
+                className="bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden"
+              >
+                {/* Accordion header */}
+                <button
+                  onClick={() => setOpenWorkoutId(isOpen ? null : w.id)}
+                  className="w-full text-left p-5 flex items-center justify-between hover:bg-gray-50 transition"
+                >
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-3">
+                      <h3 className="font-bold text-gray-900">
+                        {w.day_label || `Day ${w.order_index || ""}`}
+                      </h3>
+                      <span className="text-xs text-gray-500">
+                        #{w.order_index}
+                      </span>
+                      <span className="text-xs font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-700">
+                        {exList.length} exercise{exList.length === 1 ? "" : "s"}
+                      </span>
+                    </div>
 
-                <div className="mt-4 border rounded-lg overflow-hidden">
-                  <div className="bg-blue-50 text-blue-900 text-sm font-semibold grid grid-cols-12 gap-2 px-3 py-2">
-                    <div className="col-span-4">Exercise</div>
-                    <div className="col-span-1">Sets</div>
-                    <div className="col-span-2">Reps</div>
-                    <div className="col-span-1">RPE</div>
-                    <div className="col-span-2">Rest (s)</div>
-                    <div className="col-span-2">Notes</div>
+                    {w.notes && (
+                      <p className="mt-1 text-sm text-gray-600 line-clamp-1">
+                        {w.notes}
+                      </p>
+                    )}
                   </div>
 
-                  {(exercisesByWorkoutId[w.id] || []).length === 0 ? (
-                    <div className="px-3 py-4 text-gray-600 text-sm bg-white">
-                      No exercises.
-                    </div>
-                  ) : (
-                    (exercisesByWorkoutId[w.id] || []).map((ex) => (
-                      <div
-                        key={ex.id}
-                        className="grid grid-cols-12 gap-2 px-3 py-2 border-t items-center bg-white"
-                      >
-                        <div className="col-span-4 font-medium text-gray-900">
-                          {ex.exercise_name}
-                        </div>
-                        <div className="col-span-1">{ex.sets ?? "-"}</div>
-                        <div className="col-span-2">{ex.reps ?? "-"}</div>
-                        <div className="col-span-1">{ex.rpe ?? "-"}</div>
-                        <div className="col-span-2">{ex.rest_seconds ?? "-"}</div>
-                        <div className="col-span-2 text-sm text-gray-700">
-                          {ex.notes || "-"}
-                        </div>
+                  <span className="text-gray-500 font-bold">
+                    {isOpen ? "−" : "+"}
+                  </span>
+                </button>
+
+                {/* Accordion content */}
+                {isOpen && (
+                  <div className="px-5 pb-5">
+
+                    {/* Responsive “table” */}
+                    <div className="border border-gray-100 rounded-xl overflow-hidden">
+                      {/* header row (hidden on small screens) */}
+                      <div className="hidden md:grid bg-blue-50 text-blue-900 text-sm font-semibold grid-cols-12 gap-2 px-3 py-2">
+                        <div className="col-span-4">Exercise</div>
+                        <div className="col-span-1">Sets</div>
+                        <div className="col-span-2">Reps</div>
+                        <div className="col-span-1">RPE</div>
+                        <div className="col-span-2">Rest (s)</div>
+                        <div className="col-span-2">Notes</div>
                       </div>
-                    ))
-                  )}
-                </div>
+
+                      {exList.length === 0 ? (
+                        <div className="px-3 py-4 text-gray-600 text-sm bg-white">
+                          No exercises.
+                        </div>
+                      ) : (
+                        exList.map((ex) => (
+                          <div
+                            key={ex.id}
+                            className="border-t bg-white"
+                          >
+                            {/* Desktop row */}
+                            <div className="hidden md:grid grid-cols-12 gap-2 px-3 py-2 items-center">
+                              <div className="col-span-4 font-medium text-gray-900">
+                                {ex.exercise_name}
+                              </div>
+                              <div className="col-span-1">{ex.sets ?? "-"}</div>
+                              <div className="col-span-2">{ex.reps ?? "-"}</div>
+                              <div className="col-span-1">{ex.rpe ?? "-"}</div>
+                              <div className="col-span-2">{ex.rest_seconds ?? "-"}</div>
+                              <div className="col-span-2 text-sm text-gray-700 truncate">
+                                {ex.notes || "-"}
+                              </div>
+                            </div>
+
+                            {/* Mobile card row */}
+                            <div className="md:hidden px-3 py-3">
+                              <div className="font-semibold text-gray-900">
+                                {ex.exercise_name}
+                              </div>
+                              <div className="mt-2 grid grid-cols-2 gap-2 text-sm text-gray-700">
+                                <div><span className="text-gray-500">Sets:</span> {ex.sets ?? "-"}</div>
+                                <div><span className="text-gray-500">Reps:</span> {ex.reps ?? "-"}</div>
+                                <div><span className="text-gray-500">RPE:</span> {ex.rpe ?? "-"}</div>
+                                <div><span className="text-gray-500">Rest:</span> {ex.rest_seconds ?? "-"}</div>
+                              </div>
+                              <div className="mt-2 text-sm text-gray-700">
+                                <span className="text-gray-500">Notes:</span>{" "}
+                                {ex.notes || "-"}
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
-            ))
-          )}
+            );
+          })}
         </div>
-      </div>
+      )}
     </div>
-  );
-}
+  </div>
+);}
