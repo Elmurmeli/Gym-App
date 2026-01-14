@@ -14,6 +14,7 @@ export default function ProgramBuilder() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [savePulse, setSavePulse] = useState(false);
 
   const [program, setProgram] = useState(null);
 
@@ -22,6 +23,11 @@ export default function ProgramBuilder() {
 
   // exercisesByWorkoutId: { [workoutId]: [{ id, workout_id, exercise_name, sets, reps, rpe, rest_seconds, notes, order_index }] }
   const [exercisesByWorkoutId, setExercisesByWorkoutId] = useState({});
+
+  const pulseSaved = () => {
+  setSavePulse(true);
+  setTimeout(() => setSavePulse(false), 900);
+  };
 
   // -----------------------------------------
   // Fetch helpers
@@ -119,6 +125,7 @@ export default function ProgramBuilder() {
       setErrorMsg(error.message || "Failed to update program.");
     } else {
       setProgram(data);
+      pulseSaved();
     }
     setSaving(false);
   };
@@ -172,6 +179,7 @@ export default function ProgramBuilder() {
       setErrorMsg(error.message || "Failed to update workout.");
     } else {
       setWorkouts((prev) => prev.map((w) => (w.id === workoutId ? data : w)));
+      pulseSaved();
     }
     setSaving(false);
   };
@@ -244,6 +252,7 @@ export default function ProgramBuilder() {
     setSaving(false);
   };
 
+  // Update exercise fields
   const updateExercise = async (exerciseId, workoutId, patch) => {
     setSaving(true);
     setErrorMsg("");
@@ -261,12 +270,14 @@ export default function ProgramBuilder() {
       setExercisesByWorkoutId((prev) => ({
         ...prev,
         [workoutId]: (prev[workoutId] || []).map((e) => (e.id === exerciseId ? data : e)),
-      }));
+      }))
+      pulseSaved();
     }
 
     setSaving(false);
   };
 
+  // Delete exercise
   const deleteExercise = async (exerciseId, workoutId) => {
     const ok = window.confirm("Delete this exercise from the day?");
     if (!ok) return;
@@ -320,326 +331,378 @@ export default function ProgramBuilder() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
-      <div className="max-w-5xl mx-auto space-y-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35 }}
-          className="bg-white shadow rounded-xl p-6"
-        >
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <div className="flex items-center gap-3">
-                <h2 className="text-2xl font-bold text-blue-600">Program Builder</h2>
-                <span
-                  className={`text-xs font-bold px-2 py-1 rounded-full ${
-                    program.visibility === "public"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-gray-100 text-gray-800"
-                  }`}
-                >
-                  {program.visibility === "public" ? "🌍 Public" : "🔒 Private"}
-                </span>
+     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 p-6">
+    <div className="max-w-6xl mx-auto space-y-6">
+
+      {/* Top Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="bg-white/80 backdrop-blur shadow-sm border border-blue-100 rounded-2xl p-6"
+      >
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-3">
+              <h2 className="text-2xl font-bold text-blue-700">Program Builder</h2>
+
+              <span
+                className={`text-xs font-semibold px-3 py-1 rounded-full border ${
+                  program.visibility === "public"
+                    ? "bg-green-50 text-green-800 border-green-200"
+                    : "bg-gray-50 text-gray-800 border-gray-200"
+                }`}
+              >
+                {program.visibility === "public" ? "🌍 Public" : "🔒 Private"}
+              </span>
+
+              {/* Saving pill */}
+              <span
+                className={`text-xs font-semibold px-3 py-1 rounded-full border ${
+                  saving
+                    ? "bg-blue-50 text-blue-700 border-blue-200"
+                    : savePulse
+                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                    : "bg-white text-gray-500 border-gray-200"
+                }`}
+              >
+                {saving ? "Saving..." : savePulse ? "Saved ✓" : "Up to date"}
+              </span>
+            </div>
+
+            <p className="text-gray-600">
+              Build days and exercises. Changes save when you click out of a field.
+            </p>
+
+            {errorMsg && (
+              <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-red-700 text-sm">
+                {errorMsg}
               </div>
-              <p className="text-gray-600 mt-1">Edit days and exercises. Changes save instantly.</p>
-            </div>
-
-            <div className="flex gap-2">
-              <Link
-                to="/programs"
-                className="px-4 py-2 rounded border bg-white hover:bg-gray-50"
-              >
-                ← Programs
-              </Link>
-
-              <button
-                disabled={saving}
-                onClick={() =>
-                  updateProgramField({
-                    visibility: program.visibility === "public" ? "private" : "public",
-                  })
-                }
-                className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
-              >
-                {program.visibility === "public" ? "Make Private" : "Make Public"}
-              </button>
-            </div>
+            )}
           </div>
 
-          {/* Program fields */}
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-1">
-              <label className="block text-sm font-medium text-gray-700">Title</label>
-              <input
-                className="mt-1 w-full border rounded p-2"
-                value={program.title || ""}
-                onChange={(e) => setProgram((p) => ({ ...p, title: e.target.value }))}
-                onBlur={(e) => updateProgramField({ title: e.target.value })}
-              />
-              <p className="text-xs text-gray-500 mt-1">Click out of the field to save.</p>
-            </div>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              to="/programs"
+              className="px-4 py-2 rounded-xl border bg-white hover:bg-gray-50 transition"
+            >
+              ← Programs
+            </Link>
 
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700">Description</label>
-              <textarea
-                className="mt-1 w-full border rounded p-2"
-                rows={3}
-                value={program.description || ""}
-                onChange={(e) => setProgram((p) => ({ ...p, description: e.target.value }))}
-                onBlur={(e) => updateProgramField({ description: e.target.value || null })}
-              />
-            </div>
+            <Link
+              to={`/programs/${program.id}`}
+              className="px-4 py-2 rounded-xl border bg-white hover:bg-gray-50 transition"
+            >
+              Preview
+            </Link>
+
+            <button
+              disabled={saving}
+              onClick={() =>
+                updateProgramField({
+                  visibility: program.visibility === "public" ? "private" : "public",
+                })
+              }
+              className="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-60"
+            >
+              {program.visibility === "public" ? "Make Private" : "Make Public"}
+            </button>
+          </div>
+        </div>
+
+        {/* Program fields */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="md:col-span-1">
+            <label className="block text-sm font-medium text-gray-700">Title</label>
+            <input
+              className="mt-1 w-full border border-gray-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              value={program.title || ""}
+              placeholder="e.g. 4-Day Powerbuilding"
+              onChange={(e) => setProgram((p) => ({ ...p, title: e.target.value }))}
+              onBlur={(e) => updateProgramField({ title: e.target.value })}
+            />
+            <p className="text-xs text-gray-500 mt-1">Tip: press Tab to save quickly.</p>
           </div>
 
-          {errorMsg && <p className="mt-4 text-red-600">{errorMsg}</p>}
-        </motion.div>
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700">Description</label>
+            <textarea
+              className="mt-1 w-full border border-gray-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              rows={3}
+              placeholder="What is this program focused on?"
+              value={program.description || ""}
+              onChange={(e) => setProgram((p) => ({ ...p, description: e.target.value }))}
+              onBlur={(e) => updateProgramField({ description: e.target.value || null })}
+            />
+          </div>
+        </div>
+      </motion.div>
 
-        {/* Workouts list */}
-        <div className="flex items-center justify-between">
-          <h3 className="text-xl font-bold text-gray-800">Days / Workouts</h3>
+      {/* Days header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-xl font-bold text-gray-900">Days</h3>
+          <p className="text-sm text-gray-600">Each day contains exercises with sets/reps/RPE/rest.</p>
+        </div>
+
+        <button
+          disabled={saving}
+          onClick={addWorkout}
+          className="px-4 py-2 rounded-xl border bg-white hover:bg-gray-50 transition disabled:opacity-60"
+        >
+          + Add Day
+        </button>
+      </div>
+
+      {/* Empty state */}
+      {workouts.length === 0 ? (
+        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
+          <p className="text-gray-600">No days yet. Add your first day to start building.</p>
           <button
             disabled={saving}
             onClick={addWorkout}
-            className="px-4 py-2 rounded bg-white border hover:bg-gray-50 disabled:opacity-60"
+            className="mt-4 px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-60"
           >
-            + Add Day
+            + Add first day
           </button>
         </div>
+      ) : (
+        <div className="space-y-5">
+          {workouts.map((w) => (
+            <div key={w.id} className="bg-white shadow-sm border border-gray-100 rounded-2xl p-5">
+              {/* Day header row */}
+              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                <div className="flex-1 space-y-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs font-bold px-2 py-1 rounded-lg bg-gray-100 text-gray-700">
+                      Day #{w.order_index}
+                    </span>
 
-        {workouts.length === 0 ? (
-          <div className="bg-white shadow rounded-xl p-6">
-            <p className="text-gray-600">No days yet. Add your first day to start building.</p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {workouts.map((w) => (
-              <div key={w.id} className="bg-white shadow rounded-xl p-5">
-                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm font-bold text-gray-500">#{w.order_index}</span>
-                      <input
-                        className="flex-1 border rounded p-2 font-semibold"
-                        value={w.day_label}
-                        onChange={(e) =>
-                          setWorkouts((prev) =>
-                            prev.map((x) => (x.id === w.id ? { ...x, day_label: e.target.value } : x))
-                          )
-                        }
-                        onBlur={(e) => updateWorkout(w.id, { day_label: e.target.value })}
-                      />
-                    </div>
-
-                    <textarea
-                      className="mt-3 w-full border rounded p-2"
-                      rows={2}
-                      placeholder="Optional notes (e.g. focus, warm-up guidance...)"
-                      value={w.notes || ""}
+                    <input
+                      className="flex-1 border border-gray-200 rounded-xl p-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      value={w.day_label}
                       onChange={(e) =>
                         setWorkouts((prev) =>
-                          prev.map((x) => (x.id === w.id ? { ...x, notes: e.target.value } : x))
+                          prev.map((x) => (x.id === w.id ? { ...x, day_label: e.target.value } : x))
                         )
                       }
-                      onBlur={(e) => updateWorkout(w.id, { notes: e.target.value || null })}
+                      onBlur={(e) => updateWorkout(w.id, { day_label: e.target.value })}
                     />
                   </div>
 
-                  <div className="flex gap-2 md:ml-4">
+                  <textarea
+                    className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    rows={2}
+                    placeholder="Day notes (optional): warm-up, intent, super sets, etc."
+                    value={w.notes || ""}
+                    onChange={(e) =>
+                      setWorkouts((prev) =>
+                        prev.map((x) => (x.id === w.id ? { ...x, notes: e.target.value } : x))
+                      )
+                    }
+                    onBlur={(e) => updateWorkout(w.id, { notes: e.target.value || null })}
+                  />
+                </div>
+
+                <div className="flex flex-wrap gap-2 md:ml-4">
+                  <button
+                    disabled={saving}
+                    onClick={() => addExercise(w.id)}
+                    className="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-60"
+                  >
+                    + Add Exercise
+                  </button>
+                  <button
+                    disabled={saving}
+                    onClick={() => deleteWorkout(w.id)}
+                    className="px-4 py-2 rounded-xl border border-red-200 text-red-700 bg-white hover:bg-red-50 transition disabled:opacity-60"
+                  >
+                    Delete Day
+                  </button>
+                </div>
+              </div>
+
+              {/* Exercises section */}
+              <div className="mt-5 rounded-xl border border-gray-100 overflow-hidden">
+                <div className="bg-blue-50 text-blue-900 text-xs font-semibold grid grid-cols-12 gap-2 px-3 py-3">
+                  <div className="col-span-4">Exercise</div>
+                  <div className="col-span-1">Sets</div>
+                  <div className="col-span-2">Reps</div>
+                  <div className="col-span-1">RPE</div>
+                  <div className="col-span-2">Rest (s)</div>
+                  <div className="col-span-2 text-right">Actions</div>
+                </div>
+
+                {(exercisesByWorkoutId[w.id] || []).length === 0 ? (
+                  <div className="px-4 py-6 bg-white">
+                    <p className="text-sm text-gray-600">No exercises yet.</p>
                     <button
                       disabled={saving}
                       onClick={() => addExercise(w.id)}
-                      className="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
+                      className="mt-3 px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-60"
                     >
-                      + Add Exercise
-                    </button>
-                    <button
-                      disabled={saving}
-                      onClick={() => deleteWorkout(w.id)}
-                      className="px-3 py-2 rounded border bg-white hover:bg-gray-50 disabled:opacity-60"
-                    >
-                      Delete Day
+                      + Add first exercise
                     </button>
                   </div>
-                </div>
+                ) : (
+                  <div className="bg-white">
+                    {(exercisesByWorkoutId[w.id] || []).map((ex) => (
+                      <div
+                        key={ex.id}
+                        className="grid grid-cols-12 gap-2 px-3 py-3 border-t items-start"
+                      >
+                        <div className="col-span-4 space-y-2">
+                          <input
+                            className="w-full border border-gray-200 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            value={ex.exercise_name || ""}
+                            placeholder="Exercise name"
+                            onChange={(e) => {
+                              const v = e.target.value;
+                              setExercisesByWorkoutId((prev) => ({
+                                ...prev,
+                                [w.id]: (prev[w.id] || []).map((row) =>
+                                  row.id === ex.id ? { ...row, exercise_name: v } : row
+                                ),
+                              }));
+                            }}
+                            onBlur={(e) =>
+                              updateExercise(ex.id, w.id, { exercise_name: e.target.value })
+                            }
+                          />
 
-                {/* Exercises table */}
-                <div className="mt-4 border rounded-lg overflow-hidden">
-                  <div className="bg-blue-50 text-blue-900 text-sm font-semibold grid grid-cols-12 gap-2 px-3 py-2">
-                    <div className="col-span-4">Exercise</div>
-                    <div className="col-span-1">Sets</div>
-                    <div className="col-span-2">Reps</div>
-                    <div className="col-span-1">RPE</div>
-                    <div className="col-span-2">Rest (s)</div>
-                    <div className="col-span-2 text-right">Actions</div>
-                  </div>
-
-                  {(exercisesByWorkoutId[w.id] || []).length === 0 ? (
-                    <div className="px-3 py-4 text-gray-600 text-sm bg-white">
-                      No exercises yet. Click “Add Exercise”.
-                    </div>
-                  ) : (
-                    <div className="bg-white">
-                      {(exercisesByWorkoutId[w.id] || []).map((ex) => (
-                        <div
-                          key={ex.id}
-                          className="grid grid-cols-12 gap-2 px-3 py-2 border-t items-center"
-                        >
-                          <div className="col-span-4">
-                            <input
-                              className="w-full border rounded p-2"
-                              value={ex.exercise_name || ""}
-                              onChange={(e) => {
-                                const v = e.target.value;
-                                setExercisesByWorkoutId((prev) => ({
-                                  ...prev,
-                                  [w.id]: (prev[w.id] || []).map((row) =>
-                                    row.id === ex.id ? { ...row, exercise_name: v } : row
-                                  ),
-                                }));
-                              }}
-                              onBlur={(e) =>
-                                updateExercise(ex.id, w.id, { exercise_name: e.target.value })
-                              }
-                            />
-                            <input
-                              className="w-full border rounded p-2 mt-2 text-sm"
-                              placeholder="Notes (optional)"
-                              value={ex.notes || ""}
-                              onChange={(e) => {
-                                const v = e.target.value;
-                                setExercisesByWorkoutId((prev) => ({
-                                  ...prev,
-                                  [w.id]: (prev[w.id] || []).map((row) =>
-                                    row.id === ex.id ? { ...row, notes: v } : row
-                                  ),
-                                }));
-                              }}
-                              onBlur={(e) =>
-                                updateExercise(ex.id, w.id, { notes: e.target.value || null })
-                              }
-                            />
-                          </div>
-
-                          <div className="col-span-1">
-                            <input
-                              type="number"
-                              min="1"
-                              className="w-full border rounded p-2"
-                              value={ex.sets ?? ""}
-                              onChange={(e) => {
-                                const v = e.target.value;
-                                setExercisesByWorkoutId((prev) => ({
-                                  ...prev,
-                                  [w.id]: (prev[w.id] || []).map((row) =>
-                                    row.id === ex.id ? { ...row, sets: v } : row
-                                  ),
-                                }));
-                              }}
-                              onBlur={(e) =>
-                                updateExercise(ex.id, w.id, {
-                                  sets: e.target.value === "" ? null : Number(e.target.value),
-                                })
-                              }
-                            />
-                          </div>
-
-                          <div className="col-span-2">
-                            <input
-                              className="w-full border rounded p-2"
-                              value={ex.reps ?? ""}
-                              onChange={(e) => {
-                                const v = e.target.value;
-                                setExercisesByWorkoutId((prev) => ({
-                                  ...prev,
-                                  [w.id]: (prev[w.id] || []).map((row) =>
-                                    row.id === ex.id ? { ...row, reps: v } : row
-                                  ),
-                                }));
-                              }}
-                              onBlur={(e) =>
-                                updateExercise(ex.id, w.id, { reps: e.target.value || null })
-                              }
-                            />
-                          </div>
-
-                          <div className="col-span-1">
-                            <input
-                              type="number"
-                              step="0.5"
-                              min="1"
-                              max="10"
-                              className="w-full border rounded p-2"
-                              value={ex.rpe ?? ""}
-                              onChange={(e) => {
-                                const v = e.target.value;
-                                setExercisesByWorkoutId((prev) => ({
-                                  ...prev,
-                                  [w.id]: (prev[w.id] || []).map((row) =>
-                                    row.id === ex.id ? { ...row, rpe: v } : row
-                                  ),
-                                }));
-                              }}
-                              onBlur={(e) =>
-                                updateExercise(ex.id, w.id, {
-                                  rpe: e.target.value === "" ? null : Number(e.target.value),
-                                })
-                              }
-                            />
-                          </div>
-
-                          <div className="col-span-2">
-                            <input
-                              type="number"
-                              min="0"
-                              className="w-full border rounded p-2"
-                              value={ex.rest_seconds ?? ""}
-                              onChange={(e) => {
-                                const v = e.target.value;
-                                setExercisesByWorkoutId((prev) => ({
-                                  ...prev,
-                                  [w.id]: (prev[w.id] || []).map((row) =>
-                                    row.id === ex.id ? { ...row, rest_seconds: v } : row
-                                  ),
-                                }));
-                              }}
-                              onBlur={(e) =>
-                                updateExercise(ex.id, w.id, {
-                                  rest_seconds: e.target.value === "" ? null : Number(e.target.value),
-                                })
-                              }
-                            />
-                          </div>
-
-                          <div className="col-span-2 flex justify-end gap-2">
-                            <button
-                              disabled={saving}
-                              onClick={() => deleteExercise(ex.id, w.id)}
-                              className="px-3 py-2 rounded border hover:bg-gray-50 disabled:opacity-60"
-                            >
-                              Delete
-                            </button>
-                          </div>
+                          {/* Notes: textarea so long notes show fully */}
+                          <textarea
+                            className="w-full border border-gray-200 rounded-xl p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            rows={2}
+                            placeholder="Notes (optional) — e.g. superset with flyes, pause reps..."
+                            value={ex.notes || ""}
+                            onChange={(e) => {
+                              const v = e.target.value;
+                              setExercisesByWorkoutId((prev) => ({
+                                ...prev,
+                                [w.id]: (prev[w.id] || []).map((row) =>
+                                  row.id === ex.id ? { ...row, notes: v } : row
+                                ),
+                              }));
+                            }}
+                            onBlur={(e) =>
+                              updateExercise(ex.id, w.id, { notes: e.target.value || null })
+                            }
+                          />
                         </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
 
-                <p className="mt-2 text-xs text-gray-500">
-                  Tip: click out of a field to save changes.
-                </p>
+                        <div className="col-span-1">
+                          <input
+                            type="number"
+                            min="1"
+                            className="w-full border border-gray-200 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            value={ex.sets ?? ""}
+                            onChange={(e) => {
+                              const v = e.target.value;
+                              setExercisesByWorkoutId((prev) => ({
+                                ...prev,
+                                [w.id]: (prev[w.id] || []).map((row) =>
+                                  row.id === ex.id ? { ...row, sets: v } : row
+                                ),
+                              }));
+                            }}
+                            onBlur={(e) =>
+                              updateExercise(ex.id, w.id, {
+                                sets: e.target.value === "" ? null : Number(e.target.value),
+                              })
+                            }
+                          />
+                        </div>
+
+                        <div className="col-span-2">
+                          <input
+                            className="w-full border border-gray-200 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            value={ex.reps ?? ""}
+                            onChange={(e) => {
+                              const v = e.target.value;
+                              setExercisesByWorkoutId((prev) => ({
+                                ...prev,
+                                [w.id]: (prev[w.id] || []).map((row) =>
+                                  row.id === ex.id ? { ...row, reps: v } : row
+                                ),
+                              }));
+                            }}
+                            onBlur={(e) =>
+                              updateExercise(ex.id, w.id, { reps: e.target.value || null })
+                            }
+                          />
+                        </div>
+
+                        <div className="col-span-1">
+                          <input
+                            type="number"
+                            step="0.5"
+                            min="1"
+                            max="10"
+                            className="w-full border border-gray-200 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            value={ex.rpe ?? ""}
+                            onChange={(e) => {
+                              const v = e.target.value;
+                              setExercisesByWorkoutId((prev) => ({
+                                ...prev,
+                                [w.id]: (prev[w.id] || []).map((row) =>
+                                  row.id === ex.id ? { ...row, rpe: v } : row
+                                ),
+                              }));
+                            }}
+                            onBlur={(e) =>
+                              updateExercise(ex.id, w.id, {
+                                rpe: e.target.value === "" ? null : Number(e.target.value),
+                              })
+                            }
+                          />
+                        </div>
+
+                        <div className="col-span-2">
+                          <input
+                            type="number"
+                            min="0"
+                            className="w-full border border-gray-200 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            value={ex.rest_seconds ?? ""}
+                            onChange={(e) => {
+                              const v = e.target.value;
+                              setExercisesByWorkoutId((prev) => ({
+                                ...prev,
+                                [w.id]: (prev[w.id] || []).map((row) =>
+                                  row.id === ex.id ? { ...row, rest_seconds: v } : row
+                                ),
+                              }));
+                            }}
+                            onBlur={(e) =>
+                              updateExercise(ex.id, w.id, {
+                                rest_seconds: e.target.value === "" ? null : Number(e.target.value),
+                              })
+                            }
+                          />
+                        </div>
+
+                        <div className="col-span-2 flex justify-end">
+                          <button
+                            disabled={saving}
+                            onClick={() => deleteExercise(ex.id, w.id)}
+                            className="px-4 py-2 rounded-xl border border-red-200 text-red-700 bg-white hover:bg-red-50 transition disabled:opacity-60"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
-        )}
 
-        {/* Footer */}
-        <div className="text-center text-xs text-gray-500 py-6">
-          {saving ? "Saving..." : "All changes saved via Supabase."}
+              <p className="mt-3 text-xs text-gray-500">
+                Tip: click out of a field to save changes.
+              </p>
+            </div>
+          ))}
         </div>
-      </div>
+      )}
     </div>
-  );
-}
+  </div>
+)}
