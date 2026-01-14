@@ -61,6 +61,7 @@ export default function Programs() {
     setPrograms((prev) => prev.filter((p) => p.id !== programId));
   };
 
+  // Filtered programs based on search query
   const filteredPrograms = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return programs;
@@ -173,7 +174,7 @@ export default function Programs() {
             {filteredPrograms.map((p) => (
               <div
                 key={p.id}
-                className="group bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition overflow-hidden"
+                className="group bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition overflow-hidden flex flex-col"
               >
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-3">
@@ -210,7 +211,7 @@ export default function Programs() {
                 </div>
 
                 {/* Footer actions */}
-                <div className="px-5 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+                <div className="mt-auto pt-4 pb-3 px-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
                   <div className="flex gap-2">
                     <Link
                       to={`/programs/${p.id}`}
