@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../../supabase";
+import { motion } from "framer-motion"
 
 export default function Programs() {
   const [tab, setTab] = useState("public"); // public | mine
@@ -77,6 +78,11 @@ export default function Programs() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
+        <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+        >
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
           <div>
             <h2 className="text-3xl font-bold text-gray-900">Programs</h2>
@@ -84,6 +90,7 @@ export default function Programs() {
               Browse public programs or manage your own.
             </p>
           </div>
+
 
           <div className="flex gap-3 items-center">
             <input
@@ -104,9 +111,14 @@ export default function Programs() {
             )}
           </div>
         </div>
-
+        </motion.div>
         {/* Logged-out CTA */}
         {!user && (
+        <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{delay: 0.1, duration: 0.8 }}
+        >
           <div className="mb-6 rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 to-white p-5 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
@@ -134,9 +146,14 @@ export default function Programs() {
               </div>
             </div>
           </div>
+          </motion.div>
         )}
-
         {/* Tabs */}
+        <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{delay: 0.2, duration: 0.8 }}
+        >
         <div className="inline-flex rounded-xl border border-gray-200 bg-white p-1 shadow-sm mb-6">
           <button
             onClick={() => setTab("public")}
@@ -242,7 +259,9 @@ export default function Programs() {
               </div>
             ))}
           </div>
+          
         )}
+        </motion.div>
       </div>
     </div>
   );
