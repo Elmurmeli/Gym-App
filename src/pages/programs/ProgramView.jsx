@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "../../supabase";
 import { motion } from "framer-motion";
+import WorkoutSessionModal from "../../components/programs/WorkoutSessionModal";
 
 export default function ProgramView() {
   const { id } = useParams();
@@ -14,6 +15,7 @@ export default function ProgramView() {
   const [exercisesByWorkoutId, setExercisesByWorkoutId] = useState({});
   const [user, setUser] = useState(null);
   const [openWorkoutId, setOpenWorkoutId] = useState(null);
+  const [activeWorkout, setActiveWorkout] = useState(null);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -139,7 +141,6 @@ export default function ProgramView() {
                 <span className="text-xs font-semibold px-2 py-1 rounded-full bg-blue-50 text-blue-700">
                   {workouts.length} day{workouts.length === 1 ? "" : "s"}
                 </span>
-
               </div>
 
               {program.description ? (
@@ -223,6 +224,9 @@ export default function ProgramView() {
                 {/* Accordion content */}
                 {isOpen && (
                   <div className="px-5 pb-5">
+                    <button onClick={() => setActiveWorkout(w)} className="mt-4 mb-4 px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
+                      Start Workout
+                    </button>
 
                     {/* Responsive “table” */}
                     <div className="border border-gray-100 rounded-xl overflow-hidden">
@@ -287,6 +291,13 @@ export default function ProgramView() {
           })}
         </div>
       )}
+
+      <WorkoutSessionModal
+        open={!!activeWorkout}
+        onClose={() => setActiveWorkout(null)}
+        workout={activeWorkout}
+        exercises={exercisesByWorkoutId[activeWorkout?.id] || []}
+      />
     </div>
   </div>
 );}
