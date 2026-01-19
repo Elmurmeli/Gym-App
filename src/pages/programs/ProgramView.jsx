@@ -224,9 +224,11 @@ export default function ProgramView() {
                 {/* Accordion content */}
                 {isOpen && (
                   <div className="px-5 pb-5">
-                    <button onClick={() => setActiveWorkout(w)} className="mt-4 mb-4 px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
-                      Start Workout
-                    </button>
+                    {user && (
+                      <button onClick={() => setActiveWorkout(w)} className="mt-4 mb-4 px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
+                        Start Workout
+                      </button>
+                    )}
 
                     {/* Responsive “table” */}
                     <div className="border border-gray-100 rounded-xl overflow-hidden">
