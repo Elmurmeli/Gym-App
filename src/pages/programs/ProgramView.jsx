@@ -299,6 +299,8 @@ export default function ProgramView() {
         onClose={() => setActiveWorkout(null)}
         workout={activeWorkout}
         exercises={exercisesByWorkoutId[activeWorkout?.id] || []}
+        user={user}
+        programId={programId}
       />
     </div>
   </div>

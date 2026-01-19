@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../../supabase";
 
@@ -6,8 +7,91 @@ export default function WorkoutSessionModal({
   onClose,
   workout,
   exercises = [],
+  user,
+  programId,
 }) {
+  // State to track workout data
+  const [workoutData, setWorkoutData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [notes, setNotes] = useState("");
+
   if (!open) return null;
+
+  // Handle input changes
+  const handleInputChange = (exerciseId, setIndex, field, value) => {
+    setWorkoutData(prev => ({
+      ...prev,
+      [exerciseId]: {
+        ...prev[exerciseId],
+        [setIndex]: {
+          ...prev[exerciseId]?.[setIndex],
+          [field]: value
+        }
+      }
+    }));
+  };
+
+  // Finish workout and save to database
+  const handleFinishWorkout = async () => {
+    if (!user || !workout) return;
+
+    setLoading(true);
+    try {
+      // 1. Create workout session
+      const { data: sessionData, error: sessionError } = await supabase
+        .from('workout_sessions')
+        .insert({
+          user_id: user.id,
+          program_id: programId,
+          workout_id: workout.id,
+          performed_at: new Date().toISOString(),
+          notes: notes.trim() || null
+        })
+        .select()
+        .single();
+
+      if (sessionError) throw sessionError;
+
+      // 2. Create workout sets for each performed set
+      const setsToInsert = [];
+
+      exercises.forEach(exercise => {
+        const exerciseData = workoutData[exercise.id] || {};
+        
+        Object.entries(exerciseData).forEach(([setIndex, setData]) => {
+          if (setData.weight && setData.reps) { // Only save sets with data
+            setsToInsert.push({
+              session_id: sessionData.id,
+              program_exercise_id: exercise.id,
+              set_index: parseInt(setIndex),
+              weight: parseFloat(setData.weight),
+              reps: parseInt(setData.reps),
+              rpe: setData.rpe ? parseFloat(setData.rpe) : null
+            });
+          }
+        });
+      });
+
+      if (setsToInsert.length > 0) {
+        const { error: setsError } = await supabase
+          .from('workout_sets')
+          .insert(setsToInsert);
+
+        if (setsError) throw setsError;
+      }
+
+      // Success - close modal
+      onClose();
+      alert('Workout completed successfully!');
+      
+    } catch (error) {
+      console.error('Error saving workout:', error);
+      alert('Error saving workout. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   return (
     <AnimatePresence>
@@ -73,16 +157,25 @@ export default function WorkoutSessionModal({
                         <input
                           type="number"
                           step="0.5"
+                          value={workoutData[ex.id]?.[i]?.weight || ''}
+                          onChange={(e) => handleInputChange(ex.id, i, 'weight', e.target.value)}
                           className="border rounded p-1 text-center"
+                          placeholder="kg"
                         />
                         <input
                           type="number"
+                          value={workoutData[ex.id]?.[i]?.reps || ''}
+                          onChange={(e) => handleInputChange(ex.id, i, 'reps', e.target.value)}
                           className="border rounded p-1 text-center"
+                          placeholder="reps"
                         />
                         <input
                           type="number"
                           step="0.5"
+                          value={workoutData[ex.id]?.[i]?.rpe || ''}
+                          onChange={(e) => handleInputChange(ex.id, i, 'rpe', e.target.value)}
                           className="border rounded p-1 text-center"
+                          placeholder="RPE"
                         />
                       </div>
                     ))}
@@ -98,6 +191,20 @@ export default function WorkoutSessionModal({
             )}
           </div>
 
+          {/* Notes section */}
+          <div className="px-6 py-4 border-t">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Workout Notes (optional)
+            </label>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              className="w-full border rounded-lg p-3 text-sm"
+              rows={3}
+              placeholder="How did the workout feel? Any observations..."
+            />
+          </div>
+
           {/* Footer */}
           <div className="px-6 py-4 border-t bg-gray-50 flex justify-between">
             <button
@@ -108,9 +215,11 @@ export default function WorkoutSessionModal({
             </button>
 
             <button
-              className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium"
+              onClick={handleFinishWorkout}
+              disabled={loading}
+              className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Finish Workout
+              {loading ? 'Saving...' : 'Finish Workout'}
             </button>
           </div>
         </motion.div>
