@@ -16,6 +16,7 @@ export default function ProgramView() {
   const [user, setUser] = useState(null);
   const [openWorkoutId, setOpenWorkoutId] = useState(null);
   const [activeWorkout, setActiveWorkout] = useState(null);
+  const [inProgressSessions, setInProgressSessions] = useState({});
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -87,7 +88,52 @@ export default function ProgramView() {
     };
 
     fetchAll();
-  }, [programId]);
+
+    // Check for in-progress workout sessions
+    if (user) {
+      checkInProgressSessions();
+    }
+  }, [programId, user?.id]);
+
+  const checkInProgressSessions = async () => {
+    if (!user) return;
+
+    try {
+      const { data: sessions, error } = await supabase
+        .from('workout_sessions')
+        .select('id, workout_id, performed_at, notes')
+        .eq('user_id', user.id)
+        .eq('program_id', programId)
+        .eq('status', 'in_progress');
+
+      if (!error && sessions) {
+        const sessionMap = {};
+        sessions.forEach(session => {
+          sessionMap[session.workout_id] = session;
+        });
+        setInProgressSessions(sessionMap);
+      }
+    } catch (error) {
+      console.log('No in-progress sessions found');
+    }
+  };
+
+  const handleSessionUpdate = (workoutId, sessionData) => {
+    setInProgressSessions(prev => {
+      if (sessionData === null) {
+        // Remove the session
+        const newState = { ...prev };
+        delete newState[workoutId];
+        return newState;
+      } else {
+        // Add/update the session
+        return {
+          ...prev,
+          [workoutId]: sessionData
+        };
+      }
+    });
+  };
 
   const isOwner = user && program && user.id === program.owner_id;
 
@@ -225,8 +271,15 @@ export default function ProgramView() {
                 {isOpen && (
                   <div className="px-5 pb-5">
                     {user && (
-                      <button onClick={() => setActiveWorkout(w)} className="mt-4 mb-4 px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">
-                        Start Workout
+                      <button 
+                        onClick={() => setActiveWorkout(w)} 
+                        className={`mt-4 mb-4 px-3 py-2 rounded-xl text-white hover:opacity-90 ${
+                          inProgressSessions[w.id] 
+                            ? 'bg-orange-600 hover:bg-orange-700' 
+                            : 'bg-blue-600 hover:bg-blue-700'
+                        }`}
+                      >
+                        {inProgressSessions[w.id] ? 'Resume Workout' : 'Start Workout'}
                       </button>
                     )}
 
@@ -301,6 +354,8 @@ export default function ProgramView() {
         exercises={exercisesByWorkoutId[activeWorkout?.id] || []}
         user={user}
         programId={programId}
+        existingSession={inProgressSessions[activeWorkout?.id]}
+        onSessionUpdate={handleSessionUpdate}
       />
     </div>
   </div>
