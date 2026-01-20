@@ -135,6 +135,38 @@ export default function ProgramView() {
     });
   };
 
+  const handleDiscardWorkout = async (workoutId) => {
+    if (!user || !inProgressSessions[workoutId]) return;
+
+    const confirmDiscard = window.confirm("Are you sure you want to discard this in-progress workout? This action cannot be undone.");
+    if (!confirmDiscard) return;
+
+    try {
+      const { error } = await supabase
+        .from('workout_sessions')
+        .delete()
+        .eq('id', inProgressSessions[workoutId].id);
+
+      if (error) {
+        console.error('Error discarding workout:', error);
+        alert('Failed to discard workout. Please try again.');
+        return;
+      }
+
+      // Update state
+      setInProgressSessions(prev => {
+        const newState = { ...prev };
+        delete newState[workoutId];
+        return newState;
+      });
+    } catch (error) {
+      console.error('Error discarding workout:', error);
+      alert('Failed to discard workout. Please try again.');
+    }
+  };
+
+
+
   const isOwner = user && program && user.id === program.owner_id;
 
   if (loading) {
@@ -271,16 +303,31 @@ export default function ProgramView() {
                 {isOpen && (
                   <div className="px-5 pb-5">
                     {user && (
-                      <button 
-                        onClick={() => setActiveWorkout(w)} 
-                        className={`mt-4 mb-4 px-3 py-2 rounded-xl text-white hover:opacity-90 ${
-                          inProgressSessions[w.id] 
-                            ? 'bg-orange-600 hover:bg-orange-700' 
-                            : 'bg-blue-600 hover:bg-blue-700'
-                        }`}
-                      >
-                        {inProgressSessions[w.id] ? 'Resume Workout' : 'Start Workout'}
-                      </button>
+                      <div className="mt-4 mb-4 flex gap-2">
+                        {inProgressSessions[w.id] ? (
+                          <>
+                            <button 
+                              onClick={() => setActiveWorkout(w)} 
+                              className="px-3 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
+                            >
+                              Resume Workout
+                            </button>
+                            <button 
+                              onClick={() => handleDiscardWorkout(w.id)} 
+                              className="px-3 py-2 rounded-xl bg-red-600 text-white hover:bg-red-700"
+                            >
+                              Discard Workout
+                            </button>
+                          </>
+                        ) : (
+                          <button 
+                            onClick={() => setActiveWorkout(w)} 
+                            className="px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700"
+                          >
+                            Start Workout
+                          </button>
+                        )}
+                      </div>
                     )}
 
                     {/* Responsive “table” */}
