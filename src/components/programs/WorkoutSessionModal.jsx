@@ -51,20 +51,27 @@ export default function WorkoutSessionModal({
   useEffect(() => {
     if (!open || loading || !initialized) return;
     
+    // Check if workout data has changed
+    const workoutDataChanged = JSON.stringify(workoutData) !== JSON.stringify(initialWorkoutData);
+    
+    // Check if notes have changed
+    const notesChanged = notes.trim() !== initialNotes.trim();
+    
     // Clear existing timeout
     if (autoSaveTimeoutRef.current) {
       clearTimeout(autoSaveTimeoutRef.current);
     }
-    
-    // Check if data has actually changed from initial state
-    const workoutDataChanged = JSON.stringify(workoutData) !== JSON.stringify(initialWorkoutData);
-    const notesChanged = notes.trim() !== initialNotes.trim();
     
     if (workoutDataChanged || notesChanged) {
       // Set timeout for auto-save (2.5 seconds after last change)
       autoSaveTimeoutRef.current = setTimeout(() => {
         performAutoSave();
       }, 2500);
+    } else {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+        autoSaveTimeoutRef.current = null;
+      }
     }
     
     return () => {
@@ -75,6 +82,12 @@ export default function WorkoutSessionModal({
   }, [workoutData, notes, open, isResuming, loading]);
 
   const performAutoSave = async () => {
+    // Clear existing timeout (in case it wasn't cleared by useEffect cleanup)
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+      autoSaveTimeoutRef.current = null;
+    }
+    
     if (!user || !workout || loading) {
       return;
     }
@@ -278,6 +291,10 @@ export default function WorkoutSessionModal({
     if (!user || !workout) return;
 
     // Clear any pending auto-save
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+      autoSaveTimeoutRef.current = null;
+    }
     if (autoSaveTimeoutRef.current) {
       clearTimeout(autoSaveTimeoutRef.current);
       autoSaveTimeoutRef.current = null;
