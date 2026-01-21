@@ -24,7 +24,7 @@ export default function Home() {
           <Link 
           to="/logs" 
           className="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 transition shadow-md hover:shadow-lg">
-            Log Exercise
+            Log Exercises
           </Link>
 
           <Link
