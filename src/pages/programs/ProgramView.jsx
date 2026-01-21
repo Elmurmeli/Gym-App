@@ -2,6 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "../../supabase";
 import { motion } from "framer-motion";
+import WorkoutSessionModal from "../../components/programs/WorkoutSessionModal";
+import WorkoutHistoryList from "../../components/programs/WorkoutHistoryList";
+import WorkoutSessionViewModal from "../../components/programs/WorkoutSessionViewModal";
+import WorkoutSessionsModal from "../../components/programs/WorkoutSessionsModal";
 
 export default function ProgramView() {
   const { id } = useParams();
@@ -14,6 +18,10 @@ export default function ProgramView() {
   const [exercisesByWorkoutId, setExercisesByWorkoutId] = useState({});
   const [user, setUser] = useState(null);
   const [openWorkoutId, setOpenWorkoutId] = useState(null);
+  const [activeWorkout, setActiveWorkout] = useState(null);
+  const [inProgressSessions, setInProgressSessions] = useState({});
+  const [selectedSessionId, setSelectedSessionId] = useState(null);
+  const [viewAllSessionsWorkoutId, setViewAllSessionsWorkoutId] = useState(null);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -85,7 +93,84 @@ export default function ProgramView() {
     };
 
     fetchAll();
-  }, [programId]);
+
+    // Check for in-progress workout sessions
+    if (user) {
+      checkInProgressSessions();
+    }
+  }, [programId, user?.id]);
+
+  const checkInProgressSessions = async () => {
+    if (!user) return;
+
+    try {
+      const { data: sessions, error } = await supabase
+        .from('workout_sessions')
+        .select('id, workout_id, performed_at, notes')
+        .eq('user_id', user.id)
+        .eq('program_id', programId)
+        .eq('status', 'in_progress');
+
+      if (!error && sessions) {
+        const sessionMap = {};
+        sessions.forEach(session => {
+          sessionMap[session.workout_id] = session;
+        });
+        setInProgressSessions(sessionMap);
+      }
+    } catch (error) {
+      console.log('No in-progress sessions found');
+    }
+  };
+
+  const handleSessionUpdate = (workoutId, sessionData) => {
+    setInProgressSessions(prev => {
+      if (sessionData === null) {
+        // Remove the session
+        const newState = { ...prev };
+        delete newState[workoutId];
+        return newState;
+      } else {
+        // Add/update the session
+        return {
+          ...prev,
+          [workoutId]: sessionData
+        };
+      }
+    });
+  };
+
+  const handleDiscardWorkout = async (workoutId) => {
+    if (!user || !inProgressSessions[workoutId]) return;
+
+    const confirmDiscard = window.confirm("Are you sure you want to discard this in-progress workout? This action cannot be undone.");
+    if (!confirmDiscard) return;
+
+    try {
+      const { error } = await supabase
+        .from('workout_sessions')
+        .delete()
+        .eq('id', inProgressSessions[workoutId].id);
+
+      if (error) {
+        console.error('Error discarding workout:', error);
+        alert('Failed to discard workout. Please try again.');
+        return;
+      }
+
+      // Update state
+      setInProgressSessions(prev => {
+        const newState = { ...prev };
+        delete newState[workoutId];
+        return newState;
+      });
+    } catch (error) {
+      console.error('Error discarding workout:', error);
+      alert('Failed to discard workout. Please try again.');
+    }
+  };
+
+
 
   const isOwner = user && program && user.id === program.owner_id;
 
@@ -139,7 +224,6 @@ export default function ProgramView() {
                 <span className="text-xs font-semibold px-2 py-1 rounded-full bg-blue-50 text-blue-700">
                   {workouts.length} day{workouts.length === 1 ? "" : "s"}
                 </span>
-
               </div>
 
               {program.description ? (
@@ -223,7 +307,39 @@ export default function ProgramView() {
                 {/* Accordion content */}
                 {isOpen && (
                   <div className="px-5 pb-5">
-
+                    {user && (
+                      <div className="mt-4 mb-4 flex gap-2">
+                        {inProgressSessions[w.id] ? (
+                          <>
+                            <button 
+                              onClick={() => setActiveWorkout(w)} 
+                              className="px-3 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
+                            >
+                              Resume Workout
+                            </button>
+                            <button 
+                              onClick={() => handleDiscardWorkout(w.id)} 
+                              className="px-3 py-2 rounded-xl bg-red-600 text-white hover:bg-red-700"
+                            >
+                              Discard Workout
+                            </button>
+                          </>
+                        ) : (
+                          <button 
+                            onClick={() => setActiveWorkout(w)} 
+                            className="px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700"
+                          >
+                            Start Workout
+                          </button>
+                        )}
+                      </div>
+                    )}
+                    <WorkoutHistoryList
+                      workoutId={w.id}
+                      user={user}
+                      onSessionClick={setSelectedSessionId}
+                      onViewAllSessions={setViewAllSessionsWorkoutId}
+                    />
                     {/* Responsive “table” */}
                     <div className="border border-gray-100 rounded-xl overflow-hidden">
                       {/* header row (hidden on small screens) */}
@@ -287,6 +403,31 @@ export default function ProgramView() {
           })}
         </div>
       )}
+
+      <WorkoutSessionModal
+        open={!!activeWorkout}
+        onClose={() => setActiveWorkout(null)}
+        workout={activeWorkout}
+        exercises={exercisesByWorkoutId[activeWorkout?.id] || []}
+        user={user}
+        programId={programId}
+        existingSession={inProgressSessions[activeWorkout?.id]}
+        onSessionUpdate={handleSessionUpdate}
+      />
+
+      <WorkoutSessionViewModal
+        open={!!selectedSessionId}
+        onClose={() => setSelectedSessionId(null)}
+        sessionId={selectedSessionId}
+      />
+
+      <WorkoutSessionsModal
+        open={!!viewAllSessionsWorkoutId}
+        onClose={() => setViewAllSessionsWorkoutId(null)}
+        workoutId={viewAllSessionsWorkoutId}
+        user={user}
+        onSessionClick={setSelectedSessionId}
+      />
     </div>
   </div>
 );}
