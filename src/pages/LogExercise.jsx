@@ -12,7 +12,7 @@ export default function LogExercise() {
   });
   const [submitting, setSubmitting] = useState(false);
 
-  //Normalize: Capitalize the first letter, lowercase the rest
+  //Normalize exercise name: Capitalize the first letter, lowercase the rest
   const normalizeExerciseName = (name) => {
     const clean = name.trim().toLowerCase();
     return clean.charAt(0).toUpperCase() + clean.slice(1);
@@ -59,7 +59,13 @@ export default function LogExercise() {
       alert('Failed to log exercise: ');
     } else {
       alert('Exercise logged successfully!');
-      setForm({ });
+      setForm({
+        exercise: '',
+        weight: '',
+        reps: '',
+        sets: '',
+        date: ''
+      });
     }
     setSubmitting(false); // done loading state
 
