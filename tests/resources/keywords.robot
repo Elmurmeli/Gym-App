@@ -27,6 +27,7 @@ Login As Test User
 
 Logout User
     Click Button    ${MENU_BTN}
+    Wait Until Element Is Visible    ${LOGOUT_BTN}    timeout=5s
     Click Button    ${LOGOUT_BTN}
     Wait Until Page Contains    Login
 
