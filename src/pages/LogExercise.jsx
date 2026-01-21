@@ -89,21 +89,44 @@ export default function LogExercise() {
       transition={{delay: 0.2, duration: 0.8 }}
       className=" max-w-3xl w-full"
     >
-    <form onSubmit={handleSubmit} className="bg-white shadow rounded p-6 space-y-4">
-      {['exercise', 'weight', 'reps', 'sets', 'date'].map((field) => (
-        <div key={field}>
-          <label className="block capitalize">{field}</label>
-          <input
-            type={field === 'date' ? 'date' : 'text'}
-            name={field}
-            data-testid={`${field}-input`}
-            value={form[field]}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            required
-          />
-        </div>
-      ))}
+    <form onSubmit={handleSubmit} className="bg-white shadow rounded-lg p-6 space-y-4">
+      {['exercise', 'weight', 'reps', 'sets', 'date'].map((field) => {
+        let placeholder = '';
+        switch (field) {
+          case 'exercise':
+            placeholder = 'e.g. Bench Press';
+            break;
+          case 'weight':
+            placeholder = 'e.g. 100';
+            break;
+          case 'reps':
+            placeholder = 'e.g. 10';
+            break;
+          case 'sets':
+            placeholder = 'e.g. 3';
+            break;
+          case 'date':
+            placeholder = 'Select date';
+            break;
+          default:
+            placeholder = `${field}...`;
+        }
+        return (
+          <div key={field}>
+            <label className="block capitalize">{field}</label>
+            <input
+              type={field === 'date' ? 'date' : 'text'}
+              name={field}
+              placeholder={placeholder}
+              data-testid={`${field}-input`}
+              value={form[field]}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+            />
+          </div>
+        );
+      })}
       <button data-testid="submit-btn" type="submit" disabled={submitting} className="bg-blue-600 text-white  font-semibold px-4 py-2 rounded-lg hover:bg-blue-700">
         {submitting ? 'Logging...' : 'Log Exercise'}
       </button>
