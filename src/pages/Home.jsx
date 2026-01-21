@@ -1,25 +1,67 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
+import { supabase } from "../supabase";
 
 export default function Home() {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col items-center justify-center px-4">
-        {/* Hero section */}
-        <motion.div
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data?.user ?? null);
+    });
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 px-4 py-12 md:px-8 lg:px-24 xl:px-0 flex flex-col justify-between">
+      {/* HERO */}
+      <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-center max-w-2xl"
+        className="w-full max-w-3xl lg:max-w-5xl mx-auto text-center px-4 md:px-12 py-10 md:py-16"
       >
-        <h1 className="text-5xl font-extrabold text-blue-500 mb-4 drop-shadow-sm">
-          Welcome to Gym Tracker
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-blue-500 mb-4 drop-shadow-lg">
+          Gym Tracker
         </h1>
-        <p className="text-gray-600 mb-8 mt-4 text-xl">
-          Track your workouts, monitor your progress, and stay motivated to reach your fitness goals!
+
+        <p className="text-gray-600 text-lg md:text-xl mt-4">
+          Build programs. Track workouts. See real progress.
         </p>
 
-        {/* Buttons */}
-        <div className="flex justify-center gap-4 mb-12">
+        {/* CTAs */}
+        <div className="flex flex-wrap justify-center gap-4 mt-2 md:mt-3">
+          {user ? (
+            <>
+              <Link
+                to="/logs"
+                className="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition"
+              >
+                📝 Log your exercises
+              </Link>
+
+              <Link
+                to="/programs"
+                className="px-6 py-3 rounded-xl bg-white border border-gray-200 font-semibold hover:bg-gray-50 transition"
+              >
+                📋 My Programs
+              </Link>
+
+              <Link
+                to="/progress"
+                className="px-6 py-3 rounded-xl bg-gray-200 text-gray-800 font-semibold hover:bg-gray-300 transition"
+              >
+                📊 See your progress
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/programs"
+                className="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition"
+              >
+                🌍 Browse Programs
+              </Link>
 
           <Link 
           to="/logs" 
@@ -27,47 +69,58 @@ export default function Home() {
             Log Exercises
           </Link>
 
-          <Link
-          to="/history"
-          className="bg-gray-300 text-gray-800 font-semibold px-6 py-3 rounded-lg hover:bg-gray-400 transition shadow-md hover:shadow-lg"
-          >View History
-          </Link>
+              <Link
+                to="/login"
+                className="px-6 py-3 rounded-xl bg-gray-200 text-gray-800 font-semibold hover:bg-gray-300 transition"
+              >
+                Login
+              </Link>
+            </>
+          )}
         </div>
-        </motion.div>
+      </motion.div>
 
-        {/* Feature Cards */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-16 max-w-4xl"
-        >
+      {/* FEATURES */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.8 }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 mt-16 md:mt-28 max-w-6xl mx-auto px-2 md:px-0"
+      >
         {[
           {
-            title: "Track Workouts",
-            text: "Log your exercises and monitor progress easily.",
+            title: "Program Builder",
+            text: "Create structured training programs with days, exercises, RPE and notes.",
+            emoji: "📝",
           },
           {
-            title: "View History",
-            text: "Look back at your achievements and keep improving.",
+            title: "Workout Sessions",
+            text: "Log real workouts with weights, reps and multiple sets.",
+            emoji: "🏋️",
           },
           {
-            title: "Stay Motivated",
-            text: "Set goals and watch your progress grow every week.",
+            title: "Progress Tracking",
+            text: "Review your training history and see how you improve over time.",
+            emoji: "📈",
           },
         ].map((card, index) => (
           <div
             key={index}
-            className="bg-white shadow-md p-6 rounded-2xl hover:shadow-lg transition transform hover:-translate-y-1"
+            className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 hover:shadow-md transition transform hover:-translate-y-1 flex flex-col items-center text-center min-h-[220px]"
           >
-            <h2 className="text-xl font-semibold text-blue-600 mb-2">
+            <div className="text-3xl md:text-4xl mb-3">{card.emoji}</div>
+            <h2 className="text-lg md:text-xl font-semibold text-blue-600 mb-2">
               {card.title}
             </h2>
-            <p className="text-gray-600">{card.text}</p>
+            <p className="text-gray-600 text-sm md:text-base">{card.text}</p>
           </div>
         ))}
       </motion.div>
+
+      {/* FOOTER NOTE */}
+      <div className="text-center text-xs md:text-sm text-gray-400 mt-8 md:mt-12 mb-2">
+        Built with React, Tailwind CSS & Supabase • Full-stack personal project
       </div>
-    );
-  }
-  
+    </div>
+  );
+}
