@@ -105,7 +105,7 @@ export default function WorkoutSessionsModal({ open, onClose, workoutId, user, o
                   {sessions.map((session) => (
                     <div
                       key={session.id}
-                      className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="group flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       <div className="flex-1">
                         <div className="font-medium text-gray-900">
@@ -121,15 +121,46 @@ export default function WorkoutSessionsModal({ open, onClose, workoutId, user, o
                         )}
                         <div className="text-sm text-green-600 font-medium mt-1">✔ Completed</div>
                       </div>
-                      <button
-                        onClick={() => {
-                          onSessionClick(session.id);
-                          onClose();
-                        }}
-                        className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
-                      >
-                        View Details
-                      </button>
+                      <div className="flex items-center gap-2">
+                          <button
+                          onClick={async () => {
+                            if (!user) return;
+                            const ok = window.confirm("Delete this session? This cannot be undone.");
+                            if (!ok) return;
+                            try {
+                              const { error } = await supabase
+                                .from('workout_sessions')
+                                .delete()
+                                .eq('id', session.id)
+                                .eq('user_id', user.id);
+                              if (error) {
+                                console.error('Error deleting session:', error);
+                                alert('Failed to delete session.');
+                                return;
+                              }
+                              // Remove from UI
+                              setSessions((prev) => prev.filter((s) => s.id !== session.id));
+                            } catch (err) {
+                              console.error('Error deleting session:', err);
+                              alert('Failed to delete session.');
+                            }
+                          }}
+                          className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 px-3 py-1 bg-red-100 text-red-700 text-sm rounded-md hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-200 transition-opacity duration-150"
+                          aria-label="Delete session"
+                          tabIndex={0}
+                        >
+                          Delete
+                        </button>
+                        <button
+                          onClick={() => {
+                            onSessionClick(session.id);
+                            onClose();
+                          }}
+                          className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                          View Details
+                        </button>
+                      </div>
                     </div>
                   ))}
 
