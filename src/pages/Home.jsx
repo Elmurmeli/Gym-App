@@ -22,7 +22,7 @@ export default function Home() {
         className="w-full max-w-3xl lg:max-w-5xl mx-auto text-center px-4 md:px-12 py-10 md:py-16"
       >
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-blue-500 mb-4 drop-shadow-lg">
-          Welcome to Gym Tracker
+          Gym Tracker
         </h1>
 
         <p className="text-gray-600 text-lg md:text-xl mt-4">

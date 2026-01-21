@@ -23,7 +23,7 @@ Login As Test User
     Input Text    ${EMAIL_INPUT}      ${EMAIL}
     Input Text    ${PASSWORD_INPUT}   ${PASSWORD}
     Click Button  ${LOGIN_BTN}
-    Wait Until Page Contains    Welcome to Gym Tracker    timeout=7s
+    Wait Until Page Contains    Gym Tracker    timeout=7s
 
 Logout User
     Click Button    ${MENU_BTN}
