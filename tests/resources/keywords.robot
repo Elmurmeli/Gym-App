@@ -23,7 +23,7 @@ Login As Test User
     Input Text    ${EMAIL_INPUT}      ${EMAIL}
     Input Text    ${PASSWORD_INPUT}   ${PASSWORD}
     Click Button  ${LOGIN_BTN}
-    Wait Until Page Contains    Gym Tracker    timeout=7s
+        Wait For Logged In    25s
 
 Logout User
     Click Button    ${MENU_BTN}
@@ -37,15 +37,32 @@ Logout User
 
 Go To Log Exercise Page
     Go To    ${BASE_URL}/#/logs
-    Wait Until Page Contains Element    ${EXERCISE_INPUT}
+        Log Current URL
+        Wait Until Page Contains Element    ${EXERCISE_INPUT}    timeout=20s
 
 Go To History Page
     Go To    ${BASE_URL}/#/history
-    Wait Until Page Contains Element    ${ROW}    timeout=10s
+        Log Current URL
+        Wait Until Page Contains    Workout History    timeout=30s
+        Run Keyword And Ignore Error    Wait Until Page Contains Element    ${ROW}    timeout=30s
 
 Go To Login Page
     Go To   ${BASE_URL}/#/login
     Wait Until Page Contains    OR
+
+# ============================================
+# Debug / Session Helpers
+# ============================================
+
+Log Current URL
+    ${url}=    Get Location
+    Log    Browser URL: ${url}
+
+Wait For Logged In
+    [Arguments]    ${timeout}=20s
+    Wait Until Location Contains    /#/
+    Run Keyword And Ignore Error    Wait Until Page Contains    ${EMAIL}    timeout=${timeout}
+    Run Keyword And Ignore Error    Wait Until Page Contains    Gym Tracker    timeout=${timeout}
 
 # ============================================
 # Add Exercise

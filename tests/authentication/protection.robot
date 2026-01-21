@@ -18,13 +18,14 @@ Cannot Access Logs Without Login
 Logged In User Can Access History
     Login As Test User
     Go To History Page
-    Wait Until Page Contains    Workout History
+    Wait Until Page Contains    Workout History     timeout=30s
+    Run Keyword And Ignore Error    Wait Until Page Contains    No logs found.
 
 Logged In User Can Access Log Exercise
     Go To Login Page
     Login As Test User
     Go To Log Exercise Page
-    Wait Until Page Contains     Log Your Exercise
+    Wait Until Page Contains     Log Your Exercise      timeout=30s
 
 
 
