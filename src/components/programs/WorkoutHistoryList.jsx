@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../supabase";
+import { supabase } from "../../supabase";
 
-export default function WorkoutHistoryList({ workoutId, user, onSessionClick }) {
+export default function WorkoutHistoryList({ workoutId, user, onSessionClick, onViewAllSessions }) {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -63,6 +63,14 @@ export default function WorkoutHistoryList({ workoutId, user, onSessionClick }) 
           </li>
         ))}
       </ul>
+      {sessions.length >= 5 && (
+        <button
+          onClick={() => onViewAllSessions(workoutId)}
+          className="mt-2 text-sm text-gray-600 hover:text-gray-800 hover:underline"
+        >
+          View all sessions →
+        </button>
+      )}
     </div>
   );
 }

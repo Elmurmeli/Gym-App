@@ -3,8 +3,9 @@ import { Link, useParams } from "react-router-dom";
 import { supabase } from "../../supabase";
 import { motion } from "framer-motion";
 import WorkoutSessionModal from "../../components/programs/WorkoutSessionModal";
-import WorkoutHistoryList from "../../components/WorkoutHistoryList";
-import WorkoutSessionViewModal from "../../components/WorkoutSessionViewModal";
+import WorkoutHistoryList from "../../components/programs/WorkoutHistoryList";
+import WorkoutSessionViewModal from "../../components/programs/WorkoutSessionViewModal";
+import WorkoutSessionsModal from "../../components/programs/WorkoutSessionsModal";
 
 export default function ProgramView() {
   const { id } = useParams();
@@ -20,6 +21,7 @@ export default function ProgramView() {
   const [activeWorkout, setActiveWorkout] = useState(null);
   const [inProgressSessions, setInProgressSessions] = useState({});
   const [selectedSessionId, setSelectedSessionId] = useState(null);
+  const [viewAllSessionsWorkoutId, setViewAllSessionsWorkoutId] = useState(null);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -336,6 +338,7 @@ export default function ProgramView() {
                       workoutId={w.id}
                       user={user}
                       onSessionClick={setSelectedSessionId}
+                      onViewAllSessions={setViewAllSessionsWorkoutId}
                     />
                     {/* Responsive “table” */}
                     <div className="border border-gray-100 rounded-xl overflow-hidden">
@@ -416,6 +419,14 @@ export default function ProgramView() {
         open={!!selectedSessionId}
         onClose={() => setSelectedSessionId(null)}
         sessionId={selectedSessionId}
+      />
+
+      <WorkoutSessionsModal
+        open={!!viewAllSessionsWorkoutId}
+        onClose={() => setViewAllSessionsWorkoutId(null)}
+        workoutId={viewAllSessionsWorkoutId}
+        user={user}
+        onSessionClick={setSelectedSessionId}
       />
     </div>
   </div>

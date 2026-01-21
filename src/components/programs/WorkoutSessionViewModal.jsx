@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {motion, AnimatePresence } from "framer-motion";
-import { supabase } from "../supabase";
+import { supabase } from "../../supabase";
 
 export default function WorkoutSessionViewModal({ open, onClose, sessionId }) {
   const [sets, setSets] = useState([]);
