@@ -19,7 +19,21 @@ export default function LogExercise() {
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    let v = value;
+    if (name === 'weight') {
+      if (v !== '' && Number(v) > 1000) v = '1000';
+      if (v !== '' && Number(v) < 0) v = '0';
+    }
+    if (name === 'reps') {
+      if (v !== '' && Number(v) > 1000) v = '1000';
+      if (v !== '' && Number(v) < 1) v = '1';
+    }
+    if (name === 'sets') {
+      if (v !== '' && Number(v) > 100) v = '100';
+      if (v !== '' && Number(v) < 1) v = '1';
+    }
+    setForm({ ...form, [name]: v });
   };
   /* Function for submitting the exercise to the form*/
   const handleSubmit = async (e) => {
@@ -92,30 +106,36 @@ export default function LogExercise() {
     <form onSubmit={handleSubmit} className="bg-white shadow rounded-lg p-6 space-y-4">
       {['exercise', 'weight', 'reps', 'sets', 'date'].map((field) => {
         let placeholder = '';
+        let inputProps = {};
         switch (field) {
           case 'exercise':
             placeholder = 'e.g. Bench Press';
+            inputProps.type = 'text';
             break;
           case 'weight':
             placeholder = 'e.g. 100';
+            inputProps = { type: 'number', min: 1, max: 1000, step: 0.5 };
             break;
           case 'reps':
             placeholder = 'e.g. 10';
+            inputProps = { type: 'number', min: 1, max: 1000 };
             break;
           case 'sets':
             placeholder = 'e.g. 3';
+            inputProps = { type: 'number', min: 1, max: 100 };
             break;
           case 'date':
             placeholder = 'Select date';
+            inputProps.type = 'date';
             break;
           default:
             placeholder = `${field}...`;
+            inputProps.type = 'text';
         }
         return (
           <div key={field}>
             <label className="block capitalize">{field}</label>
             <input
-              type={field === 'date' ? 'date' : 'text'}
               name={field}
               placeholder={placeholder}
               data-testid={`${field}-input`}
@@ -123,6 +143,7 @@ export default function LogExercise() {
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
+              {...inputProps}
             />
           </div>
         );
