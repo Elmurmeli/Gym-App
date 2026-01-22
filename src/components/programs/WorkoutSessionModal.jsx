@@ -565,23 +565,42 @@ export default function WorkoutSessionModal({
                         <input
                           type="number"
                           step="0.5"
+                          min="1"
+                          max="1000"
                           value={workoutData[ex.id]?.[i]?.weight || ''}
-                          onChange={(e) => handleInputChange(ex.id, i, 'weight', e.target.value)}
+                          onChange={(e) => {
+                            let v = e.target.value;
+                            if (v !== '' && Number(v) > 1000) v = '1000';
+                            if (v !== '' && Number(v) < 0) v = '0';
+                            handleInputChange(ex.id, i, 'weight', v);
+                          }}
                           className="border rounded p-1 text-center"
                           placeholder="kg"
                         />
                         <input
                           type="number"
+                          min="1"
+                          max="1000"
                           value={workoutData[ex.id]?.[i]?.reps || ''}
-                          onChange={(e) => handleInputChange(ex.id, i, 'reps', e.target.value)}
+                          onChange={(e) => {
+                            let v = e.target.value;
+                            if (v !== '' && Number(v) > 1000) v = '1000';
+                            handleInputChange(ex.id, i, 'reps', v);
+                          }}
                           className="border rounded p-1 text-center"
                           placeholder="reps"
                         />
                         <input
                           type="number"
                           step="0.5"
+                          min="1"
+                          max="10"
                           value={workoutData[ex.id]?.[i]?.rpe || ''}
-                          onChange={(e) => handleInputChange(ex.id, i, 'rpe', e.target.value)}
+                          onChange={(e) => {
+                            let v = e.target.value;
+                            if (v !== '' && Number(v) > 10) v = '10';
+                            handleInputChange(ex.id, i, 'rpe', v);
+                          }}
                           className="border rounded p-1 text-center"
                           placeholder="RPE"
                         />

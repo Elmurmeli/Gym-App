@@ -186,27 +186,49 @@ export default function History() {
                     <td className="p-2">
                       <input
                         type="number"
+                        min="0"
+                        max="1000"
+                        step="0.5"
                         value={editForm.weight}
                         data-testid="weight-input"
-                        onChange={(e) => setEditForm({ ...editForm, weight: e.target.value })}
+                        onChange={(e) => {
+                          let v = e.target.value;
+                          if (v !== '' && Number(v) > 1000) v = '1000';
+                          if (v !== '' && Number(v) < 0) v = '0';
+                          setEditForm({ ...editForm, weight: v });
+                        }}
                         className="border p-1 rounded"
                         /> 
                     </td>
                     <td className="p-2">
                       <input
                         type="number"
+                        min="1"
+                        max="1000"
                         value={editForm.reps}
                         data-testid="reps-input"
-                        onChange={(e) => setEditForm({ ...editForm, reps: e.target.value })}
+                        onChange={(e) => {
+                          let v = e.target.value;
+                          if (v !== '' && Number(v) > 1000) v = '1000';
+                          if (v !== '' && Number(v) < 1) v = '1';
+                          setEditForm({ ...editForm, reps: v });
+                        }}
                         className="border p-1 rounded"
                         />
                     </td>
                     <td className="p-2">
                       <input
                         type="number"
+                        min="1"
+                        max="100"
                         value={editForm.sets}
                         data-testid="sets-input"
-                        onChange={(e) => setEditForm({ ...editForm, sets: e.target.value })}
+                        onChange={(e) => {
+                          let v = e.target.value;
+                          if (v !== '' && Number(v) > 100) v = '100';
+                          if (v !== '' && Number(v) < 1) v = '1';
+                          setEditForm({ ...editForm, sets: v });
+                        }}
                         className="border p-1 rounded"
                         />
                     </td>
