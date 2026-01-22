@@ -24,6 +24,7 @@ export default function ProgramBuilder() {
   // exercisesByWorkoutId: { [workoutId]: [{ id, workout_id, exercise_name, sets, reps, rpe, rest_seconds, notes, order_index }] }
   const [exercisesByWorkoutId, setExercisesByWorkoutId] = useState({});
 
+  // Handles save pulse animation
   const pulseSaved = () => {
   setSavePulse(true);
   setTimeout(() => setSavePulse(false), 900);
@@ -595,10 +596,12 @@ export default function ProgramBuilder() {
                           <input
                             type="number"
                             min="1"
+                            max="100"
                             className="w-full border border-gray-200 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                             value={ex.sets ?? ""}
                             onChange={(e) => {
-                              const v = e.target.value;
+                              let v = e.target.value;
+                              if (v !== "" && Number(v) > 100) v = "100";
                               setExercisesByWorkoutId((prev) => ({
                                 ...prev,
                                 [w.id]: (prev[w.id] || []).map((row) =>
@@ -608,7 +611,7 @@ export default function ProgramBuilder() {
                             }}
                             onBlur={(e) =>
                               updateExercise(ex.id, w.id, {
-                                sets: e.target.value === "" ? null : Number(e.target.value),
+                                sets: e.target.value === "" ? null : Math.min(Number(e.target.value), 100),
                               })
                             }
                           />
@@ -616,10 +619,14 @@ export default function ProgramBuilder() {
 
                         <div className="col-span-2">
                           <input
+                            type="number"
+                            min="1"
+                            max="1000"
                             className="w-full border border-gray-200 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                             value={ex.reps ?? ""}
                             onChange={(e) => {
-                              const v = e.target.value;
+                              let v = e.target.value;
+                              if (v !== "" && Number(v) > 1000) v = "1000";
                               setExercisesByWorkoutId((prev) => ({
                                 ...prev,
                                 [w.id]: (prev[w.id] || []).map((row) =>
@@ -628,7 +635,7 @@ export default function ProgramBuilder() {
                               }));
                             }}
                             onBlur={(e) =>
-                              updateExercise(ex.id, w.id, { reps: e.target.value || null })
+                              updateExercise(ex.id, w.id, { reps: e.target.value === "" ? null : Math.min(Number(e.target.value), 1000) })
                             }
                           />
                         </div>
@@ -642,7 +649,8 @@ export default function ProgramBuilder() {
                             className="w-full border border-gray-200 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                             value={ex.rpe ?? ""}
                             onChange={(e) => {
-                              const v = e.target.value;
+                              let v = e.target.value;
+                              if (v !== "" && Number(v) > 10) v = "10";
                               setExercisesByWorkoutId((prev) => ({
                                 ...prev,
                                 [w.id]: (prev[w.id] || []).map((row) =>
@@ -652,7 +660,7 @@ export default function ProgramBuilder() {
                             }}
                             onBlur={(e) =>
                               updateExercise(ex.id, w.id, {
-                                rpe: e.target.value === "" ? null : Number(e.target.value),
+                                rpe: e.target.value === "" ? null : Math.min(Number(e.target.value), 10),
                               })
                             }
                           />
@@ -662,10 +670,12 @@ export default function ProgramBuilder() {
                           <input
                             type="number"
                             min="0"
+                            max="3600"
                             className="w-full border border-gray-200 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                             value={ex.rest_seconds ?? ""}
                             onChange={(e) => {
-                              const v = e.target.value;
+                              let v = e.target.value;
+                              if (v !== "" && Number(v) > 3600) v = "3600";
                               setExercisesByWorkoutId((prev) => ({
                                 ...prev,
                                 [w.id]: (prev[w.id] || []).map((row) =>
@@ -675,7 +685,7 @@ export default function ProgramBuilder() {
                             }}
                             onBlur={(e) =>
                               updateExercise(ex.id, w.id, {
-                                rest_seconds: e.target.value === "" ? null : Number(e.target.value),
+                                rest_seconds: e.target.value === "" ? null : Math.min(Number(e.target.value), 3600),
                               })
                             }
                           />
