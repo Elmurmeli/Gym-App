@@ -135,7 +135,7 @@ export default function History() {
   };
 
   return (
-    <div className="min-h-screen box-border bg-gradient-to-br from-blue-50 via-white to-blue-100  justify-center px-4">
+    <div className="min-h-screen box-border justify-center px-4">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}

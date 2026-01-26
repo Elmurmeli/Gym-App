@@ -98,7 +98,7 @@ export default function Progress() {
     }, [selectedExercise, logs]);
 
     return (
-        <div className="min-h-screen box-border bg-gradient-to-br from-blue-50 to-white p-6">
+        <div className="min-h-screen box-border p-6">
         <h2 className="text-3xl font-semibold text-blue-600 text-center mb-6">
             Exercise Progress
         </h2>

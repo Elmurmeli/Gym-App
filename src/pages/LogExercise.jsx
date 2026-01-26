@@ -87,7 +87,7 @@ export default function LogExercise() {
 
   return (
     /**/
-    <div className="min-h-screen box-border bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen box-border flex flex-col items-center justify-center px-4">
     <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}

@@ -13,7 +13,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen box-border bg-gradient-to-br from-blue-50 via-white to-blue-100 px-4 py-12 md:px-8 lg:px-24 xl:px-0 flex flex-col justify-between">
+    <div className="flex-1 min-h-0 box-border px-4 py-12 md:px-8 lg:px-24 xl:px-0 flex flex-col justify-between">
       {/* HERO */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}

@@ -307,7 +307,7 @@ export default function ProgramBuilder() {
   // -----------------------------------------
     if (loading) {
     return (
-      <div className="min-h-screen box-border bg-gradient-to-br from-blue-50 to-white p-6">
+      <div className="min-h-screen box-border p-6">
         <div className="max-w-5xl mx-auto bg-white shadow rounded-xl p-6">
           <p className="text-gray-600">Loading program builder...</p>
         </div>
@@ -317,7 +317,7 @@ export default function ProgramBuilder() {
 
     if (!program) {
     return (
-      <div className="min-h-screen box-border bg-gradient-to-br from-blue-50 to-white p-6">
+      <div className="min-h-screen box-border p-6">
         <div className="max-w-5xl mx-auto bg-white shadow rounded-xl p-6">
           <p className="text-red-600">{errorMsg || "Program not found."}</p>
           <button
@@ -332,7 +332,7 @@ export default function ProgramBuilder() {
   }
 
     return (
-      <div className="min-h-screen box-border bg-gradient-to-br from-blue-50 via-white to-blue-100 p-6">
+      <div className="min-h-screen box-border p-6">
     <div className="max-w-6xl mx-auto space-y-6">
 
       {/* Top Header */}

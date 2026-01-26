@@ -176,7 +176,7 @@ export default function ProgramView() {
 
   if (loading) {
     return (
-      <div className="min-h-screen box-border bg-gradient-to-br from-blue-50 to-white p-6">
+      <div className="min-h-screen box-border p-6">
         <div className="max-w-5xl mx-auto bg-white shadow rounded-xl p-6 text-gray-600">
           Loading…
         </div>
@@ -186,7 +186,7 @@ export default function ProgramView() {
 
   if (!program) {
     return (
-      <div className="min-h-screen box-border bg-gradient-to-br from-blue-50 to-white p-6">
+      <div className="min-h-screen box-border p-6">
         <div className="max-w-5xl mx-auto bg-white shadow rounded-xl p-6">
           <p className="text-red-600">{errorMsg || "Program not found."}</p>
           <Link to="/programs" className="inline-block mt-4 text-blue-600 hover:underline">
@@ -198,7 +198,7 @@ export default function ProgramView() {
   }
 
   return (
-    <div className="min-h-screen box-border bg-gradient-to-br from-blue-50 to-white p-6">
+    <div className="min-h-screen box-border p-6">
       <div className="max-w-6xl mx-auto space-y-5">
         {/* Top header */}
         <motion.div
