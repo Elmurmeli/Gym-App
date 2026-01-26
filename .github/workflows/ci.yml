@@ -25,6 +25,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Run unit tests
+      - name: Run unit tests (Vitest)
+        run: npm run test:ci
+
+      # Build project
       - name: Build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
