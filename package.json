@@ -8,6 +8,7 @@
     "build": "vite build",
     "test": "vitest",
     "test:run": "vitest run --coverage",
+    "test:ci": "vitest --run",
     "lint": "eslint .",
     "preview": "vite preview"
   },
