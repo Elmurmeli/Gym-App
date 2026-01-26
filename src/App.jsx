@@ -44,11 +44,11 @@ export default function App() {
 
     <Router>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <div className="h-screen bg-gray-100 text-gray-800 p-4 w-screen mx-auto" src="...">
-
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-100 text-gray-800">
         <NavBar />
-        {/* Main Routes */}
-        <Routes>
+        <div className="app-content flex-1 overflow-auto p-4 flex flex-col min-h-0">
+          {/* Main Routes */}
+          <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/logs" element={
             <ProtectedRoutes>
@@ -81,7 +81,8 @@ export default function App() {
             }
           />
           <Route path="/programs/:id" element={<ProgramView />} />
-        </Routes>
+          </Routes>
+        </div>
       </div>
 
     </Router>

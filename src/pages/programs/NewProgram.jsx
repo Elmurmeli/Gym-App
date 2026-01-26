@@ -10,6 +10,7 @@ export default function NewProgram() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
+  // Handle creating a new program
   const handleCreate = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -43,7 +44,7 @@ export default function NewProgram() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
+    <div className="min-h-screen box-border p-6">
       <div className="max-w-xl mx-auto bg-white shadow rounded-xl p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold text-blue-600">Create Program</h2>

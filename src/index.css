@@ -1,5 +1,20 @@
+
 @import "tailwindcss";
 @tailwind utilities;
+
+html {
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-5px); }
@@ -9,3 +24,8 @@
 .animate-fadeIn {
   animation: fadeIn 0.12s ease-out;
 }
+
+/* Ensure page-level min-h-screen / h-screen inside the scrollable content
+   fill the content area instead of the viewport to avoid stacked heights */
+.app-content .min-h-screen { min-height: 100%; }
+.app-content .h-screen { height: 100%; }

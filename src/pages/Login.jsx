@@ -21,7 +21,7 @@ export default function Login() {
     };
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col">
+      <div className="min-h-screen box-border flex flex-col">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
