@@ -5,7 +5,7 @@ import { supabase } from "../supabase";
 
 export default function Home() {
   const [user, setUser] = useState(null);
-
+  // Get current user
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user ?? null);

@@ -430,9 +430,10 @@ export default function WorkoutSessionModal({
         .eq('session_id', sessionId);
 
       const setsToInsert = [];
+      // Insert current workout sets
       exercises.forEach(exercise => {
         const exerciseData = workoutData[exercise.id] || {};
-        
+        // Insert all sets with weight and reps
         Object.entries(exerciseData).forEach(([setIndex, setData]) => {
           if (setData.weight && setData.reps) {
             setsToInsert.push({

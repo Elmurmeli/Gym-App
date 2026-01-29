@@ -80,7 +80,7 @@ export default function ProgramView() {
         setLoading(false);
         return;
       }
-
+      // Group exercises by workout ID
       const grouped = {};
       for (const wid of workoutIds) grouped[wid] = [];
       for (const row of ex || []) {
@@ -99,10 +99,10 @@ export default function ProgramView() {
       checkInProgressSessions();
     }
   }, [programId, user?.id]);
-
+  // Check for in-progress sessions
   const checkInProgressSessions = async () => {
     if (!user) return;
-
+    // Fetch in-progress sessions for this user and program
     try {
       const { data: sessions, error } = await supabase
         .from('workout_sessions')
@@ -122,7 +122,7 @@ export default function ProgramView() {
       console.log('No in-progress sessions found');
     }
   };
-
+  // Handle session updates (add/update/remove)
   const handleSessionUpdate = (workoutId, sessionData) => {
     setInProgressSessions(prev => {
       if (sessionData === null) {

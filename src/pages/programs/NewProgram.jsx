@@ -15,14 +15,14 @@ export default function NewProgram() {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-
+    // Get current user
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) {
       setMessage("You must be logged in.");
       setLoading(false);
       return;
     }
-
+    // Insert new program
     const { data, error } = await supabase
       .from("programs")
       .insert([{

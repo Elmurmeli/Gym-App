@@ -38,7 +38,7 @@ export default function Programs() {
     else setTabLoading(true);
 
     const reqId = ++requestIdRef.current;
-
+    // Get current user (for "mine" tab)
     const { data: userData } = await supabase.auth.getUser();
     const currentUser = userData?.user ?? null;
     setUser(currentUser);
@@ -52,7 +52,7 @@ export default function Programs() {
       setTabLoading(false);
       return;
     }
-
+    // Build query
     let q = supabase
       .from("programs")
       .select("*")
