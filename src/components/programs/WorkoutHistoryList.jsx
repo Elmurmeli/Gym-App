@@ -8,7 +8,7 @@ export default function WorkoutHistoryList({ workoutId, user, onSessionClick, on
   useEffect(() => {
     const fetchSessions = async () => {
       if (!user || !workoutId) return;
-
+      // Fetch recent completed sessions for this workout and user
       setLoading(true);
       try {
         const { data, error } = await supabase
@@ -35,7 +35,7 @@ export default function WorkoutHistoryList({ workoutId, user, onSessionClick, on
 
     fetchSessions();
   }, [workoutId, user]);
-
+  // Function to handle deleting a session
   const handleDelete = async (sessionId) => {
     if (!user) return;
     const ok = window.confirm("Delete this session? This cannot be undone.");

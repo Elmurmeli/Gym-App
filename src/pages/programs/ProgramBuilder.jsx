@@ -137,10 +137,10 @@ export default function ProgramBuilder() {
   const addWorkout = async () => {
     setSaving(true);
     setErrorMsg("");
-
+    // Determine next order_index
     const nextIndex =
       workouts.length === 0 ? 1 : Math.max(...workouts.map((w) => w.order_index || 1)) + 1;
-
+    // Insert new workout/day
     const { data, error } = await supabase
       .from("program_workouts")
       .insert([
@@ -159,12 +159,12 @@ export default function ProgramBuilder() {
       setSaving(false);
       return;
     }
-
+    // Add new workout to state
     setWorkouts((prev) => [...prev, data].sort((a, b) => (a.order_index || 0) - (b.order_index || 0)));
     setExercisesByWorkoutId((prev) => ({ ...prev, [data.id]: [] }));
     setSaving(false);
   };
-
+  // Update workout fields
   const updateWorkout = async (workoutId, patch) => {
     setSaving(true);
     setErrorMsg("");
@@ -184,7 +184,7 @@ export default function ProgramBuilder() {
     }
     setSaving(false);
   };
-
+  // Delete workout
   const deleteWorkout = async (workoutId) => {
     const ok = window.confirm("Delete this day/workout and all its exercises?");
     if (!ok) return;
@@ -198,7 +198,7 @@ export default function ProgramBuilder() {
       setSaving(false);
       return;
     }
-
+    // Remove workout and its exercises from state
     setWorkouts((prev) => prev.filter((w) => w.id !== workoutId));
     setExercisesByWorkoutId((prev) => {
       const copy = { ...prev };
@@ -219,7 +219,7 @@ export default function ProgramBuilder() {
     const current = exercisesByWorkoutId[workoutId] || [];
     const nextIndex =
       current.length === 0 ? 1 : Math.max(...current.map((e) => e.order_index || 1)) + 1;
-
+    // Insert new exercise with default "Bench Press"
     const { data, error } = await supabase
       .from("program_exercises")
       .insert([
@@ -242,7 +242,7 @@ export default function ProgramBuilder() {
       setSaving(false);
       return;
     }
-
+    // Add new exercise to state
     setExercisesByWorkoutId((prev) => ({
       ...prev,
       [workoutId]: [...(prev[workoutId] || []), data].sort(
@@ -257,7 +257,7 @@ export default function ProgramBuilder() {
   const updateExercise = async (exerciseId, workoutId, patch) => {
     setSaving(true);
     setErrorMsg("");
-
+    // Update exercise in database
     const { data, error } = await supabase
       .from("program_exercises")
       .update(patch)
@@ -285,7 +285,7 @@ export default function ProgramBuilder() {
 
     setSaving(true);
     setErrorMsg("");
-
+    // Delete exercise from database
     const { error } = await supabase.from("program_exercises").delete().eq("id", exerciseId);
 
     if (error) {
@@ -293,7 +293,7 @@ export default function ProgramBuilder() {
       setSaving(false);
       return;
     }
-
+    // Remove exercise from state
     setExercisesByWorkoutId((prev) => ({
       ...prev,
       [workoutId]: (prev[workoutId] || []).filter((e) => e.id !== exerciseId),
@@ -305,6 +305,7 @@ export default function ProgramBuilder() {
   // -----------------------------------------
   // Render
   // -----------------------------------------
+    // Loading state
     if (loading) {
     return (
       <div className="min-h-screen box-border p-6">
@@ -314,7 +315,7 @@ export default function ProgramBuilder() {
       </div>
     );
   }
-
+    // Error state
     if (!program) {
     return (
       <div className="min-h-screen box-border p-6">
