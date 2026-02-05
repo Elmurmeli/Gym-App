@@ -18,7 +18,17 @@ export async function fetchUnifiedExercises(userId, { limit, from, to } = {}) {
 
   const { data, error } = await query;
   if (error) throw error;
-  return data;
+  // Parse `sets` which may be returned as a JSON string by Supabase
+  const parsed = (data || []).map(row => {
+    let sets = row.sets;
+    try {
+      if (typeof sets === 'string') sets = JSON.parse(sets);
+    } catch (e) {
+      // leave as-is if parsing fails
+    }
+    return { ...row, sets };
+  });
+  return parsed;
 }
 
 /**
@@ -27,12 +37,22 @@ export async function fetchUnifiedExercises(userId, { limit, from, to } = {}) {
  * - method 'epley' returns max estimated 1RM using Epley formula: weight * (1 + reps/30)
  */
 export function bestSetMetric(sets, { method = 'maxWeight' } = {}) {
+  // accept json strings too
+  if (typeof sets === 'string') {
+    try {
+      sets = JSON.parse(sets);
+    } catch (e) {
+      return null;
+    }
+  }
   if (!Array.isArray(sets) || sets.length === 0) return null;
   if (method === 'epley') {
     return Math.max(
       ...sets.map(s => {
         const reps = Number(s.reps) || 0;
         const weight = Number(s.weight) || 0;
+        // If this set is an actual 1-rep max, use the raw weight as the estimated 1RM
+        if (reps === 1) return weight;
         return weight * (1 + reps / 30);
       })
     );
