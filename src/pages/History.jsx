@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from "framer-motion"
 import { supabase } from '../supabase';
+import { fetchUnifiedExercises, bestSetMetric } from '../lib/exerciseUnified';
 import { PencilSquareIcon, TrashIcon, CheckIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
 
 export default function History() {
@@ -9,6 +10,7 @@ export default function History() {
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({ name: '', weight: '', reps: '', sets: '', date: '' });
   const [personalRecords, setPersonalRecords] = useState({});
+  const [dbPrs, setDbPrs] = useState([]);
 
   //Normalize exercise name: Capitalize the first letter, lowercase the rest
   const normalizeExerciseName = (name) => {
@@ -48,6 +50,29 @@ export default function History() {
 
         //Calculate personal records for the user
         setPersonalRecords(calculatePrs(data));
+      }
+
+      // Fetch unified rows and compute live PRs (max raw weight per exercise)
+      try {
+        const rows = await fetchUnifiedExercises(user.id, { limit: 2000 });
+        const map = {};
+        (rows || []).forEach(r => {
+          const name = (r.exercise_name || '').trim().toLowerCase();
+          const best = bestSetMetric(r.sets, { method: 'maxWeight' }) || 0;
+          // prefer higher weight, tie-break by most recent date
+          if (!map[name] || best > Number(map[name].pr_value) || (best === Number(map[name].pr_value) && new Date(r.date) > new Date(map[name].pr_date || 0))) {
+            map[name] = {
+              exercise_key: name,
+              exercise_name: r.exercise_name,
+              pr_value: best,
+              pr_date: r.date
+            };
+          }
+        });
+        setDbPrs(Object.values(map));
+      } catch (err) {
+        console.error('Error fetching unified exercises for PRs:', err);
+        setDbPrs([]);
       }
 
       setLoading(false);
@@ -152,6 +177,23 @@ export default function History() {
       className="w-full"
     >
       <div className="bg-white shadow-md rounded-lg p-4">
+        {/* PR Summary */}
+        {dbPrs && dbPrs.length > 0 && (
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">Personal Records</h3>
+            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+              {dbPrs.slice(0,6).map((p) => (
+                <div key={p.exercise_key} className="p-3 border rounded-lg bg-gray-50">
+                  <div className="flex items-baseline justify-between">
+                    <div className="text-sm font-medium text-gray-700">{p.exercise_name}</div>
+                    <div className="text-sm font-bold text-blue-600">{p.pr_value}</div>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">{p.pr_date ? new Date(p.pr_date).toLocaleDateString() : ''}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       {logs.length === 0 ? (
         <p>No logs found.</p>
       ) : (

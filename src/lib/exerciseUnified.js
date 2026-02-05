@@ -1,4 +1,4 @@
-import supabase from '../supabase';
+import { supabase } from '../supabase';
 
 /**
  * Fetch unified exercise rows from `exercise_unified_view`.
@@ -38,5 +38,30 @@ export function bestSetMetric(sets, { method = 'maxWeight' } = {}) {
     );
   }
   return Math.max(...sets.map(s => Number(s.weight) || 0));
+}
+
+/** Fetch per-exercise PRs (from materialized view `exercise_prs`) */
+export async function fetchExercisePRs(userId) {
+  const { data, error } = await supabase
+    .from('exercise_prs')
+    .select('*')
+    .eq('user_id', userId)
+    .order('pr_value', { ascending: false });
+  if (error) throw error;
+  return data;
+}
+
+/** Fetch progression points for a given exercise key (exercise_id or name) */
+export async function fetchExerciseProgression(userId, exerciseKey, { limit } = {}) {
+  let q = supabase
+    .from('exercise_progression')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('exercise_key', exerciseKey)
+    .order('date', { ascending: true });
+  if (limit) q = q.limit(limit);
+  const { data, error } = await q;
+  if (error) throw error;
+  return data;
 }
 
