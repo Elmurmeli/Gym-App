@@ -216,10 +216,12 @@ export default function History() {
 
         {/* Tabs: All Activity / Manual Logs / Program Sessions */}
         <div className="mb-4">
-          <div className="flex gap-2 justify-center mb-4 rounded-xl border border-gray-200 bg-white p-1 shadow-sm">
-            <button onClick={() => setActiveTab('all')} className={`px-4 py-2 rounded-xl ${activeTab==='all'? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>All Activity</button>
-            <button onClick={() => setActiveTab('manual')} className={`px-4 py-2 rounded-xl ${activeTab==='manual'? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>Manual Logs</button>
-            <button onClick={() => setActiveTab('sessions')} className={`px-4 py-2 rounded-xl ${activeTab==='sessions'? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>Program Sessions</button>
+          <div className="flex gap-2 justify-center">
+            <div className="inline-block w-fit gap-2 mb-4 rounded-xl border border-gray-200 bg-white p-1 shadow-sm">
+              <button onClick={() => setActiveTab('all')} className={`px-4 py-2 rounded-xl ${activeTab==='all'? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>All Activity</button>
+              <button onClick={() => setActiveTab('manual')} className={`px-4 py-2 rounded-xl ${activeTab==='manual'? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>Manual Logs</button>
+              <button onClick={() => setActiveTab('sessions')} className={`px-4 py-2 rounded-xl ${activeTab==='sessions'? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>Program Sessions</button>
+            </div>
           </div>
 
 
