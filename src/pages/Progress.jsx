@@ -1,16 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabase";
 import { fetchUnifiedExercises, bestSetMetric } from "../lib/exerciseUnified";
-import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    Tooltip,
-    CartesianGrid,
-    Legend,
-    ResponsiveContainer
-} from "recharts";
+import ProgressionGraph from '../components/ProgressionGraph'
 import { motion } from "framer-motion";
 
 export default function Progress() {
@@ -309,39 +300,7 @@ export default function Progress() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
         >
-        <div className="bg-white shadow-xl rounded-2xl p-6 mx-auto" style={{ width: "95%", height: 380 }}>
-            {chartData.length === 0 ? (
-            <p className="text-center text-gray-500">No data available.</p>
-            ) : (
-            <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="dateLabel" />
-                <YAxis tickFormatter={(v) => `${v} kg`} />
-                <Tooltip content={<CustomTooltip/>} />
-                <Legend verticalAlign="top" height={36} />
-                <Line
-                    name="Estimated 1RM"
-                    type="monotone"
-                    dataKey="best_metric"
-                    stroke="#10b981"
-                    strokeWidth={2}
-                    dot={false}
-                    connectNulls={false}
-                />
-                <Line
-                    name="Logged Weight"
-                    type="monotone"
-                    dataKey="weight"
-                    stroke="#3b82f6"
-                    strokeWidth={3}
-                    dot={CustomDot}
-                    connectNulls={true}
-                />
-                </LineChart>
-            </ResponsiveContainer>
-            )}
-        </div>
+        <ProgressionGraph data={chartData} />
         </motion.div>
         </div>
     );
