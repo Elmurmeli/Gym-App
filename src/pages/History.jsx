@@ -258,7 +258,8 @@ export default function History() {
                   const bestWeight = Number(bestSet?.weight) || 0;
                   const isPR = prMap[exerciseKey] !== undefined && bestWeight >= Number(prMap[exerciseKey]);
                   return {
-                    key: `s-${r.session_id || r.id || Math.random()}`,
+                    // prefer row-unique `r.id` first; fall back to `session_id`, then a random short id
+                    key: `s-${r.id || r.session_id || Math.random().toString(36).slice(2,9)}`,
                     exercise: r.exercise_name || r.name || r.workout_name || 'Session',
                     weight: bestWeight,
                     reps: Number(bestSet?.reps) || 0,
