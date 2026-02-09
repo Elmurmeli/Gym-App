@@ -337,24 +337,40 @@ export default function History() {
                   const sessions = Object.values(sessionsMap).sort((a,b) => new Date(b.date) - new Date(a.date));
                   if (sessions.length === 0) return <p className="text-center text-gray-500">No program sessions yet.</p>
 
-                  return sessions.map(s => (
-                    <div key={s.key} className="bg-white border rounded shadow-md overflow-hidden">
-                      <div className="px-4 py-3 flex items-center justify-between cursor-pointer" onClick={() => setSelectedSessionKey(selectedSessionKey === s.key ? null : s.key)}>
-                        <div className="flex-1">
-                          <div className="text-sm font-medium text-gray-800">{s.program_title}</div>
-                          <div className="text-xs text-gray-500">{s.session_name} • {(() => { const d = new Date(s.date); return isNaN(d.getTime()) ? (s.date || '-') : d.toLocaleString(); })()}</div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <button className="px-3 py-1 bg-blue-500 text-white rounded text-sm">{selectedSessionKey === s.key ? 'Hide' : 'View'}</button>
-                        </div>
-                      </div>
-                      {selectedSessionKey === s.key && (
-                        <div className="px-4 pb-4 pt-0 border-t">
-                          <SessionExercisesList rows={sessionRows.filter(r => (r.session_id || `${r.date}-${r.session_name || r.workout_name}`) === s.key)} />
-                        </div>
-                      )}
+                  return (
+                    <div className="mt-4 mb-4 rounded-xl border border-gray-200 bg-white p-2">
+                      <ul className="space-y-2">
+                        {sessions.map(s => (
+                          <li key={s.key}>
+                            <div className="group flex items-center justify-between gap-3 rounded-lg border border-gray-100 bg-white px-3 py-2 hover:shadow-sm transition">
+                              <div className="flex items-center gap-3 min-w-0">
+                                <div className="flex-shrink-0 text-2xl">🏋️</div>
+                                <div className="min-w-0" onClick={() => setSelectedSessionKey(selectedSessionKey === s.key ? null : s.key)}>
+                                  <div className="text-sm font-medium text-gray-900 truncate">{s.program_title || s.session_name}</div>
+                                  <div className="text-xs text-gray-500">{s.session_name} • {(() => { const d = new Date(s.date); return isNaN(d.getTime()) ? (s.date || '-') : d.toLocaleString(); })()}</div>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => setSelectedSessionKey(selectedSessionKey === s.key ? null : s.key)}
+                                  className="text-sm px-3 py-1 rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                >
+                                  {selectedSessionKey === s.key ? 'Hide' : 'View'}
+                                </button>
+                              </div>
+                            </div>
+
+                            {selectedSessionKey === s.key && (
+                              <div className="px-3 pb-3 pt-2">
+                                <SessionExercisesList rows={sessionRows.filter(r => (r.session_id || `${r.date}-${r.session_name || r.workout_name}`) === s.key)} />
+                              </div>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  ));
+                  );
                 })()}
               </div>
             </div>
