@@ -26,7 +26,9 @@ export async function fetchUnifiedExercises(userId, { limit, from, to } = {}) {
     } catch (e) {
       // leave as-is if parsing fails
     }
-    return { ...row, sets };
+      // prefer program title for session labeling, fall back to session_name
+      const session_label = (row.program_title || row.session_name) || null;
+      return { ...row, sets, session_label };
   });
   return parsed;
 }

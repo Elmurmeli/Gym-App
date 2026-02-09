@@ -12,9 +12,16 @@ SELECT
   COALESCE(e.name, '') AS exercise_name,
   e.date AS date,
   -- Build a jsonb array for single-entry logs (assume `reps` and `weight` represent the logged set)
-  jsonb_build_array(jsonb_build_object('reps', e.reps, 'weight', e.weight))::jsonb AS sets,
+  -- Some schemas store `sets` as jsonb, some as text (JSON string), others as numeric IDs; avoid casting non-json values to jsonb.
+  CASE
+    WHEN pg_typeof(e.sets)::text = 'jsonb' THEN to_jsonb(e.sets)
+    WHEN e.sets IS NOT NULL AND (e.sets::text LIKE '[%' OR e.sets::text LIKE '{%') THEN e.sets::text::jsonb
+    ELSE jsonb_build_array(jsonb_build_object('reps', e.reps, 'weight', e.weight))
+  END AS sets,
   'single'::text AS source,
-  NULL::uuid AS session_id
+  NULL::uuid AS session_id,
+  NULL::text AS session_name,
+  NULL::text AS program_title
 FROM public.exercises e
 
 UNION ALL
@@ -29,10 +36,15 @@ SELECT
   COALESCE(jsonb_agg(jsonb_build_object('set_index', ws.set_index, 'reps', ws.reps, 'weight', ws.weight, 'rpe', ws.rpe) ORDER BY ws.set_index), '[]'::jsonb) AS sets,
   'session'::text AS source,
   s.id::uuid AS session_id
+  -- include program title and workout/day label so clients can show program + session name
+  , COALESCE(pw.day_label, p.title) AS session_name
+  , p.title AS program_title
 FROM public.workout_sessions s
 JOIN public.workout_sets ws ON ws.session_id = s.id
 JOIN public.program_exercises pe ON pe.id = ws.program_exercise_id
-GROUP BY s.id, s.user_id, pe.id, pe.exercise_name, s.performed_at;
+LEFT JOIN public.programs p ON p.id = s.program_id
+LEFT JOIN public.program_workouts pw ON pw.id = s.workout_id
+GROUP BY s.id, s.user_id, pe.id, pe.exercise_name, s.performed_at, p.title, pw.day_label;
 
 -- 2) Enable Row Level Security and create SELECT policies
 -- Protect single-entry `exercises` so users can only SELECT their own rows

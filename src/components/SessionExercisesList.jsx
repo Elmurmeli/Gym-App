@@ -5,7 +5,13 @@ export default function SessionExercisesList({ rows = [] }) {
   // group rows by session id (fallback to date+session_name)
   const groups = rows.reduce((acc, r) => {
     const key = r.session_id || r.session_key || `${r.date}-${r.session_name || r.workout_name || 'session'}`;
-    if (!acc[key]) acc[key] = { key, rows: [], date: r.date, session_name: r.session_name || r.workout_name || 'Session', program_name: r.program_name };
+    if (!acc[key]) acc[key] = {
+      key,
+      rows: [],
+      date: r.date,
+      session_name: r.session_name || r.workout_name || 'Session',
+      program_title: r.program_title || r.program || r.program_name || ''
+    };
     acc[key].rows.push(r);
     return acc;
   }, {});
@@ -21,8 +27,8 @@ export default function SessionExercisesList({ rows = [] }) {
         <div key={s.key} className="bg-white border rounded-lg">
           <div className="p-3 flex justify-between items-center">
             <div>
-              <div className="font-medium">{s.session_name}</div>
-              <div className="text-xs text-gray-500">{s.program_name || ''} • {new Date(s.date).toLocaleString()}</div>
+              <div className="font-medium">{s.program_title || s.session_name}</div>
+              <div className="text-xs text-gray-500">{s.session_name || ''} • {new Date(s.date).toLocaleString()}</div>
             </div>
             <div className="flex items-center gap-2">
               <button

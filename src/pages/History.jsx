@@ -264,7 +264,8 @@ export default function History() {
                     reps: Number(bestSet?.reps) || 0,
                     sets: sets.length || 0,
                     date: r.date,
-                    source: r.session_name || 'Program Session',
+                    // show the program title as the source in All Activity, keep session_name for details
+                    source: r.program_title || r.program || r.program_name || 'Program Session',
                     isPR
                   };
                 });
@@ -324,9 +325,9 @@ export default function History() {
                       sessionsMap[key] = {
                         key,
                         session_id: r.session_id,
-                        // prefer an explicit session name, then program title, then workout name
-                        session_name: r.session_name || r.program || r.program_name || r.workout_name || 'Program Session',
-                        program: r.program || r.program_name || '-',
+                        // program title (from view) and session/workout name
+                        program_title: r.program_title || r.program || r.program_name || '-',
+                        session_name: r.session_name || r.workout_name || '-',
                         date: r.date,
                         duration: r.duration || r.session_duration || '-',
                       };
@@ -340,8 +341,8 @@ export default function History() {
                     <div key={s.key} className="bg-white border rounded shadow-md overflow-hidden">
                       <div className="px-4 py-3 flex items-center justify-between cursor-pointer" onClick={() => setSelectedSessionKey(selectedSessionKey === s.key ? null : s.key)}>
                         <div className="flex-1">
-                          <div className="text-sm font-medium text-gray-800">{s.session_name}</div>
-                          <div className="text-xs text-gray-500">{s.program} • {(() => { const d = new Date(s.date); return isNaN(d.getTime()) ? (s.date || '-') : d.toLocaleString(); })()}</div>
+                          <div className="text-sm font-medium text-gray-800">{s.program_title}</div>
+                          <div className="text-xs text-gray-500">{s.session_name} • {(() => { const d = new Date(s.date); return isNaN(d.getTime()) ? (s.date || '-') : d.toLocaleString(); })()}</div>
                         </div>
                         <div className="flex items-center gap-3">
                           <button className="px-3 py-1 bg-blue-500 text-white rounded text-sm">{selectedSessionKey === s.key ? 'Hide' : 'View'}</button>
