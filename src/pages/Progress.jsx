@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabase";
-import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    Tooltip,
-    CartesianGrid,
-    ResponsiveContainer
-} from "recharts";
+import { fetchUnifiedExercises, bestSetMetric } from "../lib/exerciseUnified";
+import ProgressionGraph from '../components/ProgressionGraph'
 import { motion } from "framer-motion";
 
 export default function Progress() {
@@ -16,6 +9,8 @@ export default function Progress() {
     const [exerciseList, setExerciseList] = useState([]);
     const [selectedExercise, setSelectedExercise] = useState("");
     const [filteredData, setFilteredData] = useState([]);
+    const [progressionData, setProgressionData] = useState([]);
+    const [sessionPoints, setSessionPoints] = useState([]);
     const [prs, setPrs] = useState({ maxWeight: 0, maxVolume: 0});
 
     // Calculate PRs
@@ -64,13 +59,28 @@ export default function Progress() {
                 setLogs(normalized);
 
                 // Build unique exercise list
-                const unique = [...new Set(normalized.map((log) => log.name))];
+                let unique = [...new Set(normalized.map((log) => log.name))];
+
+                // Also include exercises that appear in session-based progression view
+                try {
+                    const { data: progData, error: progErr } = await supabase
+                        .from('exercise_progression')
+                        .select('exercise_name, exercise_key')
+                        .eq('user_id', user.id);
+                    if (!progErr && progData) {
+                        progData.forEach(p => {
+                            const name = normalizeName(p.exercise_name || p.exercise_key || '');
+                            if (name && !unique.includes(name)) unique.push(name);
+                        });
+                    }
+                } catch (e) {
+                    console.error('Error fetching progression exercise list:', e);
+                }
+
                 setExerciseList(unique);
 
                 // Set default selected exercise
-                if (unique.length > 0) {
-                    setSelectedExercise(unique[0]);
-                }
+                if (unique.length > 0) setSelectedExercise(unique[0]);
             }
         };
 
@@ -96,6 +106,139 @@ export default function Progress() {
 
         setFilteredData(filtered);
     }, [selectedExercise, logs]);
+
+    // Fetch progression points from DB view for selected exercise (case-insensitive match)
+    useEffect(() => {
+        const fetchProgression = async () => {
+            if (!selectedExercise) {
+                setProgressionData([]);
+                return;
+            }
+
+            const {
+                data: { user },
+                error: userError
+            } = await supabase.auth.getUser();
+            if (userError || !user) return;
+
+            // Use ILIKE to match exercise_key case-insensitively
+            const { data, error } = await supabase
+                .from('exercise_progression')
+                .select('*')
+                .eq('user_id', user.id)
+                .ilike('exercise_name', selectedExercise);
+
+            if (error) {
+                console.error('Error fetching progression:', error);
+                setProgressionData([]);
+                return;
+            }
+
+            // Map rows to { date, best_metric }
+            const mapped = (data || []).map(d => ({ date: d.date, best_metric: Number(d.best_metric) || 0 }));
+            setProgressionData(mapped);
+
+            // Also fetch unified exercise rows (session + single) to get logged weights for session exercises
+            try {
+                const unified = await fetchUnifiedExercises(user.id, { limit: 2000 });
+                const filtered = (unified || []).filter(r => (r.exercise_name || '').toLowerCase() === selectedExercise.toLowerCase());
+                const points = filtered.map(r => {
+                    const sets = Array.isArray(r.sets) ? r.sets : (typeof r.sets === 'string' ? (() => { try { return JSON.parse(r.sets); } catch(e){ return []; } })() : []);
+                    const maxWeight = Number(bestSetMetric(sets, { method: 'maxWeight' })) || 0;
+                    const isTrue1RM = Array.isArray(sets) && sets.some(s => Number(s.reps) === 1 && Number(s.weight) === maxWeight);
+                    return { date: r.date, weight: maxWeight, actual1RM: isTrue1RM };
+                });
+                setSessionPoints(points);
+            } catch (e) {
+                console.error('Error fetching unified exercise rows:', e);
+                setSessionPoints([]);
+            }
+        };
+
+        fetchProgression();
+    }, [selectedExercise]);
+
+    // build merged chart data (date-sorted)
+    const chartData = (() => {
+        const map = {};
+        (filteredData || []).forEach(d => {
+            const k = new Date(d.date).toISOString();
+            // mark single-entry logs with reps===1 as actual 1RMs
+            map[k] = { date: k, dateLabel: new Date(d.date).toLocaleDateString(), weight: d.weight, volume: d.volume, actual1RM: Number(d.reps) === 1 };
+        });
+        (progressionData || []).forEach(p => {
+            const k = new Date(p.date).toISOString();
+            map[k] = { ...(map[k] || { date: k, dateLabel: new Date(p.date).toLocaleDateString() }), best_metric: p.best_metric };
+        });
+        // Include session-derived points (from unified view).
+        // If a session point is an actual 1RM (`actual1RM`), override the progression estimate on that date.
+        (sessionPoints || []).forEach(s => {
+            const k = new Date(s.date).toISOString();
+            if (!map[k]) map[k] = { date: k, dateLabel: new Date(s.date).toLocaleDateString() };
+            map[k].weight = s.weight;
+            // propagate actual1RM flag into the merged chart point
+            if (s.actual1RM) {
+                map[k].actual1RM = true;
+                map[k].best_metric = s.weight;
+            }
+        });
+        const arr = Object.values(map).sort((a,b) => new Date(a.date) - new Date(b.date));
+        // Mark only the single highest actual 1RM as the PR dot (if any).
+        const actualPoints = arr.filter(pt => pt.actual1RM).map(pt => ({
+            weight: Number(pt.weight) || 0,
+            date: new Date(pt.date).getTime()
+        }));
+        if (actualPoints.length > 0) {
+            // find max weight among actual 1RMs
+            const maxWeight = Math.max(...actualPoints.map(p => p.weight));
+            // find the most recent point with that max weight
+            let latestTime = -Infinity;
+            for (const pt of arr) {
+                if (pt.actual1RM && Number(pt.weight) === maxWeight) {
+                    const t = new Date(pt.date).getTime();
+                    if (t >= latestTime) latestTime = t;
+                }
+            }
+            for (const pt of arr) {
+                pt.actual1RMPR = false;
+                if (pt.actual1RM && Number(pt.weight) === maxWeight && new Date(pt.date).getTime() === latestTime) {
+                    pt.actual1RMPR = true;
+                }
+            }
+        } else {
+            // ensure flag cleared when no actual1RM points
+            for (const pt of arr) pt.actual1RMPR = false;
+        }
+        return arr;
+    })();
+
+    function CustomTooltip({ active, payload, label }) {
+        if (!active || !payload || payload.length === 0) return null;
+        return (
+            <div className="bg-white p-2 rounded shadow border text-sm">
+                <div className="font-medium">{payload[0].payload.dateLabel}</div>
+                {payload.map((p, i) => (
+                    <div key={i} className="flex justify-between">
+                        <div className="text-gray-600">{p.name}{p.payload && p.payload.actual1RMPR ? ' (1RM)' : ''}</div>
+                        <div className="font-semibold">{p.value !== undefined ? `${Number(p.value).toFixed(1)} kg` : '-'}</div>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
+    // Custom dot renderer: larger gold dot for actual 1RM points
+    function CustomDot(props) {
+        const { cx, cy, payload } = props;
+        if (cx == null || cy == null) return null;
+        // Highlight only when this merged point was marked as a PR actual 1RM
+        if (payload && payload.actual1RMPR) {
+            return (
+                <circle cx={cx} cy={cy} r={6} fill="#f59e0b" stroke="#fff" strokeWidth={2} />
+            );
+        }
+        return <circle cx={cx} cy={cy} r={4} fill="#3b82f6" />;
+    }
 
     return (
         <div className="min-h-screen box-border p-6">
@@ -157,27 +300,7 @@ export default function Progress() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
         >
-        <div className="bg-white shadow-xl rounded-2xl p-6 mx-auto" style={{ width: "95%", height: 380 }}>
-            {filteredData.length === 0 ? (
-            <p className="text-center text-gray-500">No data available.</p>
-            ) : (
-            <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={filteredData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" tickFormatter={(d) => new Date(d).toLocaleDateString()} />
-                <YAxis dataKey="weight" />
-                <Tooltip />
-                <Line
-                    type="monotone"
-                    dataKey="weight"
-                    stroke="#3b82f6"
-                    strokeWidth={3}
-                    dot={{ r: 4 }}
-                />
-                </LineChart>
-            </ResponsiveContainer>
-            )}
-        </div>
+        <ProgressionGraph data={chartData} />
         </motion.div>
         </div>
     );
