@@ -202,7 +202,7 @@ export default function History() {
             <h3 className="text-lg font-semibold text-gray-800">Personal Records</h3>
             <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
               {dbPrs.slice(0,6).map((p) => (
-                <div key={p.exercise_key} className="p-3 border rounded-lg bg-gray-50">
+                <div key={p.exercise_key} className="p-3 rounded-lg bg-yellow-300 shadow-lg">
                   <div className="flex items-baseline justify-between">
                     <div className="text-sm font-medium text-gray-700">{p.exercise_name}</div>
                     <div className="text-sm font-bold text-blue-600">{p.pr_value}</div>
