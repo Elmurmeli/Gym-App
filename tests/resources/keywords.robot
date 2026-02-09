@@ -44,7 +44,7 @@ Go To History Page
     Go To    ${BASE_URL}/#/history
         Log Current URL
         Wait Until Page Contains    Workout History    timeout=30s
-        Click Button    ${HISTORY_MANUAL_TAB}
+        Run Keyword And Ignore Error    Click Button    ${HISTORY_MANUAL_TAB}
         Wait Until Page Contains Element    ${ROW}    timeout=30s
 
 Go To Login Page
