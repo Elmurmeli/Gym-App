@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from "framer-motion"
+import { motion, useReducedMotion, useAnimation } from "framer-motion"
 import { supabase } from '../supabase';
 import { fetchUnifiedExercises, bestSetMetric } from '../lib/exerciseUnified';
 import { PencilSquareIcon, TrashIcon, CheckIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
@@ -179,6 +179,59 @@ export default function History() {
     return Number(log.weight) === personalRecords[normalized];
   };
 
+  // PR card subcomponent so each card can control its own animation lifecycle
+  // Golden gleam animation for the cards
+  function PRCard({ p }) {
+    const controls = useAnimation();
+
+    const startSweep = () => {
+      if (shouldReduceMotion) return;
+      // start the sweep visibly near the left edge so it appears almost instantly,
+      // then animate across to the right — leaving the card won't cancel this
+      controls.set({ x: '-40%', opacity: 0.95 });
+      controls.start({ x: '100%', opacity: 0.95, transition: { duration: 2.2, ease: 'easeInOut' } });
+    };
+
+    return (
+      <motion.div
+        onMouseEnter={startSweep}
+        className="relative p-3 rounded-lg bg-gradient-to-br from-yellow-100 via-yellow-300 to-yellow-400 shadow-lg overflow-hidden"
+      >
+        {!shouldReduceMotion ? (
+          <motion.div aria-hidden="true" className="absolute inset-0 pointer-events-none overflow-hidden">
+            <motion.div
+              aria-hidden="true"
+              animate={controls}
+              initial={{ x: '-60%', opacity: 0 }}
+              style={{
+                position: 'absolute',
+                top: '-40%',
+                left: '-100%',
+                width: '260%',
+                height: '200%',
+                transform: 'skewX(-20deg)',
+                background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,245,130,0.98) 50%, rgba(255,255,255,0) 100%)',
+                mixBlendMode: 'screen',
+                opacity: 0.95,
+                filter: 'blur(2px)'
+              }}
+            />
+          </motion.div>
+        ) : (
+          <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
+            <div style={{ position: 'absolute', top: '0', left: '5%', right: '5%', bottom: '0', background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,245,140,0.6) 50%, rgba(255,255,255,0) 100%)', transform: 'skewX(-18deg)', opacity: 0.7, filter: 'blur(2px)' }} />
+          </div>
+        )}
+
+        <div className="flex items-baseline justify-between">
+          <div className="text-sm font-medium text-yellow-900">{p.exercise_name}</div>
+          <div className="text-sm font-bold text-yellow-900">{p.pr_value}</div>
+        </div>
+        <div className="text-xs text-gray-500 mt-1">{p.pr_date ? new Date(p.pr_date).toLocaleDateString() : ''}</div>
+      </motion.div>
+    );
+  }
+
   return (
     <div className="min-h-screen box-border justify-center px-4">
       <motion.div
@@ -203,46 +256,8 @@ export default function History() {
             <h3 className="text-lg font-semibold text-gray-800">Personal Records</h3>
             <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
               {dbPrs.slice(0,6).map((p) => (
-                <div key={p.exercise_key} className="relative p-3 rounded-lg bg-gradient-to-br from-yellow-100 via-yellow-300 to-yellow-400 shadow-lg overflow-hidden">
-                  {/* golden gleam*/}
-                  {!shouldReduceMotion ? (
-                    <motion.div
-                      aria-hidden="true"
-                      className="absolute inset-0 pointer-events-none overflow-hidden"
-                      initial={{ opacity: 1 }}
-                      animate={{ opacity: 1 }}
-                    >
-                      <motion.div
-                        aria-hidden="true"
-                        initial={{ x: '-100%' }}
-                          animate={{ x: '100%' }}
-                          transition={{ duration: 2.2, ease: 'easeInOut', repeat: Infinity, repeatDelay: 2.5 }}
-                      style={{
-                          position: 'absolute',
-                          top: '-40%',
-                          left: '-100%',
-                          width: '260%',
-                          height: '200%',
-                          transform: 'skewX(-20deg)',
-                          background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,245,140,0.95) 50%, rgba(255,255,255,0) 100%)',
-                          mixBlendMode: 'screen',
-                          opacity: 0.85,
-                          filter: 'blur(3px)'
-                        }}
-                      />
-                    </motion.div>
-                    ) : (
-                    <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
-                      <div style={{ position: 'absolute', top: '0', left: '5%', right: '5%', bottom: '0', background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,245,140,0.6) 50%, rgba(255,255,255,0) 100%)', transform: 'skewX(-18deg)', opacity: 0.7, filter: 'blur(2px)' }} />
-                    </div>
-                  )}
-
-                  <div className="flex items-baseline justify-between">
-                    <div className="text-sm font-medium text-yellow-900">{p.exercise_name}</div>
-                    <div className="text-sm font-bold text-yellow-900">{p.pr_value}</div>
-                  </div>
-                  <div className="text-xs text-gray-500 mt-1">{p.pr_date ? new Date(p.pr_date).toLocaleDateString() : ''}</div>
-                </div>
+                /* Use a dedicated PRCard component to handle the animation lifecycle of each card independently */
+                <PRCard key={p.exercise_key} p={p} />
               ))}
             </div>
           </div>
