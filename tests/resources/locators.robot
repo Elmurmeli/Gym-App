@@ -20,6 +20,7 @@ ${CANCEL_BTN}       xpath=//*[@data-testid="cancel-btn"]
 ${PR_BADGE}         xpath=//*[@data-testid="pr-badge"]
 
 ${HISTORY_MANUAL_TAB}    xpath=//button[normalize-space(.)='Manual Logs']
+${HISTORY_ALL_TAB}       xpath=//button[normalize-space(.)='All Activity']
 
 ${AUTH_ERROR}       xpath=//*[@data-testid="auth-error"]
 

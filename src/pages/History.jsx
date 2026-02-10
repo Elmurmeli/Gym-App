@@ -339,6 +339,7 @@ export default function History() {
                         <tr key={row.key} className="even:bg-gray-50 hover:bg-gray-100">
                           <td className="p-2">{row.exercise} {row.isPR && (
                             <motion.span
+                              data-testid="pr-badge"
                               initial={{ scale: 0.8, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
                               transition={{ duration: 0.3 }}
