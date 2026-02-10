@@ -18,5 +18,6 @@ Verify PR Badge Appears
     Fill Exercise Form    Bench Press    150    3    3    02/01/2024
 
     Go To History Page
+   Click Element    ${HISTORY_ALL_TAB}
 
     Page Should Contain Element     xpath=//tr[td[contains(., "Bench Press")]]//span[@data-testid="pr-badge"]
