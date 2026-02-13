@@ -28,9 +28,9 @@ export default function Login() {
         transition={{ duration: 0.8 }}
         className="text-center"
       >
-    <div className="max-w-md mx-auto mt-16 bg-white shadow p-6 rounded-xl">
+    <div className="max-w-md mx-auto mt-16 card-bg shadow p-6 rounded-xl">
 
-      <h2 className="text-2xl font-bold mb-4 text-blue-600 text-shadow-sm">Login</h2>
+      <h2 className="text-2xl font-bold mb-4 text-primary text-shadow-sm">Login</h2>
 
       <form onSubmit={handleLogin} className="flex flex-col gap-4">
         <input
@@ -53,7 +53,7 @@ export default function Login() {
           required
         />
 
-        <button data-testid="login-btn" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+        <button data-testid="login-btn" className="btn-theme py-2 rounded">
           Login
         </button>
       </form>
@@ -61,18 +61,18 @@ export default function Login() {
       {/*Divider*/}
       <div className="flex items-center my-6">
         <div className="flex-grow border-t border-gray-300" />
-        <span className="mx-4 text-sm text-gray-500">OR</span>
+        <span className="mx-4 text-sm text-app opacity-70">OR</span>
         <div className="flex-grow border-t border-gray-300" />
       </div>
 
       <p className="text-center text-sm text-gray-600">
         Don't have an account?{' '}
         <Link
-            to="/register"
-            className="block px-2 py-2 rounded font-medium bg-green-100 hover:bg-green-200"
-            data-testid="register-link"
+          to="/register"
+          className="block px-2 py-2 rounded font-medium card-bg hover:opacity-95 text-app"
+          data-testid="register-link"
         >
-            Create an account
+          Create an account
         </Link>
       </p>
 

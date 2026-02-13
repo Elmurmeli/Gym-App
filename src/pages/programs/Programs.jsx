@@ -204,15 +204,15 @@ export default function Programs() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8 }}
         >
-          <div className="flex items-center justify-between mb-6">
-            <div className="inline-flex rounded-xl border border-gray-200 bg-white p-1 shadow-sm">
+            <div className="flex items-center justify-between mb-6">
+            <div className="inline-flex rounded-xl border border-gray-200 card-bg p-1 shadow-sm">
               <button
                 onClick={() => setTab("public")}
                 disabled={tabLoading}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                   tab === "public"
                     ? "bg-blue-600 text-white"
-                    : "text-gray-700 hover:bg-gray-50"
+                    : "text-app hover:opacity-95"
                 } ${tabLoading ? "opacity-60 cursor-not-allowed" : ""}`}
               >
                 Public
@@ -223,7 +223,7 @@ export default function Programs() {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                   tab === "mine"
                     ? "bg-blue-600 text-white"
-                    : "text-gray-700 hover:bg-gray-50"
+                    : "text-app hover:opacity-95"
                 } ${tabLoading ? "opacity-60 cursor-not-allowed" : ""}`}
               >
                 My Programs
@@ -232,17 +232,17 @@ export default function Programs() {
 
             {/* Subtle “Updating…” instead of replacing cards */}
             {tabLoading && (
-              <div className="text-sm text-gray-500">Updating…</div>
+              <div className="text-sm text-app opacity-70">Updating…</div>
             )}
           </div>
 
           {/* Initial load only */}
           {loading ? (
-            <div className="bg-white shadow rounded-2xl p-6 text-gray-600">
+            <div className="card-bg shadow rounded-2xl p-6 text-app opacity-80">
               Loading…
             </div>
           ) : filteredPrograms.length === 0 ? (
-            <div className="bg-white shadow rounded-2xl p-6 text-gray-600">
+            <div className="card-bg shadow rounded-2xl p-6 text-app opacity-80">
               {tab === "mine" && !user
                 ? "Log in to see your programs."
                 : "No programs found."}
@@ -253,21 +253,21 @@ export default function Programs() {
                 {filteredPrograms.map((p) => (
                   <div
                     key={p.id}
-                    className="group bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition overflow-hidden flex flex-col"
+                    className="group card-bg rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition overflow-hidden flex flex-col"
                   >
                     <div className="p-5">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition">
+                          <h3 className="text-lg font-bold text-app group-hover:text-primary transition">
                             {p.title}
                           </h3>
 
                           {p.description ? (
-                            <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                            <p className="text-sm text-app opacity-80 mt-1 line-clamp-2">
                               {p.description}
                             </p>
                           ) : (
-                            <p className="text-sm text-gray-400 mt-1 italic">
+                            <p className="text-sm text-app opacity-60 mt-1 italic">
                               No description
                             </p>
                           )}
@@ -284,17 +284,17 @@ export default function Programs() {
                         </span>
                       </div>
 
-                      <div className="mt-4 text-xs text-gray-500">
+                      <div className="mt-4 text-xs text-app opacity-70">
                         Created: {new Date(p.created_at).toLocaleDateString()}
                       </div>
                     </div>
 
                     {/* Footer actions */}
-                    <div className="mt-auto pt-4 pb-3 px-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+                    <div className="mt-auto pt-4 pb-3 px-4 card-bg border-t border-gray-100 flex items-center justify-between">
                       <div className="flex gap-2">
                         <Link
                           to={`/programs/${p.id}`}
-                          className="px-3 py-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 text-sm font-medium"
+                          className="px-3 py-2 rounded-lg border border-gray-200 card-bg hover:opacity-95 text-app text-sm font-medium"
                         >
                           View
                         </Link>
@@ -302,7 +302,7 @@ export default function Programs() {
                         {tab === "mine" && (
                           <Link
                             to={`/programs/${p.id}/edit`}
-                            className="px-3 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium"
+                            className="px-3 py-2 rounded-lg btn-theme hover:opacity-95 text-sm font-medium"
                           >
                             Open Builder
                           </Link>

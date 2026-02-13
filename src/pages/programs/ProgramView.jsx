@@ -174,10 +174,10 @@ export default function ProgramView() {
 
   const isOwner = user && program && user.id === program.owner_id;
 
-  if (loading) {
+    if (loading) {
     return (
       <div className="min-h-screen box-border p-6">
-        <div className="max-w-5xl mx-auto bg-white shadow rounded-xl p-6 text-gray-600">
+        <div className="max-w-5xl mx-auto card-bg shadow rounded-xl p-6 text-app">
           Loading…
         </div>
       </div>
@@ -187,9 +187,9 @@ export default function ProgramView() {
   if (!program) {
     return (
       <div className="min-h-screen box-border p-6">
-        <div className="max-w-5xl mx-auto bg-white shadow rounded-xl p-6">
+        <div className="max-w-5xl mx-auto card-bg shadow rounded-xl p-6">
           <p className="text-red-600">{errorMsg || "Program not found."}</p>
-          <Link to="/programs" className="inline-block mt-4 text-blue-600 hover:underline">
+          <Link to="/programs" className="inline-block mt-4 text-primary hover:underline">
             ← Back to programs
           </Link>
         </div>
@@ -205,12 +205,12 @@ export default function ProgramView() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
-          className="bg-white shadow rounded-xl p-6"
+          className="card-bg shadow rounded-xl p-6"
         >
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-2xl md:text-3xl font-bold text-blue-500">{program.title}</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-primary">{program.title}</h2>
                 <span
                   className={`text-xs font-bold px-2 py-1 rounded-full ${
                     program.visibility === "public"
@@ -221,29 +221,29 @@ export default function ProgramView() {
                   {program.visibility === "public" ? "🌍 Public" : "🔒 Private"}
                 </span>
 
-                <span className="text-xs font-semibold px-2 py-1 rounded-full bg-blue-50 text-blue-700">
+                <span className="text-xs font-semibold px-2 py-1 rounded-full bg-blue-50 text-primary">
                   {workouts.length} day{workouts.length === 1 ? "" : "s"}
                 </span>
               </div>
 
-              {program.description ? (
-                <div className="mt-3 rounded-xl bg-gray-50 p-4 border border-gray-100">
-                  <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">{program.description}</p>
+                {program.description ? (
+                <div className="mt-3 rounded-xl card-bg p-4 border border-gray-100">
+                  <p className="text-app whitespace-pre-wrap leading-relaxed">{program.description}</p>
                 </div>
               ) : (
-                <p className="mt-3 italic text-gray-400">No description.</p>
+                <p className="mt-3 italic text-app opacity-60">No description.</p>
               )}
             </div>
 
             <div className="flex flex-col items-end gap-2">
-              <Link to="/programs" className="px-4 py-2 rounded-xl border bg-white hover:bg-gray-50 font-medium">
+              <Link to="/programs" className="px-4 py-2 rounded-xl border card-bg hover:bg-gray-50 font-medium">
                 ← Programs
               </Link>
 
               {isOwner && (
                 <Link
                   to={`/programs/${program.id}/edit`}
-                  className="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 font-medium"
+                  className="px-4 py-2 rounded-xl btn-theme font-medium"
                 >
                   Edit Program
                 </Link>
@@ -260,7 +260,7 @@ export default function ProgramView() {
 
         {/* Days List */}
           {workouts.length === 0 ? (
-            <div className="bg-white border border-gray-100 shadow-sm rounded-xl p-6 text-gray-600">
+            <div className="card-bg border border-gray-100 shadow-sm rounded-xl p-6 text-app">
               No days added yet.
             </div>
           ) : (
@@ -272,7 +272,7 @@ export default function ProgramView() {
             return (
               <div
                 key={w.id}
-                className="bg-white border border-gray-100 shadow-sm rounded-2xl overflow-hidden"
+                className="card-bg border border-gray-100 shadow-sm rounded-2xl overflow-hidden"
               >
                 {/* Accordion header */}
                 <button
@@ -281,25 +281,25 @@ export default function ProgramView() {
                 >
                   <div className="min-w-0">
                     <div className="flex items-center gap-3">
-                      <h3 className="font-bold text-gray-900">
+                      <h3 className="font-bold text-app">
                         {w.day_label || `Day ${w.order_index || ""}`}
                       </h3>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-app opacity-60">
                         #{w.order_index}
                       </span>
-                      <span className="text-xs font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-700">
+                      <span className="text-xs font-semibold px-2 py-1 rounded-full bg-gray-100 text-app">
                         {exList.length} exercise{exList.length === 1 ? "" : "s"}
                       </span>
                     </div>
 
                     {w.notes && (
-                      <p className="mt-1 text-sm text-gray-600 line-clamp-1">
+                      <p className="mt-1 text-sm text-app opacity-75 line-clamp-1">
                         {w.notes}
                       </p>
                     )}
                   </div>
 
-                  <span className="text-gray-500 font-bold">
+                  <span className="text-app opacity-70 font-bold">
                     {isOpen ? "−" : "+"}
                   </span>
                 </button>
@@ -313,7 +313,7 @@ export default function ProgramView() {
                           <>
                             <button 
                               onClick={() => setActiveWorkout(w)} 
-                              className="px-3 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
+                              className="px-3 py-2 rounded-xl btn-theme"
                             >
                               Resume Workout
                             </button>
@@ -327,7 +327,7 @@ export default function ProgramView() {
                         ) : (
                           <button 
                             onClick={() => setActiveWorkout(w)} 
-                            className="px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700"
+                            className="px-3 py-2 rounded-xl btn-theme"
                           >
                             Start Workout
                           </button>
@@ -343,7 +343,7 @@ export default function ProgramView() {
                     {/* Responsive “table” */}
                     <div className="border border-gray-100 rounded-xl overflow-hidden">
                       {/* header row (hidden on small screens) */}
-                      <div className="hidden md:grid bg-blue-50 text-blue-900 text-sm font-semibold grid-cols-12 gap-2 px-3 py-2">
+                      <div className="hidden md:grid bg-blue-50 text-primary text-sm font-semibold grid-cols-12 gap-2 px-3 py-2">
                         <div className="col-span-4">Exercise</div>
                         <div className="col-span-1">Sets</div>
                         <div className="col-span-2">Reps</div>
@@ -353,42 +353,42 @@ export default function ProgramView() {
                       </div>
 
                       {exList.length === 0 ? (
-                        <div className="px-3 py-4 text-gray-600 text-sm bg-white">
+                        <div className="px-3 py-4 text-app text-sm card-bg">
                           No exercises.
                         </div>
                       ) : (
                         exList.map((ex) => (
                           <div
                             key={ex.id}
-                            className="border-t bg-white"
+                            className="border-t card-bg"
                           >
                             {/* Desktop row */}
                             <div className="hidden md:grid grid-cols-12 gap-2 px-3 py-2 items-center">
-                              <div className="col-span-4 font-medium text-gray-900">
+                              <div className="col-span-4 font-medium text-app">
                                 {ex.exercise_name}
                               </div>
                               <div className="col-span-1">{ex.sets ?? "-"}</div>
                               <div className="col-span-2">{ex.reps ?? "-"}</div>
                               <div className="col-span-1">{ex.rpe ?? "-"}</div>
                               <div className="col-span-2">{ex.rest_seconds ?? "-"}</div>
-                              <div className="col-span-2 text-sm text-gray-700 whitespace-pre-wrap break-words">
+                              <div className="col-span-2 text-sm text-app whitespace-pre-wrap break-words">
                                 {ex.notes || "-"}
                               </div>
                             </div>
 
                             {/* Mobile card row */}
                             <div className="md:hidden px-3 py-3">
-                              <div className="font-semibold text-gray-900">
+                              <div className="font-semibold text-app">
                                 {ex.exercise_name}
                               </div>
-                              <div className="mt-2 grid grid-cols-2 gap-2 text-sm text-gray-700">
-                                <div><span className="text-gray-500">Sets:</span> {ex.sets ?? "-"}</div>
-                                <div><span className="text-gray-500">Reps:</span> {ex.reps ?? "-"}</div>
-                                <div><span className="text-gray-500">RPE:</span> {ex.rpe ?? "-"}</div>
-                                <div><span className="text-gray-500">Rest:</span> {ex.rest_seconds ?? "-"}</div>
+                              <div className="mt-2 grid grid-cols-2 gap-2 text-sm text-app">
+                                <div><span className="text-app opacity-70">Sets:</span> {ex.sets ?? "-"}</div>
+                                <div><span className="text-app opacity-70">Reps:</span> {ex.reps ?? "-"}</div>
+                                <div><span className="text-app opacity-70">RPE:</span> {ex.rpe ?? "-"}</div>
+                                <div><span className="text-app opacity-70">Rest:</span> {ex.rest_seconds ?? "-"}</div>
                               </div>
-                              <div className="mt-2 text-sm text-gray-700">
-                                <span className="text-gray-500">Notes:</span>{" "}
+                              <div className="mt-2 text-sm text-app">
+                                <span className="text-app opacity-70">Notes:</span>{" "}
                                 {ex.notes || "-"}
                               </div>
                             </div>

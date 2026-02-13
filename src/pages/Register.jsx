@@ -37,8 +37,8 @@ export default function Register() {
         transition={{ duration: 0.8 }}
         className="text-center"
       >
-    <div className="max-w-md mx-auto mt-16 bg-white shadow p-6 rounded-xl">
-      <h2 className="text-2xl font-bold mb-4 text-blue-600 text-shadow-sm">Register</h2>
+    <div className="max-w-md mx-auto mt-16 card-bg shadow p-6 rounded-xl">
+      <h2 className="text-2xl font-bold mb-4 text-primary text-shadow-sm">Register</h2>
 
       <form onSubmit={handleRegister} className="flex flex-col gap-4">
         <input
@@ -61,12 +61,12 @@ export default function Register() {
           required
         />
 
-        <button data-testid="register-btn" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+        <button data-testid="register-btn" className="btn-theme py-2 rounded">
           Register
         </button>
       </form>
 
-      {message && <p className="mt-4 text-gray-700">{message}</p>}
+      {message && <p className="mt-4 text-app">{message}</p>}
     </div>
     </motion.div>
     </div>

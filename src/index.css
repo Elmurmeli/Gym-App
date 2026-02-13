@@ -25,6 +25,78 @@ body {
   animation: fadeIn 0.12s ease-out;
 }
 
+/* Theme variables for light/dark mode */
+:root {
+  --bg: #f8fafc;
+  --text: #0f172a;
+  --primary: #2563eb;
+  --nav-bg: #ffffff;
+  --card-bg: #ffffff;
+  --muted: #6b7280;
+  --btn-bg: var(--primary);
+}
+
+.dark {
+  --bg: #071025; /* app background */
+  --text: #e6eef8; /* primary text */
+  --primary: #7c87ff;
+  --nav-bg: #07112a;
+  --card-bg: rgba(255,255,255,0.03); /* slightly lighter than background for contrast */
+  --muted: #9aa4b2;
+  --btn-bg: var(--primary);
+}
+
+/* Apply theme globals */
+html, body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* Utility classes to use in components */
+.bg-app { background-color: var(--bg); }
+.nav-bg { background-color: var(--nav-bg); }
+.card-bg { background-color: var(--card-bg); }
+.text-app { color: var(--text); }
+.text-primary { color: var(--primary); }
+.btn-theme { background-color: var(--btn-bg); color: #fff; }
+
+/* Dropdown / menu item hover handling */
+.dropdown-bg { background-color: var(--card-bg); }
+.dropdown-item { transition: background-color 120ms; }
+.dropdown-item:hover { background-color: rgba(0,0,0,0.05); }
+.dark .dropdown-item:hover { background-color: rgba(255,255,255,0.04); }
+
+/* App wrapper gradient in light mode; dark mode uses solid var(--bg) */
+.app-wrapper { background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 50%, #eff6ff 100%); }
+.dark .app-wrapper { background: var(--bg); }
+
+/* Common Tailwind utility overrides for dark mode so existing classes look reasonable */
+.dark .bg-white { background-color: var(--card-bg) !important; }
+.dark .text-gray-800, .dark .text-gray-900 { color: var(--text) !important; }
+.dark .text-gray-500, .dark .text-gray-600, .dark .text-gray-700 { color: var(--muted) !important; }
+.dark .border-gray-100, .dark .border-gray-200, .dark .border-gray-300 { border-color: rgba(255,255,255,0.06) !important; }
+.dark .hover\:bg-gray-100:hover { background-color: rgba(255,255,255,0.02) !important; }
+.dark .hover\:bg-gray-50:hover { background-color: rgba(255,255,255,0.01) !important; }
+.dark .bg-white\/80 { background-color: rgba(255,255,255,0.04) !important; }
+
+/* Buttons using bg-white should get appropriate text color in dark */
+.dark .bg-white.text-gray-700 { color: var(--text) !important; }
+
+/* Fix cases where components use `bg-white` + `text-white` (bad contrast in dark mode) */
+.dark .bg-white.text-white,
+.dark .bg-white .text-white,
+.dark .card-bg.text-white,
+.dark .card-bg .text-white,
+.dark .border-gray-100.text-white,
+.dark .border-gray-100 .text-white {
+  color: var(--text) !important;
+}
+
+/* Slightly stronger card shadow in dark mode for separation */
+.dark .shadow-sm { box-shadow: 0 1px 4px rgba(0,0,0,0.6) !important; }
+.dark .shadow-md { box-shadow: 0 6px 18px rgba(0,0,0,0.55) !important; }
+.dark .shadow-lg { box-shadow: 0 12px 30px rgba(0,0,0,0.5) !important; }
+
 /* Ensure page-level min-h-screen / h-screen inside the scrollable content
    fill the content area instead of the viewport to avoid stacked heights */
 .app-content .min-h-screen { min-height: 100%; }

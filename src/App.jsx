@@ -44,7 +44,7 @@ export default function App() {
 
     <Router>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-100 text-gray-800">
+      <div className="min-h-screen flex flex-col app-wrapper text-app">
         <NavBar />
         <div className="app-content flex-1 overflow-auto p-4 flex flex-col min-h-0">
           {/* Main Routes */}

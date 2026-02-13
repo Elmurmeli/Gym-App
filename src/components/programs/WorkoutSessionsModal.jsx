@@ -19,7 +19,7 @@ export default function WorkoutSessionsModal({ open, onClose, workoutId, user, o
     } else {
       setLoadingMore(true);
     }
-
+    // Fetch sessions with pagination
     try {
       const currentOffset = reset ? 0 : offset;
       const { data, error } = await supabase
@@ -82,14 +82,14 @@ export default function WorkoutSessionsModal({ open, onClose, workoutId, user, o
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
-            className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
+            className="card-bg rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-900">All Workout Sessions</h2>
+              <h2 className="text-xl font-bold text-app">All Workout Sessions</h2>
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 text-2xl"
+                className="text-app opacity-80 hover:opacity-100 text-2xl"
               >
                 ×
               </button>
@@ -97,18 +97,18 @@ export default function WorkoutSessionsModal({ open, onClose, workoutId, user, o
 
             <div className="p-6 overflow-y-auto max-h-[calc(80vh-120px)]">
               {loading ? (
-                <div className="text-center text-gray-500">Loading sessions...</div>
+                <div className="text-center text-app opacity-70">Loading sessions...</div>
               ) : sessions.length === 0 ? (
-                <div className="text-center text-gray-500">No sessions found.</div>
+                <div className="text-center text-app opacity-70">No sessions found.</div>
               ) : (
                 <div className="space-y-3">
                   {sessions.map((session) => (
                     <div
                       key={session.id}
-                      className="group flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="group flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:shadow-sm transition-colors card-bg"
                     >
                       <div className="flex-1">
-                        <div className="font-medium text-gray-900">
+                        <div className="font-medium text-app">
                           {new Date(session.performed_at).toLocaleDateString('en-US', {
                             weekday: 'long',
                             year: 'numeric',
@@ -117,11 +117,11 @@ export default function WorkoutSessionsModal({ open, onClose, workoutId, user, o
                           })}
                         </div>
                         {session.notes && (
-                          <div className="text-sm text-gray-600 mt-1">{session.notes}</div>
+                          <div className="text-sm text-app opacity-80 mt-1">{session.notes}</div>
                         )}
                         <div className="text-sm text-green-600 font-medium mt-1">✔ Completed</div>
                       </div>
-                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2">
                           <button
                           onClick={async () => {
                             if (!user) return;
@@ -169,7 +169,7 @@ export default function WorkoutSessionsModal({ open, onClose, workoutId, user, o
                       <button
                         onClick={handleLoadMore}
                         disabled={loadingMore}
-                        className="px-6 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="px-6 py-2 card-bg text-app text-sm rounded-lg hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
                         {loadingMore ? 'Loading...' : 'Load More'}
                       </button>
