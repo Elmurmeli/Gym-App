@@ -148,7 +148,7 @@ export default function LogExercise() {
           </div>
         );
       })}
-      <button data-testid="submit-btn" type="submit" disabled={submitting} className="btn-theme font-semibold px-4 py-2 rounded-lg disabled:opacity-60">
+      <button data-testid="submit-btn" type="submit" disabled={submitting} className="btn-theme hover:opacity-90 font-semibold px-4 py-2 rounded-lg disabled:opacity-60">
         {submitting ? 'Logging...' : 'Log Exercise'}
       </button>
     </form>

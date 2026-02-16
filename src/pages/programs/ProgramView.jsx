@@ -287,7 +287,7 @@ export default function ProgramView() {
                       <span className="text-xs text-app opacity-60">
                         #{w.order_index}
                       </span>
-                      <span className="text-xs font-semibold px-2 py-1 rounded-full bg-gray-100 text-app">
+                      <span className="text-xs font-semibold px-2 py-1 rounded-full bg-blue-50 text-primary">
                         {exList.length} exercise{exList.length === 1 ? "" : "s"}
                       </span>
                     </div>

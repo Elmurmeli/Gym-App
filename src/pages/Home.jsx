@@ -35,21 +35,21 @@ export default function Home() {
             <>
               <Link
                 to="/logs"
-                className="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition"
+                className="px-6 py-3 rounded-xl btn-theme hover:opacity-90 text-white font-semibold shadow transition"
               >
                 📝 Log your exercises
               </Link>
 
               <Link
                 to="/programs"
-                className="px-6 py-3 rounded-xl card-bg border border-gray-200 text-app font-semibold hover:opacity-95 transition"
+                className="px-6 py-3 rounded-xl card-bg border border-gray-200 text-app font-semibold hover:opacity-80 transition"
               >
                 📋 My Programs
               </Link>
 
               <Link
                 to="/progress"
-                className="px-6 py-3 rounded-xl bg-gray-200 text-gray-800 font-semibold hover:bg-gray-300 transition"
+                className="px-6 py-3 rounded-xl btn-theme hover:opacity-90 text-white font-semibold shadow transition"
               >
                 📊 See your progress
               </Link>
@@ -58,7 +58,7 @@ export default function Home() {
             <>
               <Link
                 to="/programs"
-                className="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition"
+                className="px-6 py-3 rounded-xl btn-theme hover:opacity-90 text-white font-semibold shadow transition"
               >
                 🌍 Browse Programs
               </Link>
@@ -72,7 +72,7 @@ export default function Home() {
 
               <Link
                 to="/login"
-                className="px-6 py-3 rounded-xl bg-gray-200 text-gray-800 font-semibold hover:bg-gray-300 transition"
+                className="px-6 py-3 rounded-xl btn-theme hover:opacity-90 text-white font-semibold shadow transition"
               >
                 Login
               </Link>

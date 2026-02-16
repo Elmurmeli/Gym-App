@@ -254,12 +254,13 @@ export default function Progress() {
             transition={{ duration: 0.4, ease: "easeOut" }}
         >
             <select
-            className="border border-gray-300 p-2 rounded-lg shadow-sm focus:outline-none cursor-pointer focus:ring-1 focus:ring-blue-400 transition-all card-bg text-app"
+            className="border border-gray-300 p-2 rounded-lg shadow-sm focus:outline-none cursor-pointer focus:ring-1 focus:ring-blue-400 transition-all dropdown-bg text-app"
             value={selectedExercise}
             onChange={(e) => setSelectedExercise(e.target.value)}
+            style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text)' }}
             >
             {exerciseList.map((ex) => (
-                <option key={ex} value={ex}>
+                <option key={ex} value={ex} style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text)' }}>
                 {ex}
                 </option>
             ))}

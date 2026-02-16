@@ -79,7 +79,7 @@ export default function NavBar() {
 
             {/* Dropdown Menu */}
                 {menuOpen && (
-                    <div className="absolute right-0 mt-2 w-40 dropdown-bg border rounded shadow-lg animate-fadeIn">
+                    <div className="absolute right-0 top-full mt-1 w-40 dropdown-bg border rounded shadow-lg animate-fadeIn">
                         {/*Logged out menu*/}
                         {!user && (
                             <>
@@ -105,7 +105,7 @@ export default function NavBar() {
                             <button
                                 data-testid="logout-btn"
                                 onClick={handleLogout}
-                                className="w-full text-left px-4 py-2 dropdown-item"
+                                className="w-full text-left px-4 py-2 dropdown-bg"
                             >
                                 Logout
                             </button>

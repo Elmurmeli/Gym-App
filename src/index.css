@@ -53,12 +53,14 @@ html, body {
 }
 
 /* Utility classes to use in components */
-.bg-app { background-color: var(--bg); }
 .nav-bg { background-color: var(--nav-bg); }
 .card-bg { background-color: var(--card-bg); }
 .text-app { color: var(--text); }
 .text-primary { color: var(--primary); }
 .btn-theme { background-color: var(--btn-bg); color: #fff; }
+
+.modal-bg { background-color: #ffffff; }
+.dark .modal-bg { background-color: #07112a; }
 
 /* Dropdown / menu item hover handling */
 .dropdown-bg { background-color: var(--card-bg); }
