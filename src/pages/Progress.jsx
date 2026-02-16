@@ -242,7 +242,7 @@ export default function Progress() {
 
     return (
         <div className="min-h-screen box-border p-6">
-        <h2 className="text-3xl font-semibold text-blue-600 text-center mb-6">
+        <h2 className="text-3xl font-semibold text-primary text-center mb-6">
             Exercise Progress
         </h2>
 
@@ -254,12 +254,13 @@ export default function Progress() {
             transition={{ duration: 0.4, ease: "easeOut" }}
         >
             <select
-            className="border border-gray-300 p-2 rounded-lg shadow-sm focus:outline-none cursor-pointer focus:ring-1 focus:ring-blue-400 transition-all bg-white"
+            className="border border-gray-300 p-2 rounded-lg shadow-sm focus:outline-none cursor-pointer focus:ring-1 focus:ring-blue-400 transition-all dropdown-bg text-app"
             value={selectedExercise}
             onChange={(e) => setSelectedExercise(e.target.value)}
+            style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text)' }}
             >
             {exerciseList.map((ex) => (
-                <option key={ex} value={ex}>
+                <option key={ex} value={ex} style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text)' }}>
                 {ex}
                 </option>
             ))}
@@ -273,21 +274,21 @@ export default function Progress() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
         >
-            <div className="max-w-xl mx-auto mb-6 p-5 bg-white rounded-xl shadow-md border border-gray-100">
-            <h3 className="text-xl font-semibold text-blue-600 mb-4 text-center">🏆Personal Records🏆</h3>
+            <div className="max-w-xl mx-auto mb-6 p-5 card-bg rounded-xl shadow-md border border-gray-100">
+            <h3 className="text-xl font-semibold text-primary mb-4 text-center">🏆Personal Records🏆</h3>
 
             {filteredData.length === 0 ? (
-                <p className="text-center text-gray-500">No data for this exercise yet.</p>
+                <p className="text-center text-app opacity-70">No data for this exercise yet.</p>
             ) : (
                 <div className="flex justify-around text center">
                     <div>
-                        <p className="text-gray-600">Heaviest Lift</p>
-                        <p className="text-2xl font-bold text-blue-500">{prs.maxWeight} kg</p>
+                        <p className="text-app opacity-80">Heaviest Lift</p>
+                        <p className="text-2xl font-bold text-primary">{prs.maxWeight} kg</p>
                     </div>
 
                     <div>
-                        <p className="text-gray-600">Highest Volume</p>
-                        <p className="text-2xl font-bold text-blue-500">{prs.maxVolume} kg</p>
+                        <p className="text-app opacity-80">Highest Volume</p>
+                        <p className="text-2xl font-bold text-primary">{prs.maxVolume} kg</p>
                     </div>
                 </div>
             )}

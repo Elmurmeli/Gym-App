@@ -21,11 +21,11 @@ export default function Home() {
         transition={{ duration: 0.8 }}
         className="w-full max-w-3xl lg:max-w-5xl mx-auto text-center px-4 md:px-12 py-10 md:py-16"
       >
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-blue-500 mb-4 drop-shadow-lg">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary mb-4 drop-shadow-lg">
           Gym Tracker
         </h1>
 
-        <p className="text-gray-600 text-lg md:text-xl mt-4">
+        <p className="text-app opacity-80 text-lg md:text-xl mt-4">
           Build programs. Track workouts. See real progress.
         </p>
 
@@ -35,21 +35,21 @@ export default function Home() {
             <>
               <Link
                 to="/logs"
-                className="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition"
+                className="px-6 py-3 rounded-xl btn-theme hover:opacity-90 text-white font-semibold shadow transition"
               >
                 📝 Log your exercises
               </Link>
 
               <Link
                 to="/programs"
-                className="px-6 py-3 rounded-xl bg-white border border-gray-200 font-semibold hover:bg-gray-50 transition"
+                className="px-6 py-3 rounded-xl card-bg border border-gray-200 text-app font-semibold hover:opacity-80 transition"
               >
                 📋 My Programs
               </Link>
 
               <Link
                 to="/progress"
-                className="px-6 py-3 rounded-xl bg-gray-200 text-gray-800 font-semibold hover:bg-gray-300 transition"
+                className="px-6 py-3 rounded-xl btn-theme hover:opacity-90 text-white font-semibold shadow transition"
               >
                 📊 See your progress
               </Link>
@@ -58,21 +58,21 @@ export default function Home() {
             <>
               <Link
                 to="/programs"
-                className="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition"
+                className="px-6 py-3 rounded-xl btn-theme hover:opacity-90 text-white font-semibold shadow transition"
               >
                 🌍 Browse Programs
               </Link>
 
               <Link
                 to="/register"
-                className="px-6 py-3 rounded-xl bg-white border border-blue-600 text-blue-600 font-semibold hover:bg-blue-50 transition"
+                className="px-6 py-3 rounded-xl card-bg border border-blue-600 text-primary font-semibold hover:opacity-95 transition"
               >
                 Create Account
               </Link>
 
               <Link
                 to="/login"
-                className="px-6 py-3 rounded-xl bg-gray-200 text-gray-800 font-semibold hover:bg-gray-300 transition"
+                className="px-6 py-3 rounded-xl btn-theme hover:opacity-90 text-white font-semibold shadow transition"
               >
                 Login
               </Link>
@@ -88,7 +88,7 @@ export default function Home() {
         transition={{ delay: 0.4, duration: 0.8 }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 mt-16 md:mt-28 max-w-6xl mx-auto px-2 md:px-0"
       >
-        {[
+          {[
           {
             title: "Program Builder",
             text: "Create structured training programs with days, exercises, RPE and notes.",
@@ -107,13 +107,13 @@ export default function Home() {
         ].map((card, index) => (
           <div
             key={index}
-            className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 hover:shadow-md transition transform hover:-translate-y-1 flex flex-col items-center text-center min-h-[220px]"
+            className="card-bg rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 hover:shadow-md transition transform hover:-translate-y-1 flex flex-col items-center text-center min-h-[220px]"
           >
             <div className="text-3xl md:text-4xl mb-3">{card.emoji}</div>
-            <h2 className="text-lg md:text-xl font-semibold text-blue-600 mb-2">
+            <h2 className="text-lg md:text-xl font-semibold text-primary mb-2">
               {card.title}
             </h2>
-            <p className="text-gray-600 text-sm md:text-base">{card.text}</p>
+            <p className="text-app opacity-80 text-sm md:text-base">{card.text}</p>
           </div>
         ))}
       </motion.div>

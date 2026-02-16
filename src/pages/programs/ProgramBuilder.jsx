@@ -309,8 +309,8 @@ export default function ProgramBuilder() {
     if (loading) {
     return (
       <div className="min-h-screen box-border p-6">
-        <div className="max-w-5xl mx-auto bg-white shadow rounded-xl p-6">
-          <p className="text-gray-600">Loading program builder...</p>
+        <div className="max-w-5xl mx-auto card-bg shadow rounded-xl p-6">
+          <p className="text-app opacity-80">Loading program builder...</p>
         </div>
       </div>
     );
@@ -319,10 +319,10 @@ export default function ProgramBuilder() {
     if (!program) {
     return (
       <div className="min-h-screen box-border p-6">
-        <div className="max-w-5xl mx-auto bg-white shadow rounded-xl p-6">
+        <div className="max-w-5xl mx-auto card-bg shadow rounded-xl p-6">
           <p className="text-red-600">{errorMsg || "Program not found."}</p>
           <button
-            className="mt-4 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+            className="mt-4 px-4 py-2 rounded btn-theme"
             onClick={() => navigate("/programs")}
           >
             Back to Programs
@@ -346,7 +346,7 @@ export default function ProgramBuilder() {
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-3">
-              <h2 className="text-2xl font-bold text-blue-700">Program Builder</h2>
+              <h2 className="text-2xl font-bold text-primary">Program Builder</h2>
 
               <span
                 className={`text-xs font-semibold px-3 py-1 rounded-full border ${
@@ -365,14 +365,14 @@ export default function ProgramBuilder() {
                     ? "bg-blue-50 text-blue-700 border-blue-200"
                     : savePulse
                     ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                    : "bg-white text-gray-500 border-gray-200"
+                    : "bg-white text-app border-gray-200"
                 }`}
               >
                 {saving ? "Saving..." : savePulse ? "Saved ✓" : "Up to date"}
               </span>
             </div>
 
-            <p className="text-gray-600">
+              <p className="text-app opacity-80">
               Build days and exercises. Changes save when you click out of a field.
             </p>
 
@@ -383,17 +383,17 @@ export default function ProgramBuilder() {
             )}
           </div>
 
-          <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2">
             <Link
               to="/programs"
-              className="px-4 py-2 rounded-xl border bg-white hover:bg-gray-50 transition"
+              className="px-4 py-2 rounded-xl border card-bg hover:opacity-95 transition text-app"
             >
               ← Programs
             </Link>
 
             <Link
               to={`/programs/${program.id}`}
-              className="px-4 py-2 rounded-xl border bg-white hover:bg-gray-50 transition"
+              className="px-4 py-2 rounded-xl border card-bg hover:opacity-95 transition text-app"
             >
               Preview
             </Link>
@@ -405,7 +405,7 @@ export default function ProgramBuilder() {
                   visibility: program.visibility === "public" ? "private" : "public",
                 })
               }
-              className="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-60"
+              className="px-4 py-2 rounded-xl btn-theme transition disabled:opacity-60"
             >
               {program.visibility === "public" ? "Make Private" : "Make Public"}
             </button>
@@ -443,14 +443,14 @@ export default function ProgramBuilder() {
       {/* Days header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-xl font-bold text-gray-900">Days</h3>
-          <p className="text-sm text-gray-600">Each day contains exercises with sets/reps/RPE/rest.</p>
+          <h3 className="text-xl font-bold text-app">Days</h3>
+          <p className="text-sm text-app opacity-80">Each day contains exercises with sets/reps/RPE/rest.</p>
         </div>
 
         <button
           disabled={saving}
           onClick={addWorkout}
-          className="px-4 py-2 rounded-xl border bg-white hover:bg-gray-50 transition disabled:opacity-60"
+          className="px-4 py-2 rounded-xl border card-bg hover:opacity-95 text-app transition disabled:opacity-60"
         >
           + Add Day
         </button>
@@ -458,12 +458,12 @@ export default function ProgramBuilder() {
 
       {/* Empty state */}
       {workouts.length === 0 ? (
-        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
-          <p className="text-gray-600">No days yet. Add your first day to start building.</p>
+        <div className="card-bg shadow-sm border border-gray-100 rounded-2xl p-6">
+          <p className="text-app opacity-80">No days yet. Add your first day to start building.</p>
           <button
             disabled={saving}
             onClick={addWorkout}
-            className="mt-4 px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-60"
+            className="mt-4 px-4 py-2 rounded-xl btn-theme transition disabled:opacity-60"
           >
             + Add first day
           </button>
@@ -471,12 +471,12 @@ export default function ProgramBuilder() {
       ) : (
         <div className="space-y-5">
           {workouts.map((w) => (
-            <div key={w.id} className="bg-white shadow-sm border border-gray-100 rounded-2xl p-5">
+            <div key={w.id} className="card-bg shadow-sm border border-gray-100 rounded-2xl p-5">
               {/* Day header row */}
               <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                 <div className="flex-1 space-y-3">
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-bold px-2 py-1 rounded-lg bg-gray-100 text-gray-700">
+                    <span className="text-xs font-bold px-2 py-1 rounded-lg bg-gray-100 text-app">
                       Day #{w.order_index}
                     </span>
 
@@ -510,14 +510,14 @@ export default function ProgramBuilder() {
                   <button
                     disabled={saving}
                     onClick={() => addExercise(w.id)}
-                    className="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-60"
+                    className="px-4 py-2 rounded-xl btn-theme transition disabled:opacity-60"
                   >
                     + Add Exercise
                   </button>
                   <button
                     disabled={saving}
                     onClick={() => deleteWorkout(w.id)}
-                    className="px-4 py-2 rounded-xl border border-red-200 text-red-700 bg-white hover:bg-red-50 transition disabled:opacity-60"
+                    className="px-4 py-2 rounded-xl border border-red-200 text-red-700 card-bg hover:opacity-95 transition disabled:opacity-60"
                   >
                     Delete Day
                   </button>
@@ -536,18 +536,18 @@ export default function ProgramBuilder() {
                 </div>
 
                 {(exercisesByWorkoutId[w.id] || []).length === 0 ? (
-                  <div className="px-4 py-6 bg-white">
-                    <p className="text-sm text-gray-600">No exercises yet.</p>
+                  <div className="px-4 py-6 card-bg">
+                    <p className="text-sm text-app opacity-80">No exercises yet.</p>
                     <button
                       disabled={saving}
                       onClick={() => addExercise(w.id)}
-                      className="mt-3 px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-60"
+                      className="mt-3 px-4 py-2 rounded-xl btn-theme transition disabled:opacity-60"
                     >
                       + Add first exercise
                     </button>
                   </div>
                 ) : (
-                  <div className="bg-white">
+                  <div className="card-bg">
                     {(exercisesByWorkoutId[w.id] || []).map((ex) => (
                       <div
                         key={ex.id}
@@ -696,7 +696,7 @@ export default function ProgramBuilder() {
                           <button
                             disabled={saving}
                             onClick={() => deleteExercise(ex.id, w.id)}
-                            className="px-4 py-2 rounded-xl border border-red-200 text-red-700 bg-white hover:bg-red-50 transition disabled:opacity-60"
+                            className="px-4 py-2 rounded-xl border border-red-200 text-red-700 card-bg hover:opacity-95 transition disabled:opacity-60"
                           >
                             Delete
                           </button>
@@ -707,7 +707,7 @@ export default function ProgramBuilder() {
                 )}
               </div>
 
-              <p className="mt-3 text-xs text-gray-500">
+              <p className="mt-3 text-xs text-app opacity-70">
                 Tip: click out of a field to save changes.
               </p>
             </div>

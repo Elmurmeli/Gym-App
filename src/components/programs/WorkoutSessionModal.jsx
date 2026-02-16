@@ -483,7 +483,7 @@ export default function WorkoutSessionModal({
       >
         {/* Modal container */}
         <motion.div
-          className="w-full max-w-4xl max-h-[90vh] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col"
+          className="w-full max-w-4xl max-h-[90vh] modal-bg rounded-2xl shadow-xl overflow-hidden flex flex-col"
           initial={{ y: 40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 40, opacity: 0 }}
@@ -528,7 +528,7 @@ export default function WorkoutSessionModal({
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
             {exercises.length === 0 ? (
-              <div className="text-gray-500 text-sm">
+              <div className="text-app opacity-70 text-sm">
                 No exercises for this workout.
               </div>
             ) : (
@@ -540,10 +540,10 @@ export default function WorkoutSessionModal({
                 return (
                   <div
                     key={ex.id}
-                    className={`border rounded-xl p-4 ${isExerciseComplete ? 'border-green-200 bg-green-50' : 'border-gray-200'}`}
+                    className={`card-bg border rounded-xl p-4 ${isExerciseComplete ? 'border-green-200' : 'border-gray-200'}`}
                   >
                     <div className="flex items-center justify-between mb-3">
-                      <h3 className="font-semibold text-gray-900">
+                      <h3 className="font-semibold text-app">
                         {ex.exercise_name}
                       </h3>
                       {isExerciseComplete && (
@@ -555,10 +555,10 @@ export default function WorkoutSessionModal({
 
                   {/* Sets table */}
                   <div className="grid grid-cols-4 gap-2 text-sm">
-                    <div className="text-gray-500">Set</div>
-                    <div className="text-gray-500">Weight</div>
-                    <div className="text-gray-500">Reps</div>
-                    <div className="text-gray-500">RPE</div>
+                    <div className="text-app opacity-70">Set</div>
+                    <div className="text-app opacity-70">Weight</div>
+                    <div className="text-app opacity-70">Reps</div>
+                    <div className="text-app opacity-70">RPE</div>
 
                     {Array.from({ length: ex.sets || 0 }).map((_, i) => (
                       <div key={i} className="contents">
@@ -575,7 +575,7 @@ export default function WorkoutSessionModal({
                             if (v !== '' && Number(v) < 0) v = '0';
                             handleInputChange(ex.id, i, 'weight', v);
                           }}
-                          className="border rounded p-1 text-center"
+                          className="border rounded p-1 text-center bg-transparent text-app"
                           placeholder="kg"
                         />
                         <input
@@ -588,7 +588,7 @@ export default function WorkoutSessionModal({
                             if (v !== '' && Number(v) > 1000) v = '1000';
                             handleInputChange(ex.id, i, 'reps', v);
                           }}
-                          className="border rounded p-1 text-center"
+                          className="border rounded p-1 text-center bg-transparent text-app"
                           placeholder="reps"
                         />
                         <input
@@ -602,7 +602,7 @@ export default function WorkoutSessionModal({
                             if (v !== '' && Number(v) > 10) v = '10';
                             handleInputChange(ex.id, i, 'rpe', v);
                           }}
-                          className="border rounded p-1 text-center"
+                          className="border rounded p-1 text-center bg-transparent text-app"
                           placeholder="RPE"
                         />
                       </div>
@@ -610,7 +610,7 @@ export default function WorkoutSessionModal({
                   </div>
 
                   {/* Optional hint */}
-                  <p className="mt-2 text-xs text-gray-500">
+                  <p className="mt-2 text-xs text-app opacity-70">
                     Planned: {ex.sets} × {ex.reps}
                     {ex.rpe ? ` @ RPE ${ex.rpe}` : ""}
                   </p>
@@ -622,23 +622,23 @@ export default function WorkoutSessionModal({
 
           {/* Notes section */}
           <div className="px-6 py-4 border-t">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-app mb-2">
               Workout Notes (optional)
             </label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full border rounded-lg p-3 text-sm"
+              className="w-full border rounded-lg p-3 text-sm bg-transparent text-app"
               rows={3}
               placeholder="How did the workout feel? Any observations..."
             />
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-4 border-t bg-gray-50 flex justify-between">
+          <div className="px-6 py-4 border-t card-bg flex justify-between">
             <button
               onClick={handleClose}
-              className="px-4 py-2 rounded-lg border hover:bg-gray-100"
+              className="px-4 py-2 rounded-lg border card-bg text-app hover:bg-gray-50"
             >
               Cancel
             </button>
@@ -647,7 +647,7 @@ export default function WorkoutSessionModal({
               <button
                 onClick={handleSaveProgress}
                 disabled={loading}
-                className="px-4 py-2 rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 rounded-lg border border-primary text-primary hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Saving...' : autoSaveStatus === 'saving' ? 'Auto-saving...' : 'Save Now'}
               </button>
@@ -655,7 +655,7 @@ export default function WorkoutSessionModal({
               <button
                 onClick={handleFinishWorkout}
                 disabled={loading}
-                className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-5 py-2 rounded-lg btn-theme font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Finishing...' : 'Finish Workout'}
               </button>

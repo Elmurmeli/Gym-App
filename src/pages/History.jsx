@@ -240,7 +240,7 @@ export default function History() {
         transition={{ duration: 0.8 }}
         className="text-center"
       >
-      <h2 className="text-2xl text-blue-500 font-semibold mb-4">Workout History</h2>
+        <h2 className="text-2xl text-primary font-semibold mb-4">Workout History</h2>
     </motion.div>
 
     <motion.div
@@ -249,11 +249,11 @@ export default function History() {
       transition={{delay: 0.2, duration: 0.8 }}
       className="w-full"
     >
-      <div className="bg-white shadow-md rounded-lg p-4">
+      <div className="card-bg shadow-md rounded-lg p-4">
         {/* PR Summary */}
         {dbPrs && dbPrs.length > 0 && (
           <div className="mb-4">
-            <h3 className="text-lg font-semibold text-gray-800">Personal Records</h3>
+            <h3 className="text-lg font-semibold text-app">Personal Records</h3>
             <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
               {dbPrs.slice(0,6).map((p) => (
                 /* Use a dedicated PRCard component to handle the animation lifecycle of each card independently */
@@ -264,12 +264,12 @@ export default function History() {
         )}
 
         {/* Tabs: All Activity / Manual Logs / Program Sessions */}
-        <div className="mb-4">
+          <div className="mb-4">
           <div className="flex gap-2 justify-center">
-            <div className="inline-block w-fit gap-2 mb-4 rounded-xl border border-gray-200 bg-white p-1 shadow-sm">
-              <button onClick={() => setActiveTab('all')} className={`px-4 py-2 rounded-xl ${activeTab==='all'? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>All Activity</button>
-              <button onClick={() => setActiveTab('manual')} className={`px-4 py-2 rounded-xl ${activeTab==='manual'? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>Manual Logs</button>
-              <button onClick={() => setActiveTab('sessions')} className={`px-4 py-2 rounded-xl ${activeTab==='sessions'? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>Program Sessions</button>
+            <div className="inline-block w-fit gap-2 mb-4 rounded-xl border border-gray-200 card-bg p-1 shadow-sm">
+              <button onClick={() => setActiveTab('all')} className={`px-4 py-2 rounded-xl ${activeTab==='all'? 'btn-theme' : 'card-bg text-app'}`}>All Activity</button>
+              <button onClick={() => setActiveTab('manual')} className={`px-4 py-2 rounded-xl ${activeTab==='manual'? 'btn-theme' : 'card-bg text-app'}`}>Manual Logs</button>
+              <button onClick={() => setActiveTab('sessions')} className={`px-4 py-2 rounded-xl ${activeTab==='sessions'? 'btn-theme' : 'card-bg text-app'}`}>Program Sessions</button>
             </div>
           </div>
 
@@ -321,11 +321,11 @@ export default function History() {
                 });
 
                 const merged = [...manualEntries, ...sessionEntries].sort((a,b) => new Date(b.date) - new Date(a.date));
-                if (merged.length === 0) return <p className="text-center text-gray-500">No activity yet.</p>
+                if (merged.length === 0) return <p className="text-center text-primary opacity-70">No activity yet.</p>
                 return (
-                  <table className="w-full text-sm text-left bg-white border rounded shadow overflow-hidden">
+                  <table className="w-full text-sm text-left card-bg border rounded shadow overflow-hidden">
                     <thead>
-                      <tr className="bg-blue-100 text-blue-800">
+                      <tr className="bg-blue-100 text-primary">
                         <th className="p-2">Exercise</th>
                         <th className="p-2">Weight</th>
                         <th className="p-2">Reps</th>
@@ -336,7 +336,7 @@ export default function History() {
                     </thead>
                     <tbody>
                       {merged.map((row) => (
-                        <tr key={row.key} className="even:bg-gray-50 hover:bg-gray-100">
+                        <tr key={row.key} className="hover:bg-gray-50">
                           <td className="p-2">{row.exercise} {row.isPR && (
                             <motion.span
                               data-testid="pr-badge"
@@ -386,26 +386,26 @@ export default function History() {
                   });
 
                   const sessions = Object.values(sessionsMap).sort((a,b) => new Date(b.date) - new Date(a.date));
-                  if (sessions.length === 0) return <p className="text-center text-gray-500">No program sessions yet.</p>
+                  if (sessions.length === 0) return <p className="text-center text-app opacity-70">No program sessions yet.</p>
 
                   return (
-                    <div className="mt-4 mb-4 rounded-xl border border-gray-200 bg-white p-2">
+                    <div className="mt-4 mb-4 rounded-xl border border-gray-200 card-bg p-2">
                       <ul className="space-y-2">
                         {sessions.map(s => (
                           <li key={s.key}>
-                            <div className="group flex items-center justify-between gap-3 rounded-lg border border-gray-100 bg-white px-3 py-2 hover:shadow-sm transition">
+                              <div className="group flex items-center justify-between gap-3 rounded-lg border border-gray-100 card-bg px-3 py-2 hover:shadow-sm transition">
                               <div className="flex items-center gap-3 min-w-0">
                                 <div className="flex-shrink-0 text-2xl">🏋️</div>
                                 <div className="min-w-0" onClick={() => setSelectedSessionKey(selectedSessionKey === s.key ? null : s.key)}>
-                                  <div className="text-sm font-medium text-gray-900 truncate">{s.program_title || s.session_name}</div>
-                                  <div className="text-xs text-gray-500">{s.session_name} • {(() => { const d = new Date(s.date); return isNaN(d.getTime()) ? (s.date || '-') : d.toLocaleString(); })()}</div>
+                                  <div className="text-sm font-medium text-app truncate">{s.program_title || s.session_name}</div>
+                                  <div className="text-xs text-app opacity-70">{s.session_name} • {(() => { const d = new Date(s.date); return isNaN(d.getTime()) ? (s.date || '-') : d.toLocaleString(); })()}</div>
                                 </div>
                               </div>
 
                               <div className="flex items-center gap-2">
                                 <button
                                   onClick={() => setSelectedSessionKey(selectedSessionKey === s.key ? null : s.key)}
-                                  className="text-sm px-3 py-1 rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                  className="text-sm px-3 py-1 rounded-md btn-theme focus:outline-none focus:ring-2 focus:ring-blue-300"
                                 >
                                   {selectedSessionKey === s.key ? 'Hide' : 'View'}
                                 </button>
@@ -430,10 +430,10 @@ export default function History() {
           {/* Session details modal */}
           {selectedSessionKey && (
             <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg w-11/12 md:w-3/4 lg:w-2/3 p-4 shadow-lg">
+                <div className="bg-white rounded-lg w-11/12 md:w-3/4 lg:w-2/3 p-4 shadow-lg">
                 <div className="flex justify-between items-center mb-3">
                   <h4 className="text-lg font-semibold">Session Details</h4>
-                  <button className="text-gray-600" onClick={() => setSelectedSessionKey(null)}>Close</button>
+                  <button className="text-app" onClick={() => setSelectedSessionKey(null)}>Close</button>
                 </div>
                 <div className="max-h-96 overflow-auto">
                   <SessionExercisesList rows={sessionRows.filter(r => (r.session_id || `${r.date}-${r.session_name || r.workout_name}`) === selectedSessionKey)} />
@@ -444,13 +444,13 @@ export default function History() {
 
         </div>
         {/* Manual logs table shown when activeTab is manual */}
-        {activeTab === 'manual' ? (
-          logs.length === 0 ? (
+          {activeTab === 'manual' ? (
+            logs.length === 0 ? (
             <p>No logs found.</p>
           ) : (
-            <table className="w-full text-sm text-left bg-white border rounded shadow overflow-hidden">
+            <table className="w-full text-sm text-left card-bg border rounded shadow overflow-hidden">
               <thead>
-                <tr className="bg-blue-100 text-blue-800">
+                <tr className="bg-blue-100 text-primary">
                   <th className="p-2">Exercise</th>
                   <th className="p-2">Weight</th>
                   <th className="p-2">Reps</th>
@@ -461,7 +461,7 @@ export default function History() {
               </thead>
               <tbody>
                 {logs.map((log, idx) => (
-                  <tr key={idx} data-testid="log-row" className="even:bg-gray-50 hover:bg-gray-100">
+                  <tr key={idx} data-testid="log-row" className="hover:bg-gray-50">
                     {/* Editing view */}
                     {editingId === log.id ? (
                       <>
@@ -471,7 +471,7 @@ export default function History() {
                             value={editForm.name}
                             data-testid="exercise-input"
                             onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                            className="border p-1 rounded"
+                            className="border p-1 rounded bg-transparent text-app"
                           />
                         </td>
                         <td className="p-2">
@@ -488,7 +488,7 @@ export default function History() {
                               if (v !== '' && Number(v) < 0) v = '0';
                               setEditForm({ ...editForm, weight: v });
                             }}
-                            className="border p-1 rounded"
+                            className="border p-1 rounded bg-transparent text-app"
                           />
                         </td>
                         <td className="p-2">
@@ -504,7 +504,7 @@ export default function History() {
                               if (v !== '' && Number(v) < 1) v = '1';
                               setEditForm({ ...editForm, reps: v });
                             }}
-                            className="border p-1 rounded"
+                            className="border p-1 rounded bg-transparent text-app"
                           />
                         </td>
                         <td className="p-2">
@@ -520,7 +520,7 @@ export default function History() {
                               if (v !== '' && Number(v) < 1) v = '1';
                               setEditForm({ ...editForm, sets: v });
                             }}
-                            className="border p-1 rounded"
+                            className="border p-1 rounded bg-transparent text-app"
                           />
                         </td>
                         <td className="p-2">
@@ -529,18 +529,18 @@ export default function History() {
                             value={editForm.date}
                             data-testid="date-input"
                             onChange={(e) => setEditForm({ ...editForm, date: e.target.value })}
-                            className="border p-1 rounded"
+                            className="border p-1 rounded bg-transparent text-app"
                           />
                         </td>
                         <td className="p-2 flex gap-2">
                           <button
-                            className='bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600'
+                            className='btn-theme px-2 py-1 rounded'
                             data-testid="save-btn"
                             onClick={() => handleUpdate(log.id)}>
                             <CheckIcon className="h-5 w-5" />
                           </button>
                           <button
-                            className='bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500'
+                            className='card-bg border px-2 py-1 rounded text-app'
                             data-testid="cancel-btn"
                             onClick={() => setEditingId(null)}>
                             <ArrowUturnLeftIcon className="h-5 w-5" />
@@ -549,7 +549,7 @@ export default function History() {
                       </>
                     ) : (
                       <>
-                        <td className="p-2">{log.name} {isPROverallLog(log) && (
+                        <td className="p-2"><span className="text-app">{log.name}</span> {isPROverallLog(log) && (
                           <motion.span
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
@@ -569,7 +569,7 @@ export default function History() {
                         <td className="p-2 flex gap-2 2-1 whitespace-nowrap">
                           <button
                             data-testid="edit-btn"
-                            className='bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500'
+                            className='btn-theme px-2 py-1 rounded'
                             onClick={() => handleEdit(log)}>
                             <PencilSquareIcon className="h-5 w-5" />
                           </button>

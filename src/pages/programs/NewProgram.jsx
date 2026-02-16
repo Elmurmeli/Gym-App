@@ -45,10 +45,10 @@ export default function NewProgram() {
 
   return (
     <div className="min-h-screen box-border p-6">
-      <div className="max-w-xl mx-auto bg-white shadow rounded-xl p-6">
+      <div className="max-w-xl mx-auto card-bg shadow rounded-xl p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold text-blue-600">Create Program</h2>
-          <Link to="/programs" className="text-sm text-blue-600 hover:underline">
+          <h2 className="text-2xl font-bold text-primary">Create Program</h2>
+          <Link to="/programs" className="text-sm text-primary hover:underline">
             Back
           </Link>
         </div>
@@ -57,7 +57,7 @@ export default function NewProgram() {
           <div>
             <label className="block font-medium">Title</label>
             <input
-              className="w-full border rounded p-2"
+              className="w-full border rounded p-2 bg-transparent"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
@@ -67,7 +67,7 @@ export default function NewProgram() {
           <div>
             <label className="block font-medium">Description</label>
             <textarea
-              className="w-full border rounded p-2"
+              className="w-full border rounded p-2 bg-transparent"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
@@ -77,7 +77,7 @@ export default function NewProgram() {
           <div>
             <label className="block font-medium">Visibility</label>
             <select
-              className="w-full border rounded p-2"
+              className="w-full border rounded p-2 bg-transparent"
               value={visibility}
               onChange={(e) => setVisibility(e.target.value)}
             >
@@ -88,7 +88,7 @@ export default function NewProgram() {
 
           <button
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-60"
+            className="w-full btn-theme py-2 rounded disabled:opacity-60"
           >
             {loading ? "Creating..." : "Create Program"}
           </button>

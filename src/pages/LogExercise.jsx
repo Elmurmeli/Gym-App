@@ -94,7 +94,7 @@ export default function LogExercise() {
         transition={{ duration: 0.8 }}
         className="max-w-3xl w-full"
     >
-      <h2 className="text-2xl text-blue-500 font-semibold mb-4 text-center">Log Your Exercise</h2>
+      <h2 className="text-2xl text-primary font-semibold mb-4 text-center">Log Your Exercise</h2>
     </motion.div>
 
     <motion.div
@@ -103,7 +103,7 @@ export default function LogExercise() {
       transition={{delay: 0.2, duration: 0.8 }}
       className=" max-w-3xl w-full"
     >
-    <form onSubmit={handleSubmit} className="bg-white shadow rounded-lg p-6 space-y-4">
+    <form onSubmit={handleSubmit} className="card-bg shadow rounded-lg p-6 space-y-4">
       {['exercise', 'weight', 'reps', 'sets', 'date'].map((field) => {
         let placeholder = '';
         let inputProps = {};
@@ -134,21 +134,21 @@ export default function LogExercise() {
         }
         return (
           <div key={field}>
-            <label className="block capitalize">{field}</label>
+            <label className="block capitalize text-app">{field}</label>
             <input
               name={field}
               placeholder={placeholder}
               data-testid={`${field}-input`}
               value={form[field]}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-transparent text-app"
               required
               {...inputProps}
             />
           </div>
         );
       })}
-      <button data-testid="submit-btn" type="submit" disabled={submitting} className="bg-blue-600 text-white  font-semibold px-4 py-2 rounded-lg hover:bg-blue-700">
+      <button data-testid="submit-btn" type="submit" disabled={submitting} className="btn-theme hover:opacity-90 font-semibold px-4 py-2 rounded-lg disabled:opacity-60">
         {submitting ? 'Logging...' : 'Log Exercise'}
       </button>
     </form>
