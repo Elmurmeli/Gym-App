@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabase';
+import { motion } from 'framer-motion';
 
 export default function NavBar() {
     const [user, setUser] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [isDark, setIsDark] = useState(false);
 
 
     // Get active session
@@ -29,11 +31,25 @@ export default function NavBar() {
         window.location.hash = "#/"; // Redirect to home on logout
     };
 
+    useEffect(() => {
+        try {
+            const el = document.documentElement;
+            const stored = localStorage.getItem('theme');
+            const dark = stored ? stored === 'dark' : el.classList.contains('dark');
+            if (dark) el.classList.add('dark'); else el.classList.remove('dark');
+            setIsDark(dark);
+        } catch (e) {
+            // ignore
+        }
+    }, []);
+
     const toggleTheme = () => {
         try {
             const el = document.documentElement;
-            const isDark = el.classList.toggle('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            const next = !isDark;
+            if (next) el.classList.add('dark'); else el.classList.remove('dark');
+            localStorage.setItem('theme', next ? 'dark' : 'light');
+            setIsDark(next);
         } catch (e) {
             // ignore
         }
@@ -60,13 +76,37 @@ export default function NavBar() {
 
             {/* Right Side - Login dropdown menu */}
             <div className="relative flex items-center gap-3">
+                {/* Theme toggle button */}
                 <button
                     aria-label="Toggle theme"
                     title="Toggle light / dark"
                     onClick={toggleTheme}
-                    className="px-3 py-2 btn-theme rounded-lg hover:opacity-90 transition"
+                    className="px-2 py-1 rounded-lg hover:opacity-90 transition"
                 >
-                    🌙
+                    <div className="relative w-14 h-8 p-1 rounded-full bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600">
+                        <motion.span
+                            className="absolute left-2 top-1 text-sm pointer-events-none text-gray-700 dark:text-gray-200"
+                            animate={{ opacity: isDark ? 1 : 0 }}
+                            transition={{ duration: 0.12 }}
+                        >
+                            🌙
+                        </motion.span>
+                        <motion.span
+                            className="absolute right-2 top-1 text-sm pointer-events-none text-gray-700 dark:text-gray-200"
+                            animate={{ opacity: isDark ? 0 : 1 }}
+                            transition={{ duration: 0.12 }}
+                        >
+                            ☀️
+                        </motion.span>
+
+                        <motion.div
+                            className="w-6 h-6 rounded-full shadow-lg border border-gray-300 dark:border-white"
+                            style={{ backgroundColor: '#ffffff' }}
+                            initial={false}
+                            animate={{ x: isDark ? 24 : 0 }}
+                            transition={{ type: 'spring', stiffness: 700, damping: 30 }}
+                        />
+                    </div>
                 </button>
 
                 <button
