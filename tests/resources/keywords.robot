@@ -28,7 +28,9 @@ Login As Test User
 Logout User
     Wait Until Page Contains    ${EMAIL}    timeout=20s
     Wait Until Element Is Visible    ${MENU_BTN}    timeout=10s
-    Scroll Element Into View    ${MENU_BTN}
+    # Ensure the menu button is centered in the viewport (handles sticky header and off-screen edges)
+    Execute JavaScript    document.querySelector('[data-testid="menu-btn"]').scrollIntoView({behavior:'auto', block:'center', inline:'center'})
+    Sleep    0.25s
     Click Button    ${MENU_BTN}
     ${visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${MENU_DROPDOWN}    timeout=5s
     # Fallback: if the dropdown didn't become visible (flaky headless click), trigger it via JS
