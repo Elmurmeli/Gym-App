@@ -112,6 +112,7 @@ export default function NavBar() {
                 <button
                     data-testid="menu-btn"
                     onClick={() => setMenuOpen(!menuOpen)}
+                    aria-expanded={menuOpen}
                     className="px-3 py-2 btn-theme text-white rounded-lg hover:opacity-90 transition"
                 >
                     {user ? user.email : 'Login ▾'}
@@ -119,7 +120,7 @@ export default function NavBar() {
 
             {/* Dropdown Menu */}
                 {menuOpen && (
-                    <div className="absolute right-0 top-full mt-1 w-40 dropdown-bg border rounded shadow-lg animate-fadeIn">
+                    <div data-testid="menu-dropdown" className="absolute right-0 top-full mt-1 w-40 dropdown-bg border rounded shadow-lg animate-fadeIn">
                         {/*Logged out menu*/}
                         {!user && (
                             <>

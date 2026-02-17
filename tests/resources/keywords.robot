@@ -26,8 +26,17 @@ Login As Test User
         Wait For Logged In    25s
 
 Logout User
+    Wait Until Page Contains    ${EMAIL}    timeout=20s
+    Wait Until Element Is Visible    ${MENU_BTN}    timeout=10s
+    # Ensure the menu button is centered in the viewport (handles sticky header and off-screen edges)
+    Execute JavaScript    document.querySelector('[data-testid="menu-btn"]').scrollIntoView({behavior:'auto', block:'center', inline:'center'})
+    Sleep    0.25s
     Click Button    ${MENU_BTN}
-    Wait Until Element Is Visible    ${LOGOUT_BTN}    timeout=5s
+    ${visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${MENU_DROPDOWN}    timeout=5s
+    # Fallback: if the dropdown didn't become visible (flaky headless click), trigger it via JS
+    Run Keyword If    not ${visible}    Execute JavaScript    document.querySelector('[data-testid="menu-btn"]').click()
+    Wait Until Element Is Visible    ${MENU_DROPDOWN}    timeout=10s
+    Wait Until Element Is Visible    ${LOGOUT_BTN}    timeout=10s
     Click Button    ${LOGOUT_BTN}
     Wait Until Page Contains    Login
 
@@ -62,8 +71,8 @@ Log Current URL
 Wait For Logged In
     [Arguments]    ${timeout}=20s
     Wait Until Location Contains    /#/
-    Run Keyword And Ignore Error    Wait Until Page Contains    ${EMAIL}    timeout=${timeout}
-    Run Keyword And Ignore Error    Wait Until Page Contains    Gym Tracker    timeout=${timeout}
+    Wait Until Page Contains    ${EMAIL}    timeout=${timeout}
+    Wait Until Page Contains    Gym Tracker    timeout=${timeout}
 
 # ============================================
 # Add Exercise
