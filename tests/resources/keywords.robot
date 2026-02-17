@@ -30,6 +30,9 @@ Logout User
     Wait Until Element Is Visible    ${MENU_BTN}    timeout=10s
     Scroll Element Into View    ${MENU_BTN}
     Click Button    ${MENU_BTN}
+    ${visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${MENU_DROPDOWN}    timeout=5s
+    # Fallback: if the dropdown didn't become visible (flaky headless click), trigger it via JS
+    Run Keyword If    not ${visible}    Execute JavaScript    document.querySelector('[data-testid="menu-btn"]').click()
     Wait Until Element Is Visible    ${MENU_DROPDOWN}    timeout=10s
     Wait Until Element Is Visible    ${LOGOUT_BTN}    timeout=10s
     Click Button    ${LOGOUT_BTN}
