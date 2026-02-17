@@ -26,6 +26,7 @@ Login As Test User
         Wait For Logged In    25s
 
 Logout User
+    Maximize Browser Window
     Click Button    ${MENU_BTN}
     Wait Until Element Is Visible    ${LOGOUT_BTN}    timeout=10s
     Click Button    ${LOGOUT_BTN}
