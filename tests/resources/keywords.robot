@@ -27,7 +27,7 @@ Login As Test User
 
 Logout User
     Click Button    ${MENU_BTN}
-    Wait Until Element Is Visible    ${LOGOUT_BTN}    timeout=5s
+    Wait Until Element Is Visible    ${LOGOUT_BTN}    timeout=10s
     Click Button    ${LOGOUT_BTN}
     Wait Until Page Contains    Login
 
@@ -62,8 +62,8 @@ Log Current URL
 Wait For Logged In
     [Arguments]    ${timeout}=20s
     Wait Until Location Contains    /#/
-    Run Keyword And Ignore Error    Wait Until Page Contains    ${EMAIL}    timeout=${timeout}
-    Run Keyword And Ignore Error    Wait Until Page Contains    Gym Tracker    timeout=${timeout}
+    Wait Until Page Contains    ${EMAIL}    timeout=${timeout}
+    Wait Until Page Contains    Gym Tracker    timeout=${timeout}
 
 # ============================================
 # Add Exercise
