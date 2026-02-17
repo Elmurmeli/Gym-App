@@ -26,7 +26,6 @@ Login As Test User
         Wait For Logged In    25s
 
 Logout User
-    Maximize Browser Window
     Wait Until Page Contains    ${EMAIL}    timeout=20s
     Wait Until Element Is Visible    ${MENU_BTN}    timeout=10s
     Scroll Element Into View    ${MENU_BTN}

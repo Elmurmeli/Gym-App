@@ -36,6 +36,17 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm run build
 
+      # Serve the built site locally for Robot tests (serve under /Gym-App)
+      - name: Prepare and serve built site
+        run: |
+          mkdir -p site-root/Gym-App
+          cp -r dist/* site-root/Gym-App/
+          # Start a simple Python static server in the background on port 5173
+          cd site-root
+          nohup python3 -m http.server 5173 &>/dev/null &
+          # give the server a moment to start
+          sleep 2
+
       #Setup python for robot tests
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -55,7 +66,7 @@ jobs:
       - name: Run Robot Smoke tests (PR)
         if: github.event_name == 'pull_request'
         env:
-          BASE_URL: https://elmurmeli.github.io/Gym-App
+          BASE_URL: http://localhost:5173/Gym-App
         run: |
           robot \
             --include smoke \
@@ -67,7 +78,7 @@ jobs:
       - name: Run Robot Full Tests (main)
         if: github.event_name == 'push'
         env:
-          BASE_URL: https://elmurmeli.github.io/Gym-App
+          BASE_URL: http://localhost:5173/Gym-App
         run: |
           robot \
             --variable BROWSER:headlesschrome \
